@@ -45,6 +45,50 @@ uv run python test_e2e.py
 - ✅ Busca full-text
 - ❌ Paginação (falha esperada - workspace tem apenas 2 documentos, precisa de ≥6)
 
+## Automação de Assinatura Digital
+
+**Script**: `automatizar_assinatura.py`
+**Documentação**: `docs/fluxo_documentos_assinafy.md`
+
+Automatiza o fluxo completo de envio de documento para assinatura digital via API Assinafy:
+
+### Fluxo Automatizado
+
+```
+Upload do PDF
+  ↓
+Obter signing_url
+  ↓
+Enviar email com link de assinatura
+```
+
+### Executar Automação
+
+```bash
+# Editar configurações no arquivo
+# - PDF_FILE: caminho do PDF
+# - SIGNER_EMAIL: email do signatário
+# - SIGNER_NAME: nome do signatário
+# - DOCUMENT_NAME: nome do documento
+
+.venv/bin/python automatizar_assinatura.py
+```
+
+### Retorno Automático
+
+A API Assinafy retorna automaticamente:
+- `document_id`: ID único do documento
+- `signing_url`: Link direto para assinatura (https://app.assinafy.com.br/sign/{id})
+
+**Não é necessário adicionar signatários manualmente** - todo documento criado via API já possui um `signing_url` válido.
+
+### Scripts Auxiliares
+
+- `test_upload_pdf.py`: Teste isolado de upload de PDF
+- `enviar_link_assinatura.py`: Enviar email com link já existente
+- `adicionar_signatarios.py`: Adicionar signatários (experimental - endpoint 404)
+- `explore_signers.py`: Explorar estrutura de signatários na API
+
 ## Arquitetura do Teste E2E
 
 ### Classe: `AssinafyE2ETest`
