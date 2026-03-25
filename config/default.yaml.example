@@ -1,0 +1,46 @@
+# Assinafy Scraper - Arquivo de Configuração
+# Copie este arquivo para default.yaml ou custom.yaml e ajuste conforme necessário
+# Não commit arquivos com credenciais!
+
+assinafy:
+  # Configurações da API
+  base_url: "https://api.assinafy.com.br/v1"
+
+  # Configurações de processamento de documentos
+  document_ready_timeout: 60  # segundos para aguardar processamento
+  polling_interval: 2  # segundos entre verificações de status
+
+  # Status considerados "prontos"
+  ready_statuses:
+    - "metadata_ready"
+    - "pending_signature"
+    - "certificated"
+
+  # Status que indicam "processando"
+  processing_statuses:
+    - "uploaded"
+    - "uploading"
+    - "metadata_processing"
+    - "certificating"
+
+  # Configurações de email
+  email_template: "default"
+
+# Configurações de logging
+logging:
+  level: "INFO"  # DEBUG, INFO, WARNING, ERROR, CRITICAL
+  format: "structured"  # structured, json, simple
+  console:
+    enabled: true
+    colors: false  # TODO: implementar cores
+  file:
+    enabled: false
+    path: "logs/assinafy.log"
+    max_bytes: 10485760  # 10MB
+    backup_count: 5
+
+# Comportamentos
+behavior:
+  auto_open_email: true  # Abrir cliente de email automaticamente
+  show_progress: true  # Mostrar barras de progresso
+  confirm_destructive: true  # Confirmar ações destrutivas

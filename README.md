@@ -11,31 +11,80 @@ Repositório para extração de documentação da API Assinafy e automação do 
 
 ## 🚀 Automação de Assinatura Digital
 
-### Fluxo Rápido
+### CLI Principal (Nova!)
+
+**Instalação**:
 
 ```bash
 # Instalar dependências
 uv sync
-
-# Executar automação completa
-.venv/bin/python automatizar_assinatura.py
 ```
 
-O script `automatizar_assinatura.py` faz:
-1. Upload do PDF via API
-2. Aguarda processamento (até 60s)
-3. Envia email com link de assinatura
+**Comandos disponíveis**:
+
+```bash
+# Fluxo completo de automação
+.venv/bin/python assinafy_cli.py automate documento.pdf --email user@example.com --name "User Name"
+
+# Upload apenas
+.venv/bin/python assinafy_cli.py upload documento.pdf
+
+# Enviar link para documento existente
+.venv/bin/python assinafy_cli.py send-link DOCUMENT_ID --email user@example.com
+
+# Verbose (DEBUG logs)
+.venv/bin/python assinafy_cli.py -vv automate documento.pdf -e user@example.com
+
+# Com config customizado
+.venv/bin/python assinafy_cli.py -c config/custom.yaml automate documento.pdf -e user@example.com
+```
+
+**Verbosidade**:
+- Sem `-v`: WARNING (apenas erros)
+- `-v`: INFO (progresso)
+- `-vv`: DEBUG (detalhes técnicos)
+
+### Scripts Legados
+
+**⚠️ Scripts antigos ainda funcionam para compatibilidade, mas recomendamos usar a CLI:**
+
+```bash
+# Legado (parâmetros hardcoded)
+.venv/bin/python automatizar_assinatura.py
+
+# Legado
+.venv/bin/python test_upload_pdf.py
+
+# Legado
+.venv/bin/python enviar_link_assinatura.py
+```
 
 ### Configuração
 
-Edite as variáveis no arquivo:
+**Arquivo `.env` (credenciais)**:
 
-```python
-PDF_FILE = "/caminho/para/documento.pdf"
-SIGNER_EMAIL = "email@exemplo.com"
-SIGNER_NAME = "Nome do Signatário"
-DOCUMENT_NAME = "Nome do Documento"
+```bash
+cp .env.example .env
+# Edite .env com suas credenciais
 ```
+
+**Arquivo YAML (configurações opcionais)**:
+
+```bash
+# Criar config customizado
+cp config/default.yaml.example config/custom.yaml
+# Edite custom.yaml conforme necessário
+```
+
+### Scripts Auxiliares
+
+| Script | Propósito |
+|--------|-----------|
+| `test_upload_pdf.py` | Teste isolado de upload de PDF |
+| `enviar_link_assinatura.py` | Enviar email com signing_url existente |
+| `explore_signers.py` | Explorar estrutura de signatários na API |
+
+**⚠️ `adicionar_signatarios.py` não funciona** - endpoint da API retorna 404
 
 ### Scripts Auxiliares
 

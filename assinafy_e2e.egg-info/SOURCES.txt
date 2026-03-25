@@ -1,0 +1,15 @@
+README.md
+pyproject.toml
+assinafy/__init__.py
+assinafy/cli.py
+assinafy/config.py
+assinafy/logging_config.py
+assinafy/api/__init__.py
+assinafy/automation/__init__.py
+assinafy/automation/signature.py
+assinafy_e2e.egg-info/PKG-INFO
+assinafy_e2e.egg-info/SOURCES.txt
+assinafy_e2e.egg-info/dependency_links.txt
+assinafy_e2e.egg-info/entry_points.txt
+assinafy_e2e.egg-info/requires.txt
+assinafy_e2e.egg-info/top_level.txt

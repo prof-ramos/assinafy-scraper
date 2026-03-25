@@ -1,12 +1,21 @@
 [project]
 name = "assinafy-e2e"
-version = "0.1.0"
+version = "0.2.0"
 requires-python = ">=3.9"
 dependencies = [
     "requests>=2.31.0",
     "python-dotenv>=1.0.0",
     "weasyprint>=66.0",
+    "click>=8.1.0",
+    "pyyaml>=6.0.0",
 ]
+
+[project.scripts]
+assinafy = "assinafy.cli:cli"
+
+[tool.setuptools.packages.find]
+include = ["assinafy*"]
+exclude = ["data*", "config*", "tests*"]
 
 [project.optional-dependencies]
 dev = [
@@ -23,6 +32,7 @@ dev-dependencies = [
     "black>=23.0.0",
     "ruff>=0.1.0",
 ]
+package = true
 
 [tool.black]
 line-length = 100
