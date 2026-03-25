@@ -13,10 +13,7 @@ Scraper para extrair automaticamente a documentação da API Assinafy (https://a
 ## Instalação
 
 ```bash
-cd /Users/gabrielramos/Documents/Programas/assinafy-scraper
-
-# Criar venv e instalar dependências
-uv venv && source .venv/bin/activate
+# Instalar dependências
 uv sync
 ```
 
@@ -41,6 +38,15 @@ uv run python -m src.cli info
 # Usar o wrapper executável
 ./assinafy scrape
 ./assinafy info
+```
+
+### Via entry points instalados
+
+Após `uv sync`, os seguintes comandos ficam disponíveis:
+
+```bash
+assinafy-scrape        # Equivalente a: uv run python -m src.cli scrape
+assinafy-info          # Equivalente a: uv run python -m src.cli info
 ```
 
 ### Via script cmux
@@ -95,7 +101,8 @@ O JSON gerado contém:
           "parameters": [...],
           "request_example": {...},
           "response_example": {...},
-          "requires_auth": true
+          "requires_auth": true,
+          "supports_pagination": false
         }
       ]
     }
