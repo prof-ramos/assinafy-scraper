@@ -27,7 +27,9 @@ class AssinafyClient:
         """
         self.config = config
         self.session = requests.Session()
-        self.session.headers.update(config.get_auth_headers())
+
+        # Headers padrão para JSON (sem Content-Type para multipart)
+        self.session.headers.update(config.get_auth_headers(include_content_type=False))
 
         logger.debug(f"Cliente inicializado: {config.base_url}")
 
@@ -119,9 +121,8 @@ class AssinafyClient:
                 'file': (path.name, f, file_type)
             }
 
-            # Remover Content-Type padrão e deixar requests definir
-            headers = self.session.headers.copy()
-            headers.pop('Content-Type', None)
+            # Usar headers da config sem Content-Type (deixar requests definir Content-Type para multipart)
+            headers = self.config.get_auth_headers(include_content_type=False)
 
             response = self.session.post(
                 f"{self.config.base_url}{endpoint}",

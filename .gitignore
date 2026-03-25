@@ -23,11 +23,21 @@ uv.lock
 .DS_Store
 Thumbs.db
 
-# Generated files
-data/
-*.json
-!pyproject.toml
+# OMC state (ephemeral session data)
+.omc/state/
+
+# Logs
+logs/
+*.log
+
+# Config (sensível ou customizado)
+config/*.yaml
+!config/*.yaml.example
+!config/*.example
 
 # Environment
 .env
 .env.local
+
+# Assinafy data (mantemos assinafy_api.json)
+# data/*.json  # Descomentar para ignorar tudo exceto o padrão

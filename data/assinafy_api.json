@@ -1,0 +1,1187 @@
+{
+  "base_url": "https://api.assinafy.com.br/v1",
+  "extracted_at": "2026-03-24T21:48:09.425269",
+  "metadata": {
+    "source": "html_scraping",
+    "pages_scraped": 1,
+    "total_endpoints": 100
+  },
+  "sections": [
+    {
+      "title": "Basics",
+      "level": 1,
+      "content": "<p>The Assinafy API is RESTful and allows access to documents, users, workspaces\nand signers, using an access token or a permanent key.</p><h2 id=\"rest-api\">REST API</h2><blockquote>\n<p>Request Example</p>\n</blockquote><pre><code class=\"language-shell\">curl -X GET \"https://api.assinafy.com.br/v1/some-end-point\" \\\n  -H 'X-Api-Key: hAvmvk6Urzus3byLD2qOWrghAvmvk6Urzus3byLD2qOWrg'</code></pre><blockquote>\n<p>Success Response Example</p>\n</blockquote><pre><code class=\"language-json\">{\n    \"status\": 200,\n    \"message\": \"\",\n    \"data\": {\n        \"attribute_1\": \"value 1\",\n        \"attribute_2\": \"value 2\",\n    }\n}</code></pre><blockquote>\n<p>Error Response example</p>\n</blockquote><pre><code class=\"language-json\">{\n    \"status\": 400,\n    \"message\": \"Some error message.\",\n    \"data\": []\n}</code></pre><p>As a RESTful API, HTTP verbs are used according to the request type.</p><ul>\n<li>GET to retrieve data;</li>\n<li>POST to create;</li>\n<li>PUT to update;</li>\n<li>DELETE to remove.</li>\n</ul><h3>Content Type</h3><p>The default request and response data format is JSON. The XML format is also\nsupported.</p><h3>Status Code</h3><p>Every response will return the status attribute. The value of 200 indicates the\nrequest was successful. Otherwise another HTTP code will indicate the result. The\nstatus attribute will reflect the status code in HTTP headers.</p><h3>Authentication</h3><p>Most endpoints require authentication. There two options:</p><ul>\n<li>\n<p>A fixed API key;</p>\n</li>\n<li>\n<p>An access token.</p>\n</li>\n</ul><h2 id=\"searching,-paginating-and-sorting\">Searching, Paginating and Sorting</h2><blockquote>\n<p>Request</p>\n</blockquote><pre><code class=\"language-shell\">curl -X GET 'https://api.assinafy.com.br/v1/accounts/631606b068b6cd6709f448bc/documents?page=1&amp;per-page=25&amp;search=name' \\\n-H 'Authorization: Bearer hAvmvk6Urzus3byLD2qOWrghAvmvk6Urzus3byLD2qOWrghAvmvk6'</code></pre><blockquote>\n<p>200 OK</p>\n</blockquote><pre><code class=\"language-json\">{\n    \"status\": 200,\n    \"message\": \"\",\n    \"data\": [\n        { \"id\": \"1zus3byLD2qOWrghAvmvk6\", \"name 1\" },\n        { \"id\": \"2zus3byLD2qOWrghAvmvk6\", \"name 2\" }\n    ]\n}</code></pre><h3>URL Parameters</h3><table>\n<thead>\n<tr>\n<th>Parameter</th>\n<th>Description</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>search</td>\n<td>Search term.</td>\n</tr>\n<tr>\n<td>page</td>\n<td>Page number.</td>\n</tr>\n<tr>\n<td>per-page</td>\n<td>Desired count of records per page. A maximum of 100 is allowed.</td>\n</tr>\n<tr>\n<td>sort</td>\n<td>Sort order for results.<br/>Example.: <code>?sort=name, ?sort=-created_at</code></td>\n</tr>\n</tbody>\n</table><h3>Response Headers</h3><table>\n<thead>\n<tr>\n<th>Header</th>\n<th>Description</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>X-Pagination-Current-Page</td>\n<td>Current returned page.</td>\n</tr>\n<tr>\n<td>X-Pagination-Total-Count</td>\n<td>Total count of records.</td>\n</tr>\n<tr>\n<td>X-Pagination-Page-Count</td>\n<td>Count of pages.</td>\n</tr>\n<tr>\n<td>X-Pagination-Per-Page</td>\n<td>Count of records per page.</td>\n</tr>\n</tbody>\n</table><h2 id=\"test-and-production-environments\">Test and Production Environments</h2><p>During development stage, use the sandbox base URL:<br/>\n<a href=\"https://sandbox.assinafy.com.br/v1\">https://sandbox.assinafy.com.br/v1</a></p><p>When development is completed, use the production base URL:<br/>\n<a href=\"https://api.assinafy.com.br/v1\">https://api.assinafy.com.br/v1</a></p><h2 id=\"errors\">Errors</h2><p>It is important do consider responses resulting in a error. That can occur,\nfor example, when a field is sent with an invalid value.</p><blockquote>\n<p>400 Bad Request</p>\n</blockquote><pre><code class=\"language-json\">{\n    \"status\": 400,\n    \"message\": \"The 'email' attribute cannot be empty.\",\n    \"data\": []\n}</code></pre><h3>Error Codes</h3><p>The error code is returned in the <em>status</em> attribute.</p><table>\n<thead>\n<tr>\n<th>Code</th>\n<th>Type</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>400</td>\n<td>Bad Request</td>\n</tr>\n<tr>\n<td>401</td>\n<td>Unauthorized</td>\n</tr>\n<tr>\n<td>403</td>\n<td>Forbidden</td>\n</tr>\n<tr>\n<td>404</td>\n<td>Not Found</td>\n</tr>\n<tr>\n<td>429</td>\n<td>Too Many Requests</td>\n</tr>\n<tr>\n<td>500</td>\n<td>Internal Server Error</td>\n</tr>\n</tbody>\n</table><h2 id=\"postman-collection\">Postman Collection</h2><p>This a public Postman collection to explore Assinafy endpoints. Here is how\nto use it:</p><ol>\n<li>\n<p>Access the <a href=\"https://www.postman.com/devassinafy/dev-assinafy-s-workspace/collection/tqqxlsd/assinafy-api-collection\" target=\"_blank\">Assinafy Postman collection</a>.</p>\n</li>\n<li>\n<p>At the left, select the Assinafy Collection.</p>\n</li>\n<li>\n<p>At the right side, click on <em>fork</em> button to make a copy of the collection\ninto your own workspace.</p>\n</li>\n</ol>",
+      "subsections": [],
+      "endpoints": []
+    },
+    {
+      "title": "Quick Start",
+      "level": 1,
+      "content": "<p>These are steps to quickly start using the API. At the end of it you will be\nable to create a document and send signature invitation to signers.</p><h2 id=\"creating-a-user-account\">Creating a User Account</h2><p>During the development of your application, we recommend creating a user account in our sandbox environment. To do this, please go to <a href=\"https://stage-sandbox.assinafy-app.pages.dev\">https://stage-sandbox.assinafy-app.pages.dev</a>.</p><p>Once your application is complete, use your user account from the production environment (<a href=\"https://app.assinafy.com.br\">https://app.assinafy.com.br</a>).</p><p>For integrations using an API key, it is advisable to create a separate user account. For instance, you can create a user account named <em>My App</em>. This practice enables us to configure the minimum access necessary for the integration.</p><aside class=\"notice\">\nFor enhanced security, create a separate user account for your integration, and assign a role accordingly.\n</aside><h2 id=\"setting-up-credentials\">Setting Up Credentials</h2><h3>API Key</h3><p>To authenticate your application and gain access to Assinafy's API, you will need to generate an API key. Follow these steps to create your key:</p><ol>\n<li>Log in to your Assinafy account and navigate to the \"My Account\" page.</li>\n<li>Select the \"API\" tab.</li>\n<li>Follow the on-screen instructions to generate your unique API key.</li>\n</ol><ul>\n<li>Assinafy app sandbox URL: <a href=\"https://stage-sandbox.assinafy-app.pages.dev\">https://stage-sandbox.assinafy-app.pages.dev</a></li>\n<li>Assinafy app production URL: <a href=\"https://app.assinafy.com.br\">https://app.assinafy.com.br</a></li>\n</ul><aside class=\"notice\">\nYour API key should be used only from a back-end system. Avoid storing it in the\nsource code.\n</aside><h3>Workspace Account ID</h3><p>To find the workspace account ID, go to the \"My Account\" page and look for the \"Workspaces\" tab.</p><h2 id=\"uploading-a-document\">Uploading a Document</h2><blockquote>\n<p>Document Upload Request Using Curl</p>\n</blockquote><pre><code class=\"language-shell\">curl -X POST \"https://api.assinafy.com.br/v1/accounts/615601fab04c0a31/documents\" \\\n  -H 'X-Api-Key: hAvmvk6Urzus3byLD2qOWrghAvmvk6Urzus3byLD2qOWrg'\\\n  -F 'file=@/tmp/document.pdf'</code></pre><blockquote>\n<p>Document Upload Request Using PHP</p>\n</blockquote><pre><code class=\"language-php\">&lt;?php\n// To install requirements:\n// composer require guzzlehttp/guzzle\n\nrequire 'vendor/autoload.php';\n\nuse GuzzleHttp\\Client;\n\n// Credentials\n$workspace_account_id = 'YOUR_WORKSPACE_ACCOUNT_ID';\n$api_key = 'YOUR_API_KEY';\n\n$file_path = '/tmp/document.pdf';\n$url = 'https://api.main.stage.assinafy.com.br/v1/accounts/' . $workspace_account_id . '/documents';\n\n$client = new Client([\n    'headers' =&gt; [\n        'X-Api-Key' =&gt; $api_key,\n    ]\n]);\n\n$response = $client-&gt;request('POST', $url, [\n    'multipart' =&gt; [\n        [\n            'name' =&gt; 'file',\n            'contents' =&gt; file_get_contents($file_path),\n            'filename' =&gt; 'document.pdf'\n        ]\n    ]\n]);\n\necho $response-&gt;getStatusCode() . \"\\n\";\necho $response-&gt;getBody()-&gt;getContents() . \"\\n\";</code></pre><blockquote>\n<p>Document Upload Request Using Python</p>\n</blockquote><pre><code class=\"language-python\"># To install requirements:\n# pip install requests\n\nimport requests\n\n# Credentials\nworkspace_account_id = 'YOUR_WORKSPACE_ACCOUNT_ID'\napi_key = 'YOUR_API_KEY'\n\nfile_path = '/tmp/document.pdf'\nurl = 'https://api-staging.assinafy.com.br/v1/accounts/' + workspace_account_id + '/documents'\n\nwith open(file_path, 'rb') as file:\n    files = {'file': file}\n    headers = {'X-Api-Key': api_key}\n    response = requests.post(url, headers=headers, files=files)\n\nprint(response.status_code)\nprint(response.json())</code></pre><blockquote>\n<p>200 OK - Document Upload Response</p>\n</blockquote><pre><code class=\"language-json\">{\n  \"id\": \"615601fab04c0a3147bb1246\",\n  \"name\": \"document.pdf\",\n  \"status\": \"uploaded\",\n  \"assignment\": null,\n  \"artifacts\": {\n    \"original\": \"https://api.assinafy.com.br/v1/documents/615601fab04c0a3147bb1246/download/original\"\n  },\n  \"pages\": [\n    {\n      \"id\": \"615601faf166d6d1d8e7dc30\",\n      \"number\": 1,\n      \"height\": 2100,\n      \"width\": 1275,\n      \"download_url\": \"https://api.assinafy.com.br/v1/documents/615601fab04c0a3147bb1246/pages/615601faf166d6d1d8e7dc30/download\"\n    }\n  ],\n  \"created_at\": 1633026554,\n  \"updated_at\": 1633026554,\n  \"is_closed\": false\n}</code></pre><p>Upload a document from a local file and save the resulted ID to be used later.</p><p><code>POST /accounts/:account_id/documents</code></p><table>\n<thead>\n<tr>\n<th>Parameter</th>\n<th>Type</th>\n<th>Description</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>X-Api-Key</td>\n<td>Header</td>\n<td>The API key.</td>\n</tr>\n<tr>\n<td>account_id</td>\n<td>URL</td>\n<td>The workspace account ID.</td>\n</tr>\n</tbody>\n</table><p>Both <em>account_id</em> URL parameter and <em>X-APU-Key</em> header parameter are obtained\nas shown in previous steps.</p><p>Please follow the examples here to create a document from an uploaded file.</p><p>You may find more information in the <a href=\"#document\">document</a> session.</p><h2 id=\"creating-signers\">Creating Signers</h2><blockquote>\n<p>Create Signer</p>\n</blockquote><pre><code class=\"language-shell\">curl \"https://api.assinafy.com.br/v1/accounts/e2d6ee35c7741ca4006b9e1a/signers\" \\\n  -H 'X-Api-Key: hAvmvk6Urzus3byLD2qOWrghAvmvk6Urzus3byLD2qOWrg'\\\n  -H 'Content-Type: application/json' \\\n  -d '\n{\n  \"full_name\": \"John Dove\",\n  \"email\": \"<a class=\"__cf_email__\" data-cfemail=\"72181d1a1c32171f131b1e5c111d1f\" href=\"/cdn-cgi/l/email-protection\">[email protected]</a>\"\n}\n'</code></pre><blockquote>\n<p>200 OK - Signer Creation Response</p>\n</blockquote><pre><code class=\"language-json\">{\n  \"status\": 200,\n  \"message\": \"\",\n  \"data\": {\n    \"resource\": \"signer\",\n    \"id\": \"62d6ee35c7741ca4006b9e11\",\n    \"full_name\": \"John Signer\",\n    \"email\": \"<a class=\"__cf_email__\" data-cfemail=\"97fdf8fff9d7f2faf6fefbb9f4f8fa\" href=\"/cdn-cgi/l/email-protection\">[email protected]</a>\"\n  }\n}</code></pre><p>Create signers and save the resulted IDs to be used later.</p><p><code>POST /accounts/:account_id/signers</code></p><p>Find more information in the <a href=\"#signer\">signer</a> session.</p><h2 id=\"requesting-signatures\">Requesting Signatures</h2><blockquote>\n<p>Curl Request - Invitation to Sign a Document</p>\n</blockquote><pre><code class=\"language-shell\">curl -X POST https://api.assinafy.com.br/v1/documents/60f720572d7fecf7c16c8463/assignments\n  -H 'X-Api-Key: f720572d7fecf7c16c8463f720572d7fecf7c16c8463f72' \\\n  -H 'Content-Type: application/json' \\\n  -d '\n{\n  \"method\": \"virtual\",\n  \"signerIds\": [\n    \"615605f50e968054a5b7c9b8\"\n  ]\n}'</code></pre><p>Invite signers to sign a document using the <em>virtual</em> method.</p><p><code>POST /documents/:document_id/assignments</code></p><h3>Parameters</h3><table>\n<thead>\n<tr>\n<th>Parameter</th>\n<th>Type</th>\n<th>Description</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>X-Api-Key</td>\n<td>Header</td>\n<td>The API Key.</td>\n</tr>\n<tr>\n<td>document_id</td>\n<td>URL</td>\n<td>The document ID from the upload request.</td>\n</tr>\n<tr>\n<td>method</td>\n<td>Body</td>\n<td>Should be <em>virtual</em>.</td>\n</tr>\n<tr>\n<td>signerIds[]</td>\n<td>Body</td>\n<td>Array with of signers IDs.</td>\n</tr>\n</tbody>\n</table><p>The <em>virtual</em> method will not require any input from the signer. To request\nsignatures with input fields, the <em>collect</em> method should be used. For further\ndetails on how to implement this method, please refer to the\n<a href=\"#assignment\">assignment</a> section.</p>",
+      "subsections": [],
+      "endpoints": []
+    },
+    {
+      "title": "Authentication",
+      "level": 1,
+      "content": "<p>A authentication can be done through these methods:</p><ul>\n<li>\n<p>API key in the header <code>X-Api-Key</code>:<br/>\n<code>X-Api-Key: {api-key}</code></p>\n</li>\n<li>\n<p>Access token in the <code>Authorization</code> header:<br/>\n<code>Authorization: Bearer {access-token}</code></p>\n</li>\n<li>\n<p>Access token as URL parameter:<br/>\n<code>?access-token={access-token}</code></p>\n</li>\n</ul><p>The recommended way to authenticate is throgh an API key. You can create a key\nfrom the settings page, in the Assinafy app.</p><p>if however, you want to use an access token, it is obtained through the login\nprocess using user email and password. It is a JWT token and usually\nit expires in one hour.</p><h2 id=\"login\">Login</h2><blockquote>\n<p>Request</p>\n</blockquote><pre><code class=\"language-shell\">curl -X POST https://api.assinafy.com.br/v1/login \\\n-H 'Content-Type: application/json' \\\n-d '{ \"email\": \"<a class=\"__cf_email__\" data-cfemail=\"e095938592a08598818d908c85ce838f8d\" href=\"/cdn-cgi/l/email-protection\">[email protected]</a>\", \"password\": \"password\" }'</code></pre><blockquote>\n<p>200 OK</p>\n</blockquote><pre><code class=\"language-json\">{\n  \"status\": 200,\n  \"message\": \"\",\n  \"data\": {\n    \"access_token\": \"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiIsImp0aSI6IjY0MDFkZjQ3NWNkYzgxLjc2MTkwODgxIn0.eyJpc3MiOiJBc3NpbmFmeSIsImF1ZCI6IkFzc2luYWZ5IiwianRpIjoiNjQwMWRmNDc1Y2RjODEuNzYxOTA4ODEiLCJpYXQiOjE2Nzc4NDQyOTUsImV4cCI6MTY3OTY1ODY5NSwic3ViIjoiYmdqYXplbzVyOXYybHE3bDM2ZHg0OG5wIiwibmFtZSI6IkZcdTAwZTFiaW8gQ3Jpc3RpYW5vIExvdmF0byBKci4iLCJlbWFpbCI6ImRpcmNlLm9saXZlaXJhQGdtYWlsLmNvbSJ9.sHpe608nPwb5gMUMn-REy7TOxq7mxTPpPwE-bak6hz4\",\n    \"user\": {\n      \"id\": \"bgjazeo5r9v2lq7l36dx48np\",\n      \"name\": \"John Smith\",\n      \"email\": \"<a class=\"__cf_email__\" data-cfemail=\"90f5e8f1fde0fcf5d0f5e8f1fde0fcf5bef3fffd\" href=\"/cdn-cgi/l/email-protection\">[email protected]</a>\",\n      \"telephone\": \"17989206641\",\n      \"government_id\": \"15774136604\",\n      \"is_email_verified\": false,\n      \"has_accepted_terms\": true,\n      \"created_at\": \"2023-03-03T11:51:34Z\",\n      \"to_be_deleted_at\": null\n    },\n    \"accounts\": [\n      {\n        \"id\": \"6401df46d6a6b0c692d9ec49\",\n        \"name\": \"JS\",\n        \"roles\": [\n          \"owner\"\n        ],\n        \"is_delete_allowed\": true,\n        \"created_at\": \"2023-03-03T11:51:34Z\"\n      }\n    ]\n  }\n}</code></pre><p><code>POST /login</code></p><p>Login and create an access token.</p><h3>Headers</h3><ul>\n<li><code>Content-Type: application/json</code></li>\n</ul><h3>Body Parameters</h3><table>\n<thead>\n<tr>\n<th>Parameter</th>\n<th>Required</th>\n<th>Description</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>email</td>\n<td>true</td>\n<td>User's email.</td>\n</tr>\n<tr>\n<td>password</td>\n<td>true</td>\n<td>User's password.</td>\n</tr>\n</tbody>\n</table><h2 id=\"social-login\">Social Login</h2><blockquote>\n<p>Request</p>\n</blockquote><pre><code class=\"language-shell\">curl -X POST https://api.assinafy.com.br/v1/authentication/social-login \\\n-H 'Content-Type: application/json' \\\n-d '{\n    \"provider\": \"google\",\n    \"token\": \"yOTUvImV4cCI6MTY3OTY1ODY5NSwic3ViIjoiYmdqYXplbzVyOXYybHE3bDM2ZHg0\",\n    \"has_accepted_terms\": true\n}'</code></pre><blockquote>\n<p>200 OK</p>\n</blockquote><pre><code class=\"language-json\">{\n  \"status\": 200,\n  \"message\": \"\",\n  \"data\": {\n    \"access_token\": \"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiIsImp0aSI6IjY0MDFkZjQ3NWNkYzgxLjc2MTkwODgxIn0.eyJpc3MiOiJBc3NpbmFmeSIsImF1ZCI6IkFzc2luYWZ5IivianRpIjoiNjQwMWRmNDc1Y2RjODEuNzYxOTA4ODEiLCJpYXQiOjE2Nzc4NDQyOTUvImV4cCI6MTY3OTY1ODY5NSwic3ViIjoiYmdqYXplbzVyOXYybHE3bDM2ZHg0OG5wIiwibmFtZSI6IkZcdTAwZTFiaW8gQ3Jpc3RpYW5vIExvdmF0byBKci4iLCJlbWFpbCI6ImRpcmNlLm9saXZlaXJhQGdtYWlsLmNvbSJ9.sHpe608nPwb5gMUMn-REy7TOxq7mxTPpPwE-bak6hz4\",\n    \"user\": {\n      \"id\": \"bgjazeo5r9v2lq7l36dx48np\",\n      \"name\": \"John Smith\",\n      \"email\": \"<a class=\"__cf_email__\" data-cfemail=\"26435e474b564a4366435e474b564a430845494b\" href=\"/cdn-cgi/l/email-protection\">[email protected]</a>\",\n      \"telephone\": \"17989206641\",\n      \"government_id\": \"15774136604\",\n      \"is_email_verified\": false,\n      \"has_accepted_terms\": true,\n      \"created_at\": \"2023-03-03T11:51:34Z\",\n      \"to_be_deleted_at\": null\n    },\n    \"accounts\": [\n      {\n        \"id\": \"6401df46d6a6b0c692d9ec49\",\n        \"name\": \"JS\",\n        \"roles\": [\n          \"owner\"\n        ],\n        \"is_delete_allowed\": true,\n        \"created_at\": \"2023-03-03T11:51:34Z\"\n      }\n    ]\n  }\n}</code></pre><p><code>POST /authentication/social-login</code></p><p>Receive an access token or an ID token obtained throught a social login\nprovider and return an Assinafy access token.</p><h3>Headers</h3><ul>\n<li><code>Content-Type: application/json</code></li>\n</ul><h3>Body Parameters</h3><table>\n<thead>\n<tr>\n<th>Parameter</th>\n<th>Required</th>\n<th>Description</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>provider</td>\n<td>true</td>\n<td>The provider type.</td>\n</tr>\n<tr>\n<td>token</td>\n<td>true</td>\n<td>The access token or ID token obtained from the social login provider.</td>\n</tr>\n<tr>\n<td>has_accepted_terms</td>\n<td>true</td>\n<td>Boolean value indicating if user has accepted terms. Example: <em>true</em>.</td>\n</tr>\n</tbody>\n</table><p>Currently, the only possible provider type is <em>google</em>.</p><h2 id=\"create-api-key\">Create API Key</h2><blockquote>\n<p>Request</p>\n</blockquote><pre><code class=\"language-shell\">curl -X POST https://api.assinafy.com.br/v1/users/api-keys \\\n-H 'Content-Type: application/json' \\\n-H 'Authorization: Bearer 62b3a62b3a62b3ac64d6c55c64d6c55c64d6c55' \\\n-d '\n{\n  \"password\": \"password\"\n}\n'</code></pre><blockquote>\n<p>200 OK</p>\n</blockquote><pre><code class=\"language-json\">{\n  \"status\": 200,\n  \"message\": \"\",\n  \"data\": {\n    \"api_key\": \"mIpe_zdJfKUpMK9Va3XuYgzPXMxz49fIaRCWXseVkpVAX608A9j3i_D67qU5qW3M\"\n  }\n}</code></pre><p><code>POST /users/api-keys</code></p><p>Generate an API key for the user. The generated API key should be used\nthrough the header X-Api-Key.</p><p>Important: when generating a new key, the previous one will be deleted.</p><aside class=\"notice\">\nNever use your API key from a frontend application.\n</aside><h3>Headers</h3><ul>\n<li><code>Content-Type: application/json</code></li>\n<li><code>Authorization: Bearer {access_token}</code></li>\n</ul><h3>Body Parameters</h3><table>\n<thead>\n<tr>\n<th>Parameter</th>\n<th>Required</th>\n<th>Description</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>password</td>\n<td>true</td>\n<td>User's password.</td>\n</tr>\n</tbody>\n</table><h2 id=\"get-api-key\">Get API Key</h2><blockquote>\n<p>Request</p>\n</blockquote><pre><code class=\"language-shell\">curl -X GET https://api.assinafy.com.br/v1/users/api-keys \\\n-H 'Authorization: Bearer 62b3a62b3a62b3ac64d6c55c64d6c55c64d6c55'</code></pre><blockquote>\n<p>200 OK</p>\n</blockquote><pre><code class=\"language-json\">{\n  \"status\": 200,\n  \"message\": \"\",\n  \"data\": {\n    \"api_key\": \"************************************************************9Jdr\"\n  }\n}</code></pre><p><code>GET /users/api-keys</code></p><p>Retrieve a masked version of existing API key. For security reasons, your existing\nAPI key cannot be retrieved fully.</p><p>While an API key was not generated yet, a null value is returned.</p><h3>Header Parameters</h3><ul>\n<li><code>Authorization: Bearer {access_token}</code></li>\n</ul><h2 id=\"delete-api-key\">Delete API Key</h2><blockquote>\n<p>Request</p>\n</blockquote><pre><code class=\"language-shell\">curl -X DELETE https://api.assinafy.com.br/v1/users/api-keys \\\n-H 'Authorization: Bearer 62b3a62b3a62b3ac64d6c55c64d6c55c64d6c55'</code></pre><blockquote>\n<p>200 OK</p>\n</blockquote><pre><code class=\"language-json\">{\n  \"status\": 200,\n  \"message\": \"\",\n  \"data\": []\n}</code></pre><p><code>DELETE /users/api-keys</code></p><p>Delete an existing API key.</p><h3>Headers</h3><ul>\n<li><code>Authorization: Bearer {access_token}</code></li>\n</ul><h2 id=\"change-password\">Change Password</h2><blockquote>\n<p>Request</p>\n</blockquote><pre><code class=\"language-shell\">curl -X PUT https://api.assinafy.com.br/v1/authentication/change-password \\\n-H 'Content-Type: application/json' \\\n-H 'Authorization: Bearer hAvmvk6Urzus3byLD2qOWrg' \\\n-d '\n{\n  \"email\": \"<a class=\"__cf_email__\" data-cfemail=\"b8c8cad1cbdbd1d4d9808af8d0d7ccd5d9d1d496dbd7d5\" href=\"/cdn-cgi/l/email-protection\">[email protected]</a>\",\n  \"password\": \"X3$_!456aTa\",\n  \"new_password\": \"X3$_!456aT\"\n}'</code></pre><blockquote>\n<p>200 OK</p>\n</blockquote><pre><code class=\"language-json\">{\n  \"status\": 200,\n  \"message\": \"\",\n  \"data\": {\n    \"email\": \"<a class=\"__cf_email__\" data-cfemail=\"f18183988292989d90c9c3b1999e859c90989ddf929e9c\" href=\"/cdn-cgi/l/email-protection\">[email protected]</a>\"\n  }\n}</code></pre><p><code>PUT /authentication/change-password</code></p><p>Change user's password.</p><h3>Headers</h3><ul>\n<li><code>Authorization Bearer {access_token}</code></li>\n<li><code>Content-Type application/json</code></li>\n</ul><h3>Body Parameters</h3><table>\n<thead>\n<tr>\n<th>Parameter</th>\n<th>Required</th>\n<th>Description</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>email</td>\n<td>true</td>\n<td>User's email.</td>\n</tr>\n<tr>\n<td>password</td>\n<td>true</td>\n<td>The current password.</td>\n</tr>\n<tr>\n<td>new_password</td>\n<td>true</td>\n<td>The new password to be set.</td>\n</tr>\n</tbody>\n</table><h2 id=\"request-password-reset\">Request Password Reset</h2><blockquote>\n<p>Request</p>\n</blockquote><pre><code class=\"language-shell\">curl -X PUT https://api.assinafy.com.br/v1/authentication/request-password-reset \\\n-H 'Content-Type: application/json' \\\n-d '{\n  \"email\": \"<a class=\"__cf_email__\" data-cfemail=\"99f0ebfcf7fcb7eafce9ecf5effcfdf8d9ebaeb7faf6f4\" href=\"/cdn-cgi/l/email-protection\">[email protected]</a>\"\n}'</code></pre><blockquote>\n<p>200 OK</p>\n</blockquote><pre><code class=\"language-json\">{\n  \"status\": 200,\n  \"message\": \"\",\n  \"data\": {\n    \"email\": \"<a class=\"__cf_email__\" data-cfemail=\"620b10070c074c110712170e140706032210554c010d0f\" href=\"/cdn-cgi/l/email-protection\">[email protected]</a>\"\n  }\n}</code></pre><p><code>PUT /authentication/request-password-reset</code></p><p>Request a password reset. An email with instructions will be sent to the user\nto continue the process. This is request is typically used when the user\nforgot his password or when it was not set yet.</p><h3>Headers</h3><ul>\n<li><code>Content-Type</code> - <code>application/json</code></li>\n</ul><h3>Request Body</h3><table>\n<thead>\n<tr>\n<th>Parameter</th>\n<th>Required</th>\n<th>Description</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>email</td>\n<td>true</td>\n<td>User's email.</td>\n</tr>\n</tbody>\n</table><h2 id=\"reset-password\">Reset Password</h2><blockquote>\n<p>Request</p>\n</blockquote><pre><code class=\"language-shell\">curl -X PUT https://api.assinafy.com.br/v1/authentication/reset-password \\\n-H 'Content-Type: application/json' \\\n-d '{\n  \"email\": \"<a class=\"__cf_email__\" data-cfemail=\"6212100b11010b0e035a50220a0d160f030b0e4c010d0f\" href=\"/cdn-cgi/l/email-protection\">[email protected]</a>\",\n  \"token\": \"b3ac64d6c55b3ac64d6c55b3ac64d6c55b3ac64d6c55\",\n  \"new_password\": \"62b3ac64d6c55\"\n}'</code></pre><blockquote>\n<p>200 OK</p>\n</blockquote><pre><code class=\"language-json\">{\n  \"status\": 200,\n  \"message\": \"\",\n  \"data\": {\n    \"email\": \"<a class=\"__cf_email__\" data-cfemail=\"2b5b5942584842474a13196b43445f464a424705484446\" href=\"/cdn-cgi/l/email-protection\">[email protected]</a>\"\n  }\n}</code></pre><p><code>PUT /authentication/reset-password</code></p><p>Reset the user's password using instructions received by email.</p><h3>Headers</h3><ul>\n<li><code>Content-Type</code> - <code>application/json</code></li>\n</ul><h3>Body Parameters</h3><table>\n<thead>\n<tr>\n<th>Parameter</th>\n<th>Required</th>\n<th>Description</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>email</td>\n<td>true</td>\n<td>User's email.</td>\n</tr>\n<tr>\n<td>token</td>\n<td>false</td>\n<td>Token received by email as an URL parameter.</td>\n</tr>\n<tr>\n<td>new_password</td>\n<td>true</td>\n<td>The new password to be set.</td>\n</tr>\n</tbody>\n</table>",
+      "subsections": [],
+      "endpoints": []
+    },
+    {
+      "title": "Signer",
+      "level": 1,
+      "content": "<h2 id=\"create\">Create</h2><blockquote>\n<p>Request</p>\n</blockquote><pre><code class=\"language-shell\">curl \"https://api.assinafy.com.br/v1/accounts/e2d6ee35c7741ca4006b9e1a/signers\" \\\n  -H 'Authorization: Bearer hAvmvk6Urzus3byLD2qOWrg' \\\n  -H 'Content-Type: application/json' \\\n  -d '\n{\n  \"full_name\": \"John Dove\",\n  \"email\": \"<a class=\"__cf_email__\" data-cfemail=\"5f353037311f3a323e3633713c3032\" href=\"/cdn-cgi/l/email-protection\">[email protected]</a>\",\n  \"whatsapp_phone_number\": \"+5548999990000\"\n}\n'</code></pre><blockquote>\n<p>200 OK</p>\n</blockquote><pre><code class=\"language-json\">{\n  \"status\": 200,\n  \"message\": \"\",\n  \"data\": {\n    \"resource\": \"signer\",\n    \"id\": \"62d6ee35c7741ca4006b9e11\",\n    \"full_name\": \"John Signer\",\n    \"email\": \"<a class=\"__cf_email__\" data-cfemail=\"192f2b7d2f7c7c2a2c2d2d7a2a2d7c74787075597c74787075377a7674\" href=\"/cdn-cgi/l/email-protection\">[email protected]</a>\",\n    \"whatsapp_phone_number\": \"5548999990000\"\n  }\n}</code></pre><p><code>POST /accounts/:account_id/signers</code></p><p>Create a signer.</p><h3>Header Parameters</h3><ul>\n<li><code>Content-Type: application/json</code></li>\n<li><code>Authorization: Bearer {access_token}</code></li>\n</ul><h3>URL Parameters</h3><table>\n<thead>\n<tr>\n<th>Parameter</th>\n<th>Required</th>\n<th>Description</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>account_id</td>\n<td>True</td>\n<td>The account ID.</td>\n</tr>\n</tbody>\n</table><h3>Body Parameters</h3><table>\n<thead>\n<tr>\n<th>Parameter</th>\n<th>Required</th>\n<th>Description</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>full_name</td>\n<td>true</td>\n<td>Signer full name.</td>\n</tr>\n<tr>\n<td>email</td>\n<td>false</td>\n<td>Signer Email.</td>\n</tr>\n<tr>\n<td>whatsapp_phone_number</td>\n<td>false</td>\n<td>Signer's WhatsApp phone number. Format: E.164 (e.g., +5548999990000).</td>\n</tr>\n</tbody>\n</table><h2 id=\"list\">List</h2><blockquote>\n<p>Request</p>\n</blockquote><pre><code class=\"language-shell\">curl \"https://api.assinafy.com.br/v1/accounts/60f720577e30d2047d4f385f/signers\" \\\n  -H 'Authorization: Bearer hAvmvk6Urzus3byLD2qOWrg'</code></pre><blockquote>\n<p>200 OK</p>\n</blockquote><pre><code class=\"language-json\">{\n  \"status\": 200,\n  \"message\": \"\",\n  \"data\": [\n    {\n      \"id\": \"60f720577e30d2047d4f385f\",\n      \"full_name\": \"Joan Signer\",\n      \"email\": \"<a class=\"__cf_email__\" data-cfemail=\"24574d434a41561564574d434a41560a474b49\" href=\"/cdn-cgi/l/email-protection\">[email protected]</a>\",\n      \"whatsapp_phone_number\": \"5548999990000\"\n    },\n    {\n      \"id\": \"60f72057b865123687d56c3c\",\n      \"full_name\": \"Mary Signer\",\n      \"email\": \"<a class=\"__cf_email__\" data-cfemail=\"0a79636d646f78384a79636d646f7824696567\" href=\"/cdn-cgi/l/email-protection\">[email protected]</a>\",\n      \"whatsapp_phone_number\": null\n    }\n  ]\n}</code></pre><p><code>GET /accounts/:account_id/signers</code></p><p>List signers of the workspace.</p><h3>Header Parameters</h3><ul>\n<li><code>Authorization: Bearer {access_token}</code></li>\n</ul><h3>URL Parameters</h3><table>\n<thead>\n<tr>\n<th>Parameter</th>\n<th>Required</th>\n<th>Description</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>account_id</td>\n<td>true</td>\n<td>The account ID.</td>\n</tr>\n<tr>\n<td>search</td>\n<td>false</td>\n<td>Search term to filter by full_name or email.</td>\n</tr>\n</tbody>\n</table><h2 id=\"get\">Get</h2><blockquote>\n<p>Request</p>\n</blockquote><pre><code class=\"language-shell\">curl -X GET \"https://api.assinafy.com.br/v1/accounts/35c7741ca4006b9e11/signers/62d6ee35c7741ca4006b9e11\" \\\n  -H 'Authorization: Bearer hAvmvk6Urzus3byLD2qOWrg'</code></pre><blockquote>\n<p>200 OK</p>\n</blockquote><pre><code class=\"language-json\">{\n  \"status\": 200,\n  \"message\": \"\",\n  \"data\": {\n    \"resource\": \"signer\",\n    \"id\": \"62d6ee35c7741ca4006b9e11\",\n    \"full_name\": \"John Signer\",\n    \"email\": \"<a class=\"__cf_email__\" data-cfemail=\"98aeaafcaefdfdabadacacfbabacfdf5f9f1f4d8fdf5f9f1f4b6fbf7f5\" href=\"/cdn-cgi/l/email-protection\">[email protected]</a>\",\n    \"whatsapp_phone_number\": \"5548999990000\"\n  }\n}</code></pre><p><code>GET /accounts/:account_id/signers/:signer_id</code></p><p>Retrieve a signer's information.</p><h3>Header Parameters</h3><ul>\n<li><code>Authorization: Bearer {access_token}</code></li>\n</ul><h3>URL Parameters</h3><table>\n<thead>\n<tr>\n<th>Parameter</th>\n<th>Required</th>\n<th>Description</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>account_id</td>\n<td>True</td>\n<td>The account ID.</td>\n</tr>\n<tr>\n<td>signer_id</td>\n<td>true</td>\n<td>The signer ID.</td>\n</tr>\n</tbody>\n</table><h2 id=\"update\">Update</h2><blockquote>\n<p>Request</p>\n</blockquote><pre><code class=\"language-shell\">curl -X PUT \"https://api.assinafy.com.br/v1/accounts/35c7741ca4006b9e11/signers/62d6ee35c7741ca4006b9e11\" \\\n  -H 'Authorization: Bearer hAvmvk6Urzus3byLD2qOWrg' \\\n  -d '\n{\n  \"full_name\": \"John Dove\",\n  \"email\": \"<a class=\"__cf_email__\" data-cfemail=\"bbd1d4d3d5fbded6dad2d795d8d4d6\" href=\"/cdn-cgi/l/email-protection\">[email protected]</a>\",\n  \"whatsapp_phone_number\": \"+5548999990000\"\n}\n'</code></pre><blockquote>\n<p>200 OK</p>\n</blockquote><pre><code class=\"language-json\">{\n  \"status\": 200,\n  \"message\": \"\",\n  \"data\": {\n    \"resource\": \"signer\",\n    \"id\": \"62d6ee35c7741ca4006b9e11\",\n    \"full_name\": \"John Signer\",\n    \"email\": \"<a class=\"__cf_email__\" data-cfemail=\"ddebefb9ebb8b8eee8e9e9beeee9b8b0bcb4b19db8b0bcb4b1f3beb2b0\" href=\"/cdn-cgi/l/email-protection\">[email protected]</a>\",\n    \"whatsapp_phone_number\": \"5548999990000\"\n  }\n}</code></pre><p><code>PUT /accounts/:account_id/signers/:signer_id</code></p><p>Update signer's account information.</p><p>Important: A signer can only be updated while the record is not associated\nto any active document.</p><h3>Header Parameters</h3><ul>\n<li><code>Content-Type: application/json</code></li>\n<li><code>Authorization: Bearer {access_token}</code></li>\n</ul><h3>URL Parameters</h3><table>\n<thead>\n<tr>\n<th>Parameter</th>\n<th>Required</th>\n<th>Description</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>account_id</td>\n<td>true</td>\n<td>The account ID.</td>\n</tr>\n<tr>\n<td>signer_id</td>\n<td>true</td>\n<td>The signer ID.</td>\n</tr>\n</tbody>\n</table><h3>Body Parameters</h3><table>\n<thead>\n<tr>\n<th>Parameter</th>\n<th>Required</th>\n<th>Description</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>full_name</td>\n<td>false</td>\n<td>Signer full name.</td>\n</tr>\n<tr>\n<td>email</td>\n<td>false</td>\n<td>Signer Email.</td>\n</tr>\n<tr>\n<td>whatsapp_phone_number</td>\n<td>false</td>\n<td>Signer's WhatsApp phone number. Format: E.164 (e.g., +5548999990000).</td>\n</tr>\n</tbody>\n</table><h2 id=\"delete\">Delete</h2><blockquote>\n<p>Request</p>\n</blockquote><pre><code class=\"language-shell\">curl -X DELETE \"https://api.assinafy.com.br/v1/accounts/5c7741ca4006b9e1/signers/62d6ee35c7741ca4006b9e11\" \\\n  -H 'Authorization: Bearer hAvmvk6Urzus3byLD2qOWrg'</code></pre><blockquote>\n<p>200 OK</p>\n</blockquote><pre><code class=\"language-json\">{\n  \"status\": 200,\n  \"message\": \"\",\n  \"data\": []\n}</code></pre><p><code>DELETE /accounts/:account_id/signers/:signer_id</code></p><p>Delete a signer.</p><h3>Header Parameters</h3><ul>\n<li><code>Content-Type: application/json</code></li>\n<li><code>Authorization: Bearer {access_token}</code></li>\n</ul><h3>URL Parameters</h3><table>\n<thead>\n<tr>\n<th>Parameter</th>\n<th>Required</th>\n<th>Description</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>account_id</td>\n<td>true</td>\n<td>The account ID.</td>\n</tr>\n<tr>\n<td>signer_id</td>\n<td>true</td>\n<td>The signer ID.</td>\n</tr>\n</tbody>\n</table><h2 id=\"get-self\">Get Self</h2><blockquote>\n<p>Request</p>\n</blockquote><pre><code class=\"language-shell\">curl -X GET 'https://api.assinafy.com.br/v1/signers/self?signer-access-code=9uAWyOXx9hgzCKdCuahkinwvg8tWJ2RC'</code></pre><blockquote>\n<p>200 OK</p>\n</blockquote><pre><code class=\"language-json\">{\n  \"status\": 200,\n  \"message\": \"\",\n  \"data\": {\n    \"resource\": \"signer\",\n    \"id\": \"uahkinwvg8tWJ2RC\",\n    \"full_name\": \"Signer Name\",\n    \"email\": \"<a class=\"__cf_email__\" data-cfemail=\"e490819790a48189858d88ca878b89\" href=\"/cdn-cgi/l/email-protection\">[email protected]</a>\",\n    \"whatsapp_phone_number\": \"5548999990000\",\n    \"has_accepted_terms\": false,\n    \"has_signature\": false,\n    \"has_initial\": false\n  }\n}</code></pre><p><code>GET /signers/self</code></p><p>Allows a signer to obtain his/her own information.</p><p><strong>Headers</strong>:</p><ul>\n<li><code>Content-Type</code> - <code>application/json</code></li>\n</ul><h3>Body Parameters</h3><table>\n<thead>\n<tr>\n<th>Parameter</th>\n<th>Required</th>\n<th>Description</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td><code>signer-access-code</code></td>\n<td>true</td>\n<td>Signer access code.</td>\n</tr>\n</tbody>\n</table><h2 id=\"accept-terms\">Accept Terms</h2><blockquote>\n<p>Request</p>\n</blockquote><pre><code class=\"language-shell\">curl -X PUT 'https://api.assinafy.com.br/v1/signers/accept-terms' -d '\n{\n  \"signer-access-code\": \"9uAWyOXx9hgzCKdCuahkinwvg8tWJ2RC-n6hhxyLS1QfMhqWSw-PnwQlSs2oPNea\"\n}\n'</code></pre><blockquote>\n<p>200 OK</p>\n</blockquote><pre><code class=\"language-json\">{\n  \"status\": 200,\n  \"message\": \"\",\n  \"data\": {\n    \"full_name\": \"Signer Name\",\n    \"email\": \"<a class=\"__cf_email__\" data-cfemail=\"254048444c4965514056510b464a48\" href=\"/cdn-cgi/l/email-protection\">[email protected]</a>\",\n    \"has_accepted_terms\": true\n  }\n}</code></pre><p><code>PUT /signers/accept-terms</code></p><p>This endpoint allows a signer to accept terms of use.</p><p><strong>Alternative:</strong> Terms can also be accepted via the <a href=\"#confirm-signer-data\">Confirm Signer Data</a> endpoint by including <code>has_accepted_terms: true</code> in the request body. This allows confirming data and accepting terms in a single API call.</p><p><strong>Headers</strong>:</p><ul>\n<li><code>Content-Type</code> - <code>application/json</code></li>\n</ul><h3>Body Parameters</h3><table>\n<thead>\n<tr>\n<th>Parameter</th>\n<th>Required</th>\n<th>Description</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td><code>signer-access-code</code></td>\n<td>true</td>\n<td>Signer access code.</td>\n</tr>\n</tbody>\n</table><h2 id=\"verify-email\">Verify Email</h2><blockquote>\n<p>Request</p>\n</blockquote><pre><code class=\"language-shell\">curl -XPOST 'https://api.assinafy.com.br/v1/verify' -d '\n{\n  \"verification-code\": \"123456\",\n  \"signer-access-code\": \"9uAWyOXx9hgzCKdCuahkinwvg8tWJ2RC-n6hhxyLS1QfMhqWSw-PnwQlSs2oPNea\"\n}\n'</code></pre><blockquote>\n<p>200 OK</p>\n</blockquote><pre><code class=\"language-json\">{\n  \"message\": \"Code verified successfully\"\n}</code></pre><p><code>POST /verify</code></p><p>Verify the signer email that received a link to access a document.</p><h3>Header Parameters</h3><ul>\n<li><code>Content-Type</code> - <code>application/json</code></li>\n</ul><h3>Body Parameters</h3><table>\n<thead>\n<tr>\n<th>Parameter</th>\n<th>Required</th>\n<th>Description</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td><code>signer-access-code</code></td>\n<td>true</td>\n<td>Signer access code.</td>\n</tr>\n<tr>\n<td><code>verification-code</code></td>\n<td>true</td>\n<td>Verification code.</td>\n</tr>\n</tbody>\n</table><h2 id=\"confirm-signer-data\">Confirm Signer Data</h2><blockquote>\n<p>Request</p>\n</blockquote><pre><code class=\"language-shell\">curl -X PUT 'https://api.assinafy.com.br/v1/documents/c57d51eaad68a7/signers/confirm-data?signer-access-code=9uAWyOXx9hgzCKdCuahkinwvg8tWJ2RC-n6hhxyLS1QfMhqWSw-PnwQlSs2oPNea' \\\n-H 'Content-Type: application/json' \\\n-d '\n{\n  \"email\": \"<a class=\"__cf_email__\" data-cfemail=\"b1dbded9df9fd5ded4f1d4c9d0dcc1ddd49fd2dedc\" href=\"/cdn-cgi/l/email-protection\">[email protected]</a>\",\n  \"whatsapp_phone_number\": \"+5548999990000\",\n  \"has_accepted_terms\": true\n}\n'</code></pre><blockquote>\n<p>200 OK</p>\n</blockquote><pre><code class=\"language-json\">{}</code></pre><p><code>PUT /documents/:documentId/signers/confirm-data</code></p><p>Confirm signer data for virtual assignments. This endpoint is required for virtual assignments using email verification method. Signers must confirm their data before they can sign the document.</p><p><strong>Important:</strong> </p><ul>\n<li>Both <code>email</code> and <code>whatsapp_phone_number</code> are <strong>required</strong> fields in this request.</li>\n<li>For virtual assignments with email verification, this endpoint must be called after email verification and before signing.</li>\n<li><strong>Email validation:</strong>\n<ul>\n<li>If the signer already has an email, the provided email <strong>must match</strong> the existing email exactly.</li>\n<li>If the signer doesn't have an email, the provided email will be saved to the signer's record.</li>\n</ul></li>\n<li><strong>WhatsApp phone number validation:</strong>\n<ul>\n<li>If the signer already has a WhatsApp phone number, the provided phone number <strong>must match</strong> the existing phone number exactly.</li>\n<li>If the signer doesn't have a phone number, the provided phone number will be saved to the signer's record.</li>\n</ul></li>\n<li>Terms acceptance can be done in this same request by setting <code>has_accepted_terms</code> to <code>true</code>, allowing you to confirm data and accept terms in a single API call.</li>\n</ul><h3>Header Parameters</h3><ul>\n<li><code>Content-Type</code> - <code>application/json</code></li>\n</ul><h3>URL Parameters</h3><table>\n<thead>\n<tr>\n<th>Parameter</th>\n<th>Required</th>\n<th>Description</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td><code>documentId</code></td>\n<td>true</td>\n<td>Document custom ID.</td>\n</tr>\n<tr>\n<td><code>signer-access-code</code></td>\n<td>true</td>\n<td>Signer access code.</td>\n</tr>\n</tbody>\n</table><h3>Body Parameters</h3><table>\n<thead>\n<tr>\n<th>Parameter</th>\n<th>Required</th>\n<th>Description</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td><code>email</code></td>\n<td><strong>true</strong></td>\n<td>Signer's email address. Must match the existing email if already set, or will be saved if not set. Must be a valid email format.</td>\n</tr>\n<tr>\n<td><code>whatsapp_phone_number</code></td>\n<td><strong>true</strong></td>\n<td>Signer's WhatsApp phone number. Must match the existing phone number if already set, or will be saved if not set. Format: E.164 (e.g., +5548999990000).</td>\n</tr>\n<tr>\n<td><code>has_accepted_terms</code></td>\n<td>false</td>\n<td>Set to <code>true</code> to accept terms of use. This allows accepting terms and confirming data in a single request.</td>\n</tr>\n</tbody>\n</table><h3>Error Responses</h3><p><strong>400 Bad Request</strong> - If email is missing:</p><pre><code class=\"language-json\">{\n  \"name\": \"Bad Request\",\n  \"message\": \"Email is required.\",\n  \"code\": 0,\n  \"status\": 400\n}</code></pre><p><strong>400 Bad Request</strong> - If email is empty:</p><pre><code class=\"language-json\">{\n  \"name\": \"Bad Request\",\n  \"message\": \"Email cannot be empty.\",\n  \"code\": 0,\n  \"status\": 400\n}</code></pre><p><strong>400 Bad Request</strong> - If email format is invalid:</p><pre><code class=\"language-json\">{\n  \"name\": \"Bad Request\",\n  \"message\": \"Invalid email.\",\n  \"code\": 0,\n  \"status\": 400\n}</code></pre><p><strong>400 Bad Request</strong> - If email doesn't match existing email:</p><pre><code class=\"language-json\">{\n  \"name\": \"Bad Request\",\n  \"message\": \"The provided email does not match the signer's email.\",\n  \"code\": 0,\n  \"status\": 400\n}</code></pre><p><strong>400 Bad Request</strong> - If WhatsApp phone number is missing:</p><pre><code class=\"language-json\">{\n  \"name\": \"Bad Request\",\n  \"message\": \"WhatsApp phone number is required.\",\n  \"code\": 0,\n  \"status\": 400\n}</code></pre><p><strong>400 Bad Request</strong> - If WhatsApp phone number is empty:</p><pre><code class=\"language-json\">{\n  \"name\": \"Bad Request\",\n  \"message\": \"WhatsApp phone number cannot be empty.\",\n  \"code\": 0,\n  \"status\": 400\n}</code></pre><p><strong>400 Bad Request</strong> - If WhatsApp phone number doesn't match existing phone number:</p><pre><code class=\"language-json\">{\n  \"name\": \"Bad Request\",\n  \"message\": \"The provided phone number does not match the signer's phone number.\",\n  \"code\": 0,\n  \"status\": 400\n}</code></pre><p><strong>400 Bad Request</strong> - If attempting to sign without confirming data first:</p><pre><code class=\"language-json\">{\n  \"name\": \"Bad Request\",\n  \"message\": \"Signer data must be confirmed before signing.\",\n  \"code\": 0,\n  \"status\": 400\n}</code></pre><h2 id=\"upload-signature\">Upload Signature</h2><blockquote>\n<p>Request</p>\n</blockquote><pre><code class=\"language-shell\">curl 'https://api.assinafy.com.br/v1/signature?signer-access-code=9uAWyOXx9hgzCKdCuea&amp;type=signature' \\\n-H 'Content-Type: image/png' \\\n-d '{&lt;Binary Here&gt;}'</code></pre><blockquote>\n<p>200 OK</p>\n</blockquote><pre><code class=\"language-json\">{\n  \"status\": 200,\n  \"message\": \"\",\n  \"data\": []\n}</code></pre><p><code>POST /signature?signer-access-code=:signer_access_code&amp;type=:type</code></p><p>Upload the signer's signature or intial image.</p><h3>Header Parameters</h3><ul>\n<li><code>Content-Type</code> - <code>image/{png|jpeg}</code></li>\n</ul><h3>URL Parameters</h3><table>\n<thead>\n<tr>\n<th>Parameter</th>\n<th>Default</th>\n<th>Required</th>\n<th>Description</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>signer-access-code</td>\n<td></td>\n<td>true</td>\n<td>The signer access code.</td>\n</tr>\n<tr>\n<td>type</td>\n<td><em>signature</em></td>\n<td></td>\n<td>Should be <em>signature</em> or <em>initial</em>.</td>\n</tr>\n</tbody>\n</table><h2 id=\"download-signature\">Download Signature</h2><blockquote>\n<p>Request</p>\n</blockquote><pre><code class=\"language-shell\">curl 'https://api.assinafy.com.br/v1/signature/signature?signer-access-code=9uAWyOXx9hgzCKdCuea</code></pre><blockquote>\n<p>200 OK</p>\n</blockquote><pre><code>Content-Type: image/png\n\n[PNG binary]</code></pre><p><code>GET /signature/:type?signer-access-code=:signer_access_code</code></p><p>Download the signer's signature or initial image.</p><h3>URL Parameters</h3><table>\n<thead>\n<tr>\n<th>Parameter</th>\n<th>Required</th>\n<th>Description</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>signer_access_code</td>\n<td>true</td>\n<td>The signer access code.</td>\n</tr>\n<tr>\n<td>type</td>\n<td>true</td>\n<td>Should be <em>signature</em> or <em>initial</em>.</td>\n</tr>\n</tbody>\n</table>",
+      "subsections": [],
+      "endpoints": [
+        {
+          "title": "Creating Signers",
+          "method": "GET",
+          "path": "/accounts/{id}/signers",
+          "description": "200 OK - Signer Creation Response",
+          "parameters": [],
+          "request_example": null,
+          "response_example": null,
+          "requires_auth": false,
+          "supports_pagination": false
+        },
+        {
+          "title": "Creating Signers",
+          "method": "GET",
+          "path": "/accounts/{id}/signers",
+          "description": "200 OK - Signer Creation Response",
+          "parameters": [],
+          "request_example": null,
+          "response_example": null,
+          "requires_auth": false,
+          "supports_pagination": false
+        },
+        {
+          "title": "Create",
+          "method": "GET",
+          "path": "/accounts/{id}/signers",
+          "description": "200 OK",
+          "parameters": [],
+          "request_example": null,
+          "response_example": null,
+          "requires_auth": false,
+          "supports_pagination": false
+        },
+        {
+          "title": "Create",
+          "method": "GET",
+          "path": "/accounts/{id}/signers",
+          "description": "200 OK",
+          "parameters": [],
+          "request_example": null,
+          "response_example": null,
+          "requires_auth": false,
+          "supports_pagination": false
+        },
+        {
+          "title": "List",
+          "method": "GET",
+          "path": "/accounts/{id}/signers",
+          "description": "200 OK",
+          "parameters": [],
+          "request_example": null,
+          "response_example": null,
+          "requires_auth": false,
+          "supports_pagination": false
+        },
+        {
+          "title": "List",
+          "method": "GET",
+          "path": "/accounts/{id}/signers",
+          "description": "200 OK",
+          "parameters": [],
+          "request_example": null,
+          "response_example": null,
+          "requires_auth": false,
+          "supports_pagination": false
+        },
+        {
+          "title": "Get",
+          "method": "GET",
+          "path": "/accounts/35c7741ca4006b9e11/signers/{id}",
+          "description": "200 OK",
+          "parameters": [],
+          "request_example": null,
+          "response_example": null,
+          "requires_auth": false,
+          "supports_pagination": false
+        },
+        {
+          "title": "Get",
+          "method": "GET",
+          "path": "/accounts/35c7741ca4006b9e11/signers/{id}",
+          "description": "200 OK",
+          "parameters": [],
+          "request_example": null,
+          "response_example": null,
+          "requires_auth": false,
+          "supports_pagination": false
+        },
+        {
+          "title": "Update",
+          "method": "PUT",
+          "path": "/accounts/35c7741ca4006b9e11/signers/{id}",
+          "description": "200 OK",
+          "parameters": [],
+          "request_example": null,
+          "response_example": null,
+          "requires_auth": false,
+          "supports_pagination": false
+        },
+        {
+          "title": "Update",
+          "method": "PUT",
+          "path": "/accounts/35c7741ca4006b9e11/signers/{id}",
+          "description": "200 OK",
+          "parameters": [],
+          "request_example": null,
+          "response_example": null,
+          "requires_auth": false,
+          "supports_pagination": false
+        },
+        {
+          "title": "Delete",
+          "method": "DELETE",
+          "path": "/accounts/5c7741ca4006b9e1/signers/{id}",
+          "description": "200 OK",
+          "parameters": [],
+          "request_example": null,
+          "response_example": null,
+          "requires_auth": false,
+          "supports_pagination": false
+        },
+        {
+          "title": "Delete",
+          "method": "DELETE",
+          "path": "/accounts/5c7741ca4006b9e1/signers/{id}",
+          "description": "200 OK",
+          "parameters": [],
+          "request_example": null,
+          "response_example": null,
+          "requires_auth": false,
+          "supports_pagination": false
+        },
+        {
+          "title": "Get Self",
+          "method": "GET",
+          "path": "/signers/self?signer-access-code=9uAWyOXx9hgzCKdCuahkinwvg8tWJ2RC",
+          "description": "200 OK",
+          "parameters": [],
+          "request_example": null,
+          "response_example": null,
+          "requires_auth": false,
+          "supports_pagination": false
+        },
+        {
+          "title": "Get Self",
+          "method": "GET",
+          "path": "/signers/self?signer-access-code=9uAWyOXx9hgzCKdCuahkinwvg8tWJ2RC",
+          "description": "200 OK",
+          "parameters": [],
+          "request_example": null,
+          "response_example": null,
+          "requires_auth": false,
+          "supports_pagination": false
+        },
+        {
+          "title": "Accept Terms",
+          "method": "PUT",
+          "path": "/signers/accept-terms",
+          "description": "200 OK",
+          "parameters": [],
+          "request_example": null,
+          "response_example": null,
+          "requires_auth": false,
+          "supports_pagination": false
+        },
+        {
+          "title": "Accept Terms",
+          "method": "PUT",
+          "path": "/signers/accept-terms",
+          "description": "200 OK",
+          "parameters": [],
+          "request_example": null,
+          "response_example": null,
+          "requires_auth": false,
+          "supports_pagination": false
+        },
+        {
+          "title": "Confirm Signer Data",
+          "method": "PUT",
+          "path": "/documents/c57d51eaad68a7/signers/confirm-data?signer-access-code=9uAWyOXx9hgzCKdCuahkinwvg8tWJ2RC-n6hhxyLS1QfMhqWSw-PnwQlSs2oPNea",
+          "description": "200 OK",
+          "parameters": [],
+          "request_example": null,
+          "response_example": null,
+          "requires_auth": false,
+          "supports_pagination": false
+        },
+        {
+          "title": "Confirm Signer Data",
+          "method": "PUT",
+          "path": "/documents/c57d51eaad68a7/signers/confirm-data?signer-access-code=9uAWyOXx9hgzCKdCuahkinwvg8tWJ2RC-n6hhxyLS1QfMhqWSw-PnwQlSs2oPNea",
+          "description": "200 OK",
+          "parameters": [],
+          "request_example": null,
+          "response_example": null,
+          "requires_auth": false,
+          "supports_pagination": false
+        },
+        {
+          "title": "Upload Signature",
+          "method": "GET",
+          "path": "/signature?signer-access-code=9uAWyOXx9hgzCKdCuea&type=signature",
+          "description": "200 OK",
+          "parameters": [],
+          "request_example": null,
+          "response_example": null,
+          "requires_auth": false,
+          "supports_pagination": false
+        },
+        {
+          "title": "Upload Signature",
+          "method": "GET",
+          "path": "/signature?signer-access-code=9uAWyOXx9hgzCKdCuea&type=signature",
+          "description": "200 OK",
+          "parameters": [],
+          "request_example": null,
+          "response_example": null,
+          "requires_auth": false,
+          "supports_pagination": false
+        },
+        {
+          "title": "Resend",
+          "method": "PUT",
+          "path": "/documents/c57d51eaad68a7/assignments/d51edaee68a7/signers/a51edaee68a7/resend",
+          "description": "200 OK",
+          "parameters": [],
+          "request_example": null,
+          "response_example": null,
+          "requires_auth": false,
+          "supports_pagination": false
+        },
+        {
+          "title": "Resend",
+          "method": "PUT",
+          "path": "/documents/c57d51eaad68a7/assignments/d51edaee68a7/signers/a51edaee68a7/resend",
+          "description": "200 OK",
+          "parameters": [],
+          "request_example": null,
+          "response_example": null,
+          "requires_auth": false,
+          "supports_pagination": false
+        },
+        {
+          "title": "Get",
+          "method": "GET",
+          "path": "/sign?signer-access-code=9uAWyOXx9hgzCKdCuahkinwvg8tWJ2RC-n6hhxyLS1QfMhqWSw-PnwQlSs2oPNea",
+          "description": "200 OK",
+          "parameters": [],
+          "request_example": null,
+          "response_example": null,
+          "requires_auth": false,
+          "supports_pagination": false
+        },
+        {
+          "title": "Get",
+          "method": "GET",
+          "path": "/sign?signer-access-code=9uAWyOXx9hgzCKdCuahkinwvg8tWJ2RC-n6hhxyLS1QfMhqWSw-PnwQlSs2oPNea",
+          "description": "200 OK",
+          "parameters": [],
+          "request_example": null,
+          "response_example": null,
+          "requires_auth": false,
+          "supports_pagination": false
+        },
+        {
+          "title": "Sign",
+          "method": "POST",
+          "path": "/documents/c57d51eaad68a7/assignments/d51edaee68a7?signer-access-code=9uAWyOXx9hgzCKdCuahkinwvg8tWJ2RC-n6hhxyLS1QfMhqWSw-PnwQlSs2oPNea",
+          "description": "POST /documents/:documentId/assignments/:assignmentId",
+          "parameters": [],
+          "request_example": null,
+          "response_example": null,
+          "requires_auth": false,
+          "supports_pagination": false
+        },
+        {
+          "title": "Sign",
+          "method": "POST",
+          "path": "/documents/c57d51eaad68a7/assignments/d51edaee68a7?signer-access-code=9uAWyOXx9hgzCKdCuahkinwvg8tWJ2RC-n6hhxyLS1QfMhqWSw-PnwQlSs2oPNea",
+          "description": "POST /documents/:documentId/assignments/:assignmentId",
+          "parameters": [],
+          "request_example": null,
+          "response_example": null,
+          "requires_auth": false,
+          "supports_pagination": false
+        },
+        {
+          "title": "Decline",
+          "method": "PUT",
+          "path": "/documents/c57d51eaad68a7/assignments/d51edaee68a7/reject?signer-access-code=1e7d51e68a7",
+          "description": "200 OK",
+          "parameters": [],
+          "request_example": null,
+          "response_example": null,
+          "requires_auth": false,
+          "supports_pagination": false
+        },
+        {
+          "title": "Decline",
+          "method": "PUT",
+          "path": "/documents/c57d51eaad68a7/assignments/d51edaee68a7/reject?signer-access-code=1e7d51e68a7",
+          "description": "200 OK",
+          "parameters": [],
+          "request_example": null,
+          "response_example": null,
+          "requires_auth": false,
+          "supports_pagination": false
+        },
+        {
+          "title": "Sign Multiple",
+          "method": "PUT",
+          "path": "/signers/documents/sign-multiple?signer-access-code=9uAWyOXx9hgzCKhkinwvg8tWJ2RC",
+          "description": "PUT /signers/documents/sign-multiple",
+          "parameters": [],
+          "request_example": null,
+          "response_example": null,
+          "requires_auth": false,
+          "supports_pagination": false
+        },
+        {
+          "title": "Sign Multiple",
+          "method": "PUT",
+          "path": "/signers/documents/sign-multiple?signer-access-code=9uAWyOXx9hgzCKhkinwvg8tWJ2RC",
+          "description": "PUT /signers/documents/sign-multiple",
+          "parameters": [],
+          "request_example": null,
+          "response_example": null,
+          "requires_auth": false,
+          "supports_pagination": false
+        },
+        {
+          "title": "Decline Multiple",
+          "method": "PUT",
+          "path": "/signers/documents/decline-multiple?signer-access-code=9uAWyOXx9hgzCKhkinwvg8tWJ2RC",
+          "description": "PUT /signers/documents/decline-multiple",
+          "parameters": [],
+          "request_example": null,
+          "response_example": null,
+          "requires_auth": false,
+          "supports_pagination": false
+        },
+        {
+          "title": "Decline Multiple",
+          "method": "PUT",
+          "path": "/signers/documents/decline-multiple?signer-access-code=9uAWyOXx9hgzCKhkinwvg8tWJ2RC",
+          "description": "PUT /signers/documents/decline-multiple",
+          "parameters": [],
+          "request_example": null,
+          "response_example": null,
+          "requires_auth": false,
+          "supports_pagination": false
+        },
+        {
+          "title": "Download",
+          "method": "GET",
+          "path": "/signers/{id}/documents/{id}/download/original?signer-access-code=1ca4006b9e111ca4006b9e11",
+          "description": "200 OK",
+          "parameters": [],
+          "request_example": null,
+          "response_example": null,
+          "requires_auth": false,
+          "supports_pagination": false
+        },
+        {
+          "title": "Download",
+          "method": "GET",
+          "path": "/signers/{id}/documents/{id}/download/original?signer-access-code=1ca4006b9e111ca4006b9e11",
+          "description": "200 OK",
+          "parameters": [],
+          "request_example": null,
+          "response_example": null,
+          "requires_auth": false,
+          "supports_pagination": false
+        },
+        {
+          "title": "Validate",
+          "method": "POST",
+          "path": "/accounts/{id}d55bdd13197/fields/{id}/validate?signer-access-code=hAvmvk6Urzus3byLD2qOWrghAvmvk6Urzus3byLD2qOWrg",
+          "description": "200 OK",
+          "parameters": [],
+          "request_example": null,
+          "response_example": null,
+          "requires_auth": false,
+          "supports_pagination": false
+        },
+        {
+          "title": "Validate",
+          "method": "POST",
+          "path": "/accounts/{id}d55bdd13197/fields/{id}/validate?signer-access-code=hAvmvk6Urzus3byLD2qOWrghAvmvk6Urzus3byLD2qOWrg",
+          "description": "200 OK",
+          "parameters": [],
+          "request_example": null,
+          "response_example": null,
+          "requires_auth": false,
+          "supports_pagination": false
+        },
+        {
+          "title": "Validate Multiple",
+          "method": "POST",
+          "path": "/accounts/{id}d55bdd13197/fields/validate-multiple?signer-access-code=hAvmvk6Urzus3byLD2qOWrghAvmvk6Urzus3byLD2qOWrg",
+          "description": "200 OK",
+          "parameters": [],
+          "request_example": null,
+          "response_example": null,
+          "requires_auth": false,
+          "supports_pagination": false
+        },
+        {
+          "title": "Validate Multiple",
+          "method": "POST",
+          "path": "/accounts/{id}d55bdd13197/fields/validate-multiple?signer-access-code=hAvmvk6Urzus3byLD2qOWrghAvmvk6Urzus3byLD2qOWrg",
+          "description": "200 OK",
+          "parameters": [],
+          "request_example": null,
+          "response_example": null,
+          "requires_auth": false,
+          "supports_pagination": false
+        }
+      ]
+    },
+    {
+      "title": "Document",
+      "level": 1,
+      "content": "<p>This is the documents management service. The endpoints of this area allow us\nto create, list, download and delete documents.</p><h3>Document Status</h3><p>A document will be in one of the following status:</p><table>\n<thead>\n<tr>\n<th>Status</th>\n<th>Deletable</th>\n<th>Description</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>uploading</td>\n<td>no</td>\n<td>The document upload is in process.</td>\n</tr>\n<tr>\n<td>uploaded</td>\n<td>no</td>\n<td>The document has been uploaded.</td>\n</tr>\n<tr>\n<td>metadata_processing</td>\n<td>no</td>\n<td>The initial processing is under way.</td>\n</tr>\n<tr>\n<td>metadata_ready</td>\n<td>yes</td>\n<td>The initial processing has been completed.</td>\n</tr>\n<tr>\n<td>expired</td>\n<td>yes</td>\n<td>The signature deadline has been reached.</td>\n</tr>\n<tr>\n<td>certificating</td>\n<td>no</td>\n<td>The document has been signed and is being certificated.</td>\n</tr>\n<tr>\n<td>certificated</td>\n<td>no</td>\n<td>The document is certificated.</td>\n</tr>\n<tr>\n<td>rejected_by_signer</td>\n<td>yes</td>\n<td>A signer declined signing the document.</td>\n</tr>\n<tr>\n<td>pending_signature</td>\n<td>yes</td>\n<td>The document is waiting for signatures.</td>\n</tr>\n<tr>\n<td>rejected_by_user</td>\n<td>yes</td>\n<td>The signature process was cancelled by a user.</td>\n</tr>\n<tr>\n<td>failed</td>\n<td>yes</td>\n<td>The document processing has failed.</td>\n</tr>\n</tbody>\n</table><h2 id=\"statuses\">Statuses</h2><blockquote>\n<p>Request</p>\n</blockquote><pre><code class=\"language-shell\">curl -X GET \"https://api.assinafy.com.br/v1/documents/statuses\" \\\n  -H \"Authorization: Bearer hAvmvk6Urzus3byLD2qOWrg\"</code></pre><blockquote>\n<p>200 OK</p>\n</blockquote><pre><code class=\"language-json\">{\n  \"status\": 200,\n  \"message\": \"\",\n  \"data\": [\n    {\n      \"code\": \"uploading\",\n      \"deletable\": false\n    },\n    {\n      \"code\": \"uploaded\",\n      \"deletable\": false\n    },\n    {\n      \"code\": \"metadata_processing\",\n      \"deletable\": false\n    },\n    {\n      \"code\": \"metadata_ready\",\n      \"deletable\": true\n    },\n    {\n      \"code\": \"certificating\",\n      \"deletable\": false\n    }\n  ]\n}</code></pre><p><code>GET /documents/statuses</code></p><p>Returns the list of supported document statuses and their properties (such as whether a document in that status can be deleted).</p><h3>Header Parameters</h3><ul>\n<li><code>Authorization: Bearer {access_token}</code></li>\n</ul><h2 id=\"list\">List</h2><blockquote>\n<p>Request</p>\n</blockquote><pre><code class=\"language-shell\">curl \"https://api.assinafy.com.br/v1/accounts/d199996981dbd199996981db/documents\" \\\n  -H 'Authorization: Bearer hAvmvk6Urzus3byLD2qOWrghAvmvk6Urzus3byLD2qOWrg'</code></pre><blockquote>\n<p>200 OK</p>\n</blockquote><pre><code class=\"language-json\">{\n  \"status\": 200,\n  \"message\": \"\",\n  \"data\": [\n    {\n      \"id\": \"6981dbd199996981d\",\n      \"account_id\": \"1a\",\n      \"name\": \"my_document.pdf\",\n      \"status\": \"metadata_ready\",\n      \"assignment\": {\n        \"id\": \"1\",\n        \"sender_email\": \"<a class=\"__cf_email__\" data-cfemail=\"6d1e080309081f4308150c001d01082d08000c0401430e0200\" href=\"/cdn-cgi/l/email-protection\">[email protected]</a>\",\n        \"method\": \"virtual\",\n        \"expires_at\": null,\n        \"message\": null,\n        \"signers\": [\n          {\n            \"id\": \"customid1\",\n            \"full_name\": \"Signer 1\",\n            \"email\": \"<a class=\"__cf_email__\" data-cfemail=\"b1c2d8d6dfd4c3f1d4dcd0d8dd9fd2dedc\" href=\"/cdn-cgi/l/email-protection\">[email protected]</a>\",\n            \"has_accepted_terms\": false\n          },\n          {\n            \"id\": \"customid2\",\n            \"full_name\": \"Signer 2\",\n            \"email\": \"<a class=\"__cf_email__\" data-cfemail=\"5c2f353b32392e6e1c2f353b32392e723f3331\" href=\"/cdn-cgi/l/email-protection\">[email protected]</a>\",\n            \"has_accepted_terms\": false\n          }\n        ],\n        \"items\": [\n          {\n            \"id\": \"dbd199996981d\",\n            \"page\": {\n              \"id\": \"dbd199996981d\",\n              \"number\": 1,\n              \"height\": 1,\n              \"width\": 1,\n              \"download_url\": \"https://api.assinafy.com.br/v1/documents/doc1/pages/1a/download\"\n            },\n            \"signer\": {\n              \"id\": \"dbd199996981d\",\n              \"full_name\": \"Signer Name\",\n              \"email\": \"<a class=\"__cf_email__\" data-cfemail=\"18605860367b7775\" href=\"/cdn-cgi/l/email-protection\">[email protected]</a>\",\n              \"has_accepted_terms\": false\n            },\n            \"field\": {\n              \"id\": \"dbd199996981d\",\n              \"name\": \"Assinatura\",\n              \"type\": \"virtual\",\n              \"regex\": null,\n              \"is_pre_defined\": false,\n              \"is_active\": true,\n              \"is_required\": true,\n              \"is_standard\": false,\n              \"is_read_only\": false,\n              \"is_visible\": true\n            },\n            \"display_settings\": \"\",\n            \"value\": \"\",\n            \"completed\": true\n          }\n        ],\n        \"summary\": {\n          \"signer_count\": 2,\n          \"completed_count\": 1,\n          \"signers\": [\n            {\n              \"id\": \"dbd199996981d\",\n              \"full_name\": \"Signer 1\",\n              \"email\": \"<a class=\"__cf_email__\" data-cfemail=\"473f073f6924282a\" href=\"/cdn-cgi/l/email-protection\">[email protected]</a>\",\n              \"has_accepted_terms\": false,\n              \"completed\": true\n            },\n            {\n              \"id\": \"dbd199996981d\",\n              \"full_name\": \"Signer 2\",\n              \"email\": \"<a class=\"__cf_email__\" data-cfemail=\"dfacb6b8b1baaded9fbab2beb6b3f1bcb0b2\" href=\"/cdn-cgi/l/email-protection\">[email protected]</a>\",\n              \"has_accepted_terms\": false,\n              \"completed\": false\n            }\n          ]\n        }\n      },\n      \"artifacts\": {\n        \"original\": \"https://api.assinafy.com.br/v1/documents/doc1/download/original\",\n        \"thumbnail\": \"https://api.assinafy.com.br/v1/documents/doc1/thumbnail\"\n      },\n      \"pages\": [\n        {\n          \"id\": \"dbd199996981d\",\n          \"number\": 1,\n          \"height\": 1,\n          \"width\": 1,\n          \"download_url\": \"https://api.assinafy.com.br/v1/documents/doc1/pages/1a/download\"\n        }\n      ],\n      \"created_at\": \"2023-07-21T13:43:17Z\",\n      \"updated_at\": \"2023-07-21T13:43:17Z\",\n      \"is_closed\": false,\n      \"decline_reason\": null,\n      \"declined_by\": null\n    },\n  ]\n}</code></pre><p><code>GET /accounts/:account_id/documents</code></p><p>This endpoint will list documents of the workspace.</p><h3>Header Parameters</h3><ul>\n<li><code>Authorization: Bearer {access_token}</code></li>\n</ul><h3>URL Parameters</h3><table>\n<thead>\n<tr>\n<th>Parameter</th>\n<th>Required</th>\n<th>Description</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>account_id</td>\n<td>true</td>\n<td>ID of the workspace account.</td>\n</tr>\n<tr>\n<td>status</td>\n<td>false</td>\n<td>Status filter. Ex.: <code>?status=pending_signature</code>.</td>\n</tr>\n<tr>\n<td>method</td>\n<td>false</td>\n<td>Signature method filter. Ex.: <code>?method=virtual</code>. Possible values: <code>virtual</code> or <code>collect</code>.</td>\n</tr>\n<tr>\n<td>search</td>\n<td>false</td>\n<td>Search term that will be used for partial matching on the following attributes: <code>document.name</code>, <code>signer.full_name</code> and <code>signer.email</code>.</td>\n</tr>\n<tr>\n<td>sort</td>\n<td>false</td>\n<td>Allows sorting by: <code>name</code> and <code>updated_at</code>.</td>\n</tr>\n</tbody>\n</table><h3>Document Status</h3><p>These are the possible document status:</p><table>\n<thead>\n<tr>\n<th>Status</th>\n<th>Deletable</th>\n<th>Description</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>uploading</td>\n<td>no</td>\n<td>The document upload is in process.</td>\n</tr>\n<tr>\n<td>uploaded</td>\n<td>no</td>\n<td>The document has been uploaded.</td>\n</tr>\n<tr>\n<td>metadata_processing</td>\n<td>no</td>\n<td>The initial processing is under way.</td>\n</tr>\n<tr>\n<td>metadata_ready</td>\n<td>yes</td>\n<td>The initial processing has been completed.</td>\n</tr>\n<tr>\n<td>expired</td>\n<td>yes</td>\n<td>The signature deadline has been reached.</td>\n</tr>\n<tr>\n<td>certificating</td>\n<td>no</td>\n<td>The document has been signed and is being certificated.</td>\n</tr>\n<tr>\n<td>certificated</td>\n<td>no</td>\n<td>The document is certificated.</td>\n</tr>\n<tr>\n<td>rejected_by_signer</td>\n<td>yes</td>\n<td>A signer declined signing the document.</td>\n</tr>\n<tr>\n<td>pending_signature</td>\n<td>yes</td>\n<td>The document is waiting for signatures.</td>\n</tr>\n<tr>\n<td>rejected_by_user</td>\n<td>yes</td>\n<td>The signature process was cancelled by a user.</td>\n</tr>\n<tr>\n<td>failed</td>\n<td>yes</td>\n<td>The document processing has failed.</td>\n</tr>\n</tbody>\n</table><h2 id=\"upload-and-create\">Upload and Create</h2><blockquote>\n<p>Request</p>\n</blockquote><pre><code class=\"language-shell\">curl -X POST \"https://api.assinafy.com.br/v1/accounts/615601fab04c0a31/documents\" \\\n  -H 'Authorization: Bearer hAvmvk6Urzus3byLD2qOWrg'\\\n  -F 'file=@/tmp/document.pdf'</code></pre><blockquote>\n<p>200 OK</p>\n</blockquote><pre><code class=\"language-json\">{\n  \"id\": \"615601fab04c0a3147bb1246\",\n  \"name\": \"document.pdf\",\n  \"status\": \"uploaded\",\n  \"assignment\": null,\n  \"artifacts\": {\n    \"original\": \"https://api.assinafy.com.br/v1/documents/615601fab04c0a3147bb1246/download/original\"\n  },\n  \"pages\": [\n    {\n      \"id\": \"615601faf166d6d1d8e7dc30\",\n      \"number\": 1,\n      \"height\": 2100,\n      \"width\": 1275,\n      \"download_url\": \"https://api.assinafy.com.br/v1/documents/615601fab04c0a3147bb1246/pages/615601faf166d6d1d8e7dc30/download\"\n    }\n  ],\n  \"created_at\": 1633026554,\n  \"updated_at\": 1633026554,\n  \"is_closed\": false\n}</code></pre><p><code>POST /accounts/:account_id/documents</code></p><p>Create a document from an uploaded file.</p><p><strong>Headers</strong>:</p><ul>\n<li><code>Content-Type</code> - <code>multipart/form-data</code></li>\n<li><code>Authorization</code> - <code>Bearer {access_token}</code></li>\n</ul><h3>URL Parameters</h3><table>\n<thead>\n<tr>\n<th>Parameter</th>\n<th>Required</th>\n<th>Description</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>account_id</td>\n<td>True</td>\n<td>The ID of the workspace.</td>\n</tr>\n</tbody>\n</table><h3>Limits</h3><ul>\n<li><strong>Maximum file size</strong>: 25MB</li>\n</ul><h2 id=\"create-from-template\">Create from Template</h2><blockquote>\n<p>Request</p>\n</blockquote><pre><code class=\"language-shell\">curl -X POST \"https://api.assinafy.com.br/v1/accounts/35c7741ca4006b9e11/templates/60f720572d7fecf7c16c8463/documents\" \\\n  -H 'Authorization: Bearer hAvmvk6Urzus3byLD2qOWrg' \\\n  -d '\n    {\n      \"name\": \"sample-contract-one-page.pdf\",\n      \"message\": \"Message to the signers\",\n      \"editor_fields\": [\n        {\n          \"field_id\": \"fa8c14f3af99d2846d1789de4ba\",\n          \"value\": \"Field value\"\n        }\n      ],\n      \"signers\": [\n        {\n          \"role_id\": \"fa8c14f32d732271e071998246e\",\n          \"email\": \"<a class=\"__cf_email__\" data-cfemail=\"f495989995da9995869d9ab48495979c91979bda979b99da9686\" href=\"/cdn-cgi/l/email-protection\">[email protected]</a>\",\n          \"name\": \"Srta. Betina Silvana Rangel\"\n        },\n        {\n          \"role_id\": \"fa8c14f3964a362e3230f2283d1\",\n          \"email\": \"<a class=\"__cf_email__\" data-cfemail=\"2b585f4e47474a1c1c6b5d4e594f4a594a05454e5f\" href=\"/cdn-cgi/l/email-protection\">[email protected]</a>\",\n          \"name\": \"George Aguiar Espinoza\"\n        }\n      ],\n      \"expires_at\": \"2024-07-30T23:59:00Z\"\n    }\n'</code></pre><blockquote>\n<p>200 OK</p>\n</blockquote><pre><code class=\"language-json\">{\n    \"status\": 200,\n    \"message\": \"\",\n    \"data\": {\n        \"resource\": \"document\",\n        \"id\": \"fa8c140c614c928f7e7efa086b2\",\n        \"account_id\": \"1a\",\n        \"template_id\": \"fa8c140b5ee344f8e48236ed284\",\n        \"name\": \"sample-contract-one-page.pdf\",\n        \"status\": \"uploaded\",\n        \"assignment\": {\n            \"id\": \"fa8c140ccd5781b079738d19e95\",\n            \"sender_email\": \"<a class=\"__cf_email__\" data-cfemail=\"f880b880d69b9795\" href=\"/cdn-cgi/l/email-protection\">[email protected]</a>\",\n            \"method\": \"virtual\",\n            \"expires_at\": \"2024-07-30T23:59:00Z\",\n            \"message\": \"669fc6accda22\",\n            \"signers\": [\n                {\n                    \"id\": \"fa8c140cb49b79f940aab95fddd\",\n                    \"full_name\": \"Suzana Stephany Cordeiro\",\n                    \"email\": \"<a class=\"__cf_email__\" data-cfemail=\"137e727f767d723d7261616677725367766161723d707c7e3d7161\" href=\"/cdn-cgi/l/email-protection\">[email protected]</a>\",\n                    \"has_accepted_terms\": false\n                }\n            ],\n            \"copy_receivers\": [\n                {\n                    \"id\": \"fa8c140cbce705c1a080346cb39\",\n                    \"full_name\": \"Eric Flores Filho\",\n                    \"email\": \"<a class=\"__cf_email__\" data-cfemail=\"aecbcdcfdcdccfdccfeedecbcadcc1ddcf80cdc1c3\" href=\"/cdn-cgi/l/email-protection\">[email protected]</a>\",\n                    \"has_accepted_terms\": false\n                }\n            ],\n            \"items\": [\n                {\n                    \"id\": \"fa8c140cd99a0b9dcb40e7ef29e\",\n                    \"page\": null,\n                    \"signer\": {\n                        \"id\": \"fa8c140cb49b79f940aab95fddd\",\n                        \"full_name\": \"Suzana Stephany Cordeiro\",\n                        \"email\": \"<a class=\"__cf_email__\" data-cfemail=\"e5888489808b84cb849797908184a59180979784cb868a88cb8797\" href=\"/cdn-cgi/l/email-protection\">[email protected]</a>\",\n                        \"has_accepted_terms\": false\n                    },\n                    \"field\": {\n                        \"id\": \"field1\",\n                        \"name\": \"signature\",\n                        \"type\": \"virtual\",\n                        \"regex\": null,\n                        \"is_pre_defined\": false,\n                        \"is_active\": true,\n                        \"is_required\": true,\n                        \"is_standard\": false,\n                        \"is_read_only\": false,\n                        \"is_visible\": true\n                    },\n                    \"display_settings\": [],\n                    \"value\": null,\n                    \"completed\": false\n                }\n            ],\n            \"summary\": {\n                \"signer_count\": 1,\n                \"completed_count\": 0,\n                \"signers\": [\n                    {\n                        \"id\": \"fa8c140cb49b79f940aab95fddd\",\n                        \"full_name\": \"Suzana Stephany Cordeiro\",\n                        \"email\": \"<a class=\"__cf_email__\" data-cfemail=\"c9a4a8a5aca7a8e7a8bbbbbcada889bdacbbbba8e7aaa6a4e7abbb\" href=\"/cdn-cgi/l/email-protection\">[email protected]</a>\",\n                        \"has_accepted_terms\": false,\n                        \"completed\": false\n                    }\n                ]\n            },\n            \"signing_urls\": [\n            {\n                \"signer_id\": \"customid1\",\n                \"url\": \"https://api.assinafy.com.br/v1/sign/<a class=\"__cf_email__\" data-cfemail=\"3751560f5406030754010603540e050f51005200525156070f01550508525a565e5b0a5a565b525956195645454253567743524545561954585a195545\" href=\"/cdn-cgi/l/email-protection\">[email protected]</a>\",\n            },\n            {\n                \"signer_id\": \"customid2\",\n                \"url\": \"https://api.assinafy.com.br/v1/sign/<a class=\"__cf_email__\" data-cfemail=\"98fef9a0fba9aca8fbaea9acfba1aaa0feaffdaffdfef9a8a0aefaaaa7fdf5f9f1f4a5fdfbf9eaeaf9eaf9d8e8fdfceaf7ebf9b6fbf7f5\" href=\"/cdn-cgi/l/email-protection\">[email protected]</a>\",\n            }\n            ]\n        },\n        \"artifacts\": {\n            \"original\": \"https://api.assinafy.com.br/v1/v1/documents/fa8c140c614c928f7e7efa086b2/download/original\",\n            \"thumbnail\": \"https://api.assinafy.com.br/v1/v1/documents/fa8c140c614c928f7e7efa086b2/thumbnail\"\n        },\n        \"pages\": [\n            {\n                \"id\": \"fa8c140c9617a07be842995d4a1\",\n                \"number\": 1,\n                \"height\": 2100,\n                \"width\": 1275,\n                \"download_url\": \"https://api.assinafy.com.br/v1/v1/documents/fa8c140c614c928f7e7efa086b2/pages/fa8c140c9617a07be842995d4a1/download\"\n            }\n        ],\n        \"created_at\": \"2024-07-23T15:05:17Z\",\n        \"updated_at\": \"2024-07-23T15:05:17Z\",\n        \"is_closed\": false,\n        \"decline_reason\": null,\n        \"declined_by\": null\n    }\n}</code></pre><p><code>POST /accounts/{account_id}/templates/{template_id}/documents</code></p><p>Create a document from a template.</p><h3>Header Parameters</h3><ul>\n<li><code>Content-Type: application/json</code></li>\n<li><code>Authorization: Bearer {access_token}</code></li>\n</ul><h3>URL Parameters</h3><table>\n<thead>\n<tr>\n<th>Parameter</th>\n<th>Required</th>\n<th>Description</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>account_id</td>\n<td>True</td>\n<td>The account ID.</td>\n</tr>\n<tr>\n<td>template_id</td>\n<td>True</td>\n<td>The template ID.</td>\n</tr>\n</tbody>\n</table><h3>Body Parameters</h3><table>\n<thead>\n<tr>\n<th>Parameter</th>\n<th>Required</th>\n<th>Description</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td><code>signers[]</code></td>\n<td>true</td>\n<td>A list of signers required to sign the document.</td>\n</tr>\n<tr>\n<td><code>signers[].role_id</code></td>\n<td>true</td>\n<td>The template role ID associated with the signer.</td>\n</tr>\n<tr>\n<td><code>signers[].email</code></td>\n<td>true</td>\n<td>The signer's email address.</td>\n</tr>\n<tr>\n<td><code>signers[].name</code></td>\n<td>true</td>\n<td>The signer's full name.</td>\n</tr>\n<tr>\n<td><code>editor_fields[]</code></td>\n<td>false</td>\n<td>A list of editor fields and values.</td>\n</tr>\n<tr>\n<td><code>editor_fields[].field_id</code></td>\n<td>true</td>\n<td>The unique identifier of a field, matching the <code>field_id</code> provided in the template data.</td>\n</tr>\n<tr>\n<td><code>editor_fields[].value</code></td>\n<td>true</td>\n<td>The value to assign to the corresponding field.</td>\n</tr>\n<tr>\n<td><code>name</code></td>\n<td>false</td>\n<td>The title or name for the document being created. The default is the template name.</td>\n</tr>\n<tr>\n<td><code>message</code></td>\n<td>false</td>\n<td>An optional message to be sent to signers.</td>\n</tr>\n<tr>\n<td><code>expires_at</code></td>\n<td>false</td>\n<td>The expiration date for the assignment in <strong>ISO 8601</strong> format. By default, there is no expiration.</td>\n</tr>\n</tbody>\n</table><h2 id=\"get\">Get</h2><blockquote>\n<p>Request</p>\n</blockquote><pre><code class=\"language-shell\">curl \"https://api.assinafy.com.br/v1/documents/60f720572d7fecf7c16c8463\" \\\n-H 'Authorization: Bearer hAvmvk6Urzus3byLD2qOWrg'</code></pre><blockquote>\n<p>200 OK</p>\n</blockquote><pre><code class=\"language-json\">{\n  \"status\": 200,\n  \"message\": \"\",\n  \"data\": {\n    \"resource\": \"document\",\n    \"id\": \"1016d5795af62e28c2161efcb7a6\",\n    \"account_id\": \"d199996981dbd199996981db\",\n    \"name\": \"3.pdf\",\n    \"status\": \"rejected_by_signer\",\n    \"assignment\": {\n      \"id\": \"1016d5a650dcb1e056eddd367bbd\",\n      \"sender_email\": \"<a class=\"__cf_email__\" data-cfemail=\"c4b7a1aaa0a1b6eaa1bca5a9b4a8a184a1a9a5ada8eaa7aba9\" href=\"/cdn-cgi/l/email-protection\">[email protected]</a>\",\n      \"expiration\": \"2038-01-01\",\n      \"signers\": [\n        {\n          \"id\": \"customid1\",\n          \"full_name\": \"Signer 1\",\n          \"email\": \"<a class=\"__cf_email__\" data-cfemail=\"80f3e9e7eee5f2b1c0f3e9e7eee5f2aee3efed\" href=\"/cdn-cgi/l/email-protection\">[email protected]</a>\"\n        },\n        {\n          \"id\": \"customid2\",\n          \"full_name\": \"Signer 2\",\n          \"email\": \"<a class=\"__cf_email__\" data-cfemail=\"07746e606962753547746e606962752964686a\" href=\"/cdn-cgi/l/email-protection\">[email protected]</a>\"\n        }\n      ],\n      \"method\": \"virtual\",\n      \"items\": [],\n      \"summary\": {\n        \"signer_count\": 0,\n        \"completed_count\": 0,\n        \"signers\": []\n      },\n      \"signing_urls\": [\n        {\n          \"signer_id\": \"customid1\",\n          \"url\": \"https://api.assinafy.com.br/v1/sign/<a class=\"__cf_email__\" data-cfemail=\"dcedecedeab8e9ebe5e9bdbaeaeeb9eee4bfeeedeaedb9babfbeebbdeae3b9b1bdb5b0e1a49ca4f2bfb3b1\" href=\"/cdn-cgi/l/email-protection\">[email protected]</a>\",\n        },\n        {\n          \"signer_id\": \"customid2\",\n          \"url\": \"https://api.assinafy.com.br/v1/sign/<a class=\"__cf_email__\" data-cfemail=\"daebeaebecbeefede3efbbbcece8bfe8e2b9e8ebecebbfbcb9b8edbbece5bfb7bbb3b6e7a9b3bdb4bfa8e89aa9b3bdb4bfa8f4b9b5b7\" href=\"/cdn-cgi/l/email-protection\">[email protected]</a>\",\n        }\n      ]\n    },\n    \"download_url\": \"https://api.assinafy.com.br/v1/documents/3/download\",\n    \"download_final_url\": null,\n    \"pages\": [],\n    \"is_closed\": true,\n    \"signing_url\": \"http://app.assinafy.test/sign/doc1\",\n    \"created_at\": \"2022-07-19 18:14:29\",\n    \"updated_at\": \"2022-07-19 18:14:29\"\n  }\n}</code></pre><blockquote>\n<p>200 OK | Document declined by a signer</p>\n</blockquote><pre><code class=\"language-json\">{\n  \"status\": 200,\n  \"message\": \"\",\n  \"data\": {\n    \"resource\": \"document\",\n    \"id\": \"1016d5795af62e28c2161efcb7a6\",\n    \"name\": \"2.pdf\",\n    \"status\": \"rejected_by_signer\",\n    \"assignment\": {\n      \"id\": \"1016d5a650dcb1e056eddd367bbd\",\n      \"sender_email\": \"<a class=\"__cf_email__\" data-cfemail=\"7a091f141e1f08541f021b170a161f3a1f171b131654191517\" href=\"/cdn-cgi/l/email-protection\">[email protected]</a>\",\n      \"expiration\": \"2038-01-01\",\n      \"signers\": [\n        {\n          \"id\": \"customid1\",\n          \"full_name\": \"Signer 1\",\n          \"email\": \"<a class=\"__cf_email__\" data-cfemail=\"67140e000902155627140e000902154904080a\" href=\"/cdn-cgi/l/email-protection\">[email protected]</a>\"\n        },\n        {\n          \"id\": \"customid2\",\n          \"full_name\": \"Signer 2\",\n          \"email\": \"<a class=\"__cf_email__\" data-cfemail=\"6e1d0709000b1c5c2e1d0709000b1c400d0103\" href=\"/cdn-cgi/l/email-protection\">[email protected]</a>\"\n        }\n      ],\n      \"method\": \"virtual\",\n      \"items\": [],\n      \"summary\": {\n        \"signer_count\": 0,\n        \"completed_count\": 0,\n        \"signers\": []\n      },\n      \"signing_urls\": [\n        {\n          \"signer_id\": \"customid1\",\n          \"url\": \"https://api.assinafy.com.br/v1/sign/<a class=\"__cf_email__\" data-cfemail=\"b180818087d584868884d0d78783d48389d283808780d4d7d2d386d0878ed4dcd0d8dd8cc2d8d6dfd4c380f1c2d8d6dfd4c39fd2dedc\" href=\"/cdn-cgi/l/email-protection\">[email protected]</a>\",\n        },\n        {\n          \"signer_id\": \"customid2\",\n          \"url\": \"https://api.assinafy.com.br/v1/sign/<a class=\"__cf_email__\" data-cfemail=\"facbcacbcc9ecfcdc3cf9b9cccc89fc8c299c8cbcccb9f9c9998cd9bccc59f979b9396c789939d949f88c8ba89939d949f88d4999597\" href=\"/cdn-cgi/l/email-protection\">[email protected]</a>\",\n        }\n      ]\n    },\n    \"artifacts\": {\n      \"original\": \"https://api.assinafy.com.br/v1/documents/3/download/original\",\n      \"certificated\": \"https://api.assinafy.com.br/v1/documents/3/download/certificated\",\n      \"certificate-page\": \"https://api.assinafy.com.br/v1/documents/3/download/certificate-page\",\n      \"bundle\": \"https://api.assinafy.com.br/v1/documents/3/download/bundle\"\n    },\n\n    \"pages\": [],\n    \"created_at\": \"2022-07-19 17:53:37\",\n    \"updated_at\": \"2022-07-19 17:53:37\",\n    \"decline_reason\": \"I regretted.\",\n    \"activities\": [\n      {\n        \"id\": 1,\n        \"event\": \"signer_rejected_document\",\n        \"message\": \"Signer 1 decline doc 2\",\n        \"origin\": \"\",\n        \"created_at\": \"2022-07-19 17:53:36\"\n      }\n    ]\n  }\n}</code></pre><p><code>GET /documents/{document_id}</code></p><p>Get the document data by its ID.</p><h3>Header Parameters</h3><ul>\n<li><code>Authorization: Bearer {access_token}</code></li>\n</ul><p><strong>Important:</strong> The attribute <em>declined_reason</em> in the result, is only available\nwhen the the access token is from the user who created the document.</p><h2 id=\"delete\">Delete</h2><blockquote>\n<p>Request</p>\n</blockquote><pre><code class=\"language-shell\">curl -X DELETE \"https://api.assinafy.com.br/v1/documents/60f720572d7fecf7c16c8463\" \\\n  -H \"Authorization: Bearer hAvmvk6Urzus3byLD2qOWrg\"</code></pre><blockquote>\n<p>200 OK</p>\n</blockquote><pre><code class=\"language-json\">{\n  \"status\": 200,\n  \"message\": \"\",\n  \"data\": []\n}</code></pre><p><code>DELETE /documents/:documentId</code></p><p>Delete a document by its ID.</p><h3>Header Parameters</h3><ul>\n<li><code>Authorization: Bearer {access_token}</code></li>\n</ul><h2 id=\"download\">Download</h2><blockquote>\n<p>Request</p>\n</blockquote><pre><code class=\"language-shell\">curl \"https://api.assinafy.com.br/v1/documents/60f720572d7fecf7c16c8463/download/original\" \\\n-H 'Authorization: Bearer hAvmvk6Urzus3byLD2qOWrg' </code></pre><blockquote>\n<p>200 OK</p>\n</blockquote><pre><code>Content-Type: application/pdf\n\n[PDF binary]</code></pre><p><code>GET /documents/:document_id/download/:artifact_name</code></p><p>Download a document artifact.</p><h3>Header Parameters</h3><ul>\n<li><code>Authorization: Bearer {access_token}</code></li>\n</ul><h3>URL Paramenters</h3><table>\n<thead>\n<tr>\n<th>Name</th>\n<th>Required</th>\n<th>Description</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>document_id</td>\n<td>True</td>\n<td>The document ID.</td>\n</tr>\n<tr>\n<td>artifact_name</td>\n<td>True</td>\n<td>The type of artifact to download.</td>\n</tr>\n</tbody>\n</table><p><strong>Artifact types</strong>: original, certificated, certificate-page, bundle.</p><h2 id=\"download-thumbnail\">Download Thumbnail</h2><blockquote>\n<p>Request</p>\n</blockquote><pre><code class=\"language-shell\">curl \"https://api.assinafy.com.br/v1/documents/60f720572d7fecf7c16c8463/thumbnail\" \\\n    -H 'Authorization: Bearer hAvmvk6Urzus3byLD2qOWrg'</code></pre><blockquote>\n<p>200 OK</p>\n</blockquote><pre><code>Content-Type: image/jpeg\n\n[JPEG binary]</code></pre><p><code>GET /documents/:document_id/thumbnail</code></p><p>Download the document thumbnail.</p><h3>Header Parameters</h3><ul>\n<li><code>Authorization: Bearer {access_token}</code></li>\n</ul><h3>URL Parameters</h3><table>\n<thead>\n<tr>\n<th>Parameter</th>\n<th>Required</th>\n<th>Description</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>document_id</td>\n<td>True</td>\n<td>The ID of the document to retrieve the thumbnail.</td>\n</tr>\n</tbody>\n</table><h2 id=\"download-page\">Download Page</h2><blockquote>\n<p>Request</p>\n</blockquote><pre><code class=\"language-shell\">curl \"https://api.assinafy.com.br/v1/documents/60f720572d7fecf7c16c8463/pages/60f7205883c2fc57d51e68a7/download\" \\\n    -H 'Authorization: Bearer hAvmvk6Urzus3byLD2qOWrg'</code></pre><blockquote>\n<p>200 OK</p>\n</blockquote><pre><code>Content-Type: application/jpeg\n\n[JPEG binary]</code></pre><p><code>GET /documents/{document_id}/pages/{page_id}/download</code></p><p>Download a document page as JPEG content.</p><h3>Header Parameters</h3><ul>\n<li><code>Authorization: Bearer {access_token}</code></li>\n</ul><h3>URL Parameters</h3><table>\n<thead>\n<tr>\n<th>Parameter</th>\n<th>Required</th>\n<th>Description</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>document_id</td>\n<td>True</td>\n<td>The ID of the document to be downloaded.</td>\n</tr>\n<tr>\n<td>page_id</td>\n<td>True</td>\n<td>The ID of the page to be downloaded.</td>\n</tr>\n</tbody>\n</table><h2 id=\"verify\">Verify</h2><blockquote>\n<p>Request</p>\n</blockquote><pre><code class=\"language-shell\">curl \"https://api.assinafy.com.br/v1/documents/FE32EDDADE7CBDDCBB934E7402047450B0E59C02/verify\"</code></pre><blockquote>\n<p>200 OK | Verified</p>\n</blockquote><pre><code class=\"language-json\">{\n  \"status\": 200,\n  \"message\": \"\",\n  \"data\": {\n    \"hash\": \"FE32EDDADE7CBDDCBB934E7402047450B0E59C02\",\n    \"id\": \"63ddb172402799bfc991d10d\",\n    \"status\": \"certificated\",\n    \"page_count\": \"1\",\n    \"signer_count\": \"1\",\n    \"completed_count\": 1,\n    \"completed_at\": \"2023-01-27T19:27:44Z\",\n    \"verified_at\": \"2023-01-27T19:27:46Z\",\n    \"is_valid\": true,\n    \"message\": \"\"\n  }\n}</code></pre><blockquote>\n<p>200 OK | Not Verified</p>\n</blockquote><pre><code class=\"language-json\">{\n  \"status\": 200,\n  \"message\": \"\",\n  \"data\": {\n    \"hash\": \"INVALIDHASHEXAMPLE\",\n    \"id\": null,\n    \"status\": null,\n    \"page_count\": null,\n    \"signer_count\": null,\n    \"completed_count\": null,\n    \"completed_at\": null,\n    \"verified_at\": \"2023-01-27T19:30:15Z\",\n    \"is_valid\": false,\n    \"message\": \"Document not signed or not found.\"\n  }\n}</code></pre><p><code>GET /documents/:signature_hash/verify</code></p><p>Verify a document through its signature hash.</p><h3>URL Parameters</h3><table>\n<thead>\n<tr>\n<th>Parameter</th>\n<th>Required</th>\n<th>Description</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>signature_hash</td>\n<td>True</td>\n<td>The signature hash. It can be found on a signed document.</td>\n</tr>\n</tbody>\n</table><h2 id=\"list-activities\">List Activities</h2><blockquote>\n<p>Request</p>\n</blockquote><pre><code class=\"language-shell\">curl \"https://api.assinafy.com.br/v1/documents/60f720572d7fecf7c16c8463/activities\" \\\n  -H 'Authorization: Bearer hAvmvk6Urzus3byLD2qOWrg'</code></pre><blockquote>\n<p>200 OK</p>\n</blockquote><pre><code class=\"language-json\">{\n  \"status\": 200,\n  \"message\": \"\",\n  \"data\": [\n    {\n      \"id\": 3,\n      \"event\": \"signer_rejected_document\",\n      \"message\": \"Signer 1 decline doc 2\",\n      \"origin\": {\n        \"ip\": \"172.19.0.1\",\n        \"user-agent\": \"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.0.0 Safari/537.36\"\n      },\n      \"created_at\": \"2022-07-19 19:28:16\"\n    },\n    {\n      \"id\": 1,\n      \"event\": \"signature_requested\",\n      \"message\": \"Requested signature from Mrs. Nicole Bergstrom (<a class=\"__cf_email__\" data-cfemail=\"9ae9f3f7fff5f4b4e8eff4eeffdae3fbf2f5f5b4f9f5f7\" href=\"/cdn-cgi/l/email-protection\">[email protected]</a>).\",\n      \"origin\": {\n        \"ip\": \"172.19.0.1\",\n        \"user-agent\": \"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.0.0 Safari/537.36\"\n      },\n      \"created_at\": \"2022-07-19 19:28:14\"\n    }\n  ]\n}</code></pre><p><code>GET /documents/:documentId/activities</code></p><p>List document activities.</p><h3>Header Parameters</h3><ul>\n<li><code>Authorization: Bearer {access_token}</code></li>\n</ul><h3>URL Parameters</h3><table>\n<thead>\n<tr>\n<th>Parameter</th>\n<th>Required</th>\n<th>Description</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>documentId</td>\n<td>true</td>\n<td>The document ID.</td>\n</tr>\n</tbody>\n</table><h2 id=\"public:-get-basic-info\">Public: Get Basic Info</h2><blockquote>\n<p>Request</p>\n</blockquote><pre><code class=\"language-shell\">curl \"https://api.assinafy.com.br/v1/public/documents/39adfe3r5a3a\"</code></pre><blockquote>\n<p>200 OK</p>\n</blockquote><pre><code class=\"language-json\">{\n  \"status\": 200,\n  \"message\": \"\",\n  \"data\": {\n    \"resource\": \"document\",\n    \"id\": \"doc1\",\n    \"name\": \"1.pdf\",\n    \"page_count\": \"1\",\n    \"created_by\": \"John Smith\"\n  }\n}</code></pre><p><code>GET /public/documents/{document_id}</code></p><p>Get public information about a document by its ID. This endpoint does not require authentication and returns basic document details.</p><h3>URL Parameters</h3><table>\n<thead>\n<tr>\n<th>Parameter</th>\n<th>Required</th>\n<th>Description</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>document_id</td>\n<td>True</td>\n<td>The ID of the document.</td>\n</tr>\n</tbody>\n</table><h2 id=\"signer:-send-token\">Signer: Send Token</h2><blockquote>\n<p>Request</p>\n</blockquote><pre><code class=\"language-shell\">curl -X PUT \"https://api.assinafy.com.br/v1/public/documents/39adfe3r5a3a/send-token\" \\\n  -H \"Content-Type: application/json\" \\\n  -d '\n{\n  \"recipient\": \"<a class=\"__cf_email__\" data-cfemail=\"5a29333d343f281a3f373b333674393537\" href=\"/cdn-cgi/l/email-protection\">[email protected]</a>\",\n  \"channel\": \"email\"\n}\n'</code></pre><blockquote>\n<p>200 OK</p>\n</blockquote><pre><code class=\"language-json\">{\n  \"status\": 200,\n  \"message\": \"\",\n  \"data\": {\n    \"document\": {\n      \"resource\": \"document\",\n      \"id\": \"doc1\",\n      \"name\": \"1.pdf\",\n      \"page_count\": \"1\",\n      \"created_by\": \"John Smith\"\n    },\n    \"channel\": \"email\",\n    \"recipient\": \"<a class=\"__cf_email__\" data-cfemail=\"42312b252c273002272f232b2e6c212d2f\" href=\"/cdn-cgi/l/email-protection\">[email protected]</a>\"\n  }\n}</code></pre><p><code>PUT /public/documents/{document_id}/send-token</code></p><p>Send the 6-digit token to the specified email for signing the document. This endpoint\ndoes not require authentication and allows the token to be sent to a signer.</p><h3>Header Parameters</h3><ul>\n<li><code>Content-Type: application/json</code></li>\n</ul><h3>URL Parameters</h3><table>\n<thead>\n<tr>\n<th>Parameter</th>\n<th>Required</th>\n<th>Description</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>document_id</td>\n<td>True</td>\n<td>The ID of the document.</td>\n</tr>\n</tbody>\n</table><h3>Body Params</h3><table>\n<thead>\n<tr>\n<th>Parameter</th>\n<th>Required</th>\n<th>Description</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>recipient</td>\n<td>True</td>\n<td>Email of the signer.</td>\n</tr>\n<tr>\n<td>channel</td>\n<td>True</td>\n<td>Channel to send the token.</td>\n</tr>\n</tbody>\n</table>",
+      "subsections": [],
+      "endpoints": [
+        {
+          "title": "Searching, Paginating and Sorting",
+          "method": "GET",
+          "path": "/accounts/{id}/documents?page=1&per-page=25&search=name",
+          "description": "200 OK",
+          "parameters": [],
+          "request_example": null,
+          "response_example": null,
+          "requires_auth": false,
+          "supports_pagination": false
+        },
+        {
+          "title": "Searching, Paginating and Sorting",
+          "method": "GET",
+          "path": "/accounts/{id}/documents?page=1&per-page=25&search=name",
+          "description": "200 OK",
+          "parameters": [],
+          "request_example": null,
+          "response_example": null,
+          "requires_auth": false,
+          "supports_pagination": false
+        },
+        {
+          "title": "Uploading a Document",
+          "method": "POST",
+          "path": "/accounts/{id}fab04c0a31/documents",
+          "description": "Document Upload Request Using PHP",
+          "parameters": [],
+          "request_example": null,
+          "response_example": null,
+          "requires_auth": false,
+          "supports_pagination": false
+        },
+        {
+          "title": "Uploading a Document",
+          "method": "POST",
+          "path": "/accounts/{id}fab04c0a31/documents",
+          "description": "Document Upload Request Using PHP",
+          "parameters": [],
+          "request_example": null,
+          "response_example": null,
+          "requires_auth": false,
+          "supports_pagination": false
+        },
+        {
+          "title": "Statuses",
+          "method": "GET",
+          "path": "/documents/statuses",
+          "description": "200 OK",
+          "parameters": [
+            {
+              "name": "Authorization",
+              "type": "string",
+              "required": true,
+              "description": null,
+              "param_type": "header",
+              "example": "Bearer hAvmvk6Urzus3byLD2qOWrg"
+            }
+          ],
+          "request_example": null,
+          "response_example": null,
+          "requires_auth": true,
+          "supports_pagination": false
+        },
+        {
+          "title": "Statuses",
+          "method": "GET",
+          "path": "/documents/statuses",
+          "description": "200 OK",
+          "parameters": [
+            {
+              "name": "Authorization",
+              "type": "string",
+              "required": true,
+              "description": null,
+              "param_type": "header",
+              "example": "Bearer hAvmvk6Urzus3byLD2qOWrg"
+            }
+          ],
+          "request_example": null,
+          "response_example": null,
+          "requires_auth": true,
+          "supports_pagination": false
+        },
+        {
+          "title": "List",
+          "method": "GET",
+          "path": "/accounts/{id}/documents",
+          "description": "200 OK",
+          "parameters": [],
+          "request_example": null,
+          "response_example": null,
+          "requires_auth": false,
+          "supports_pagination": false
+        },
+        {
+          "title": "List",
+          "method": "GET",
+          "path": "/accounts/{id}/documents",
+          "description": "200 OK",
+          "parameters": [],
+          "request_example": null,
+          "response_example": null,
+          "requires_auth": false,
+          "supports_pagination": false
+        },
+        {
+          "title": "Upload and Create",
+          "method": "POST",
+          "path": "/accounts/{id}fab04c0a31/documents",
+          "description": "200 OK",
+          "parameters": [],
+          "request_example": null,
+          "response_example": null,
+          "requires_auth": false,
+          "supports_pagination": false
+        },
+        {
+          "title": "Upload and Create",
+          "method": "POST",
+          "path": "/accounts/{id}fab04c0a31/documents",
+          "description": "200 OK",
+          "parameters": [],
+          "request_example": null,
+          "response_example": null,
+          "requires_auth": false,
+          "supports_pagination": false
+        },
+        {
+          "title": "Create from Template",
+          "method": "POST",
+          "path": "/accounts/35c7741ca4006b9e11/templates/{id}/documents",
+          "description": "200 OK",
+          "parameters": [],
+          "request_example": null,
+          "response_example": null,
+          "requires_auth": false,
+          "supports_pagination": false
+        },
+        {
+          "title": "Create from Template",
+          "method": "POST",
+          "path": "/accounts/35c7741ca4006b9e11/templates/{id}/documents",
+          "description": "200 OK",
+          "parameters": [],
+          "request_example": null,
+          "response_example": null,
+          "requires_auth": false,
+          "supports_pagination": false
+        },
+        {
+          "title": "Get",
+          "method": "GET",
+          "path": "/documents/{id}",
+          "description": "200 OK",
+          "parameters": [],
+          "request_example": null,
+          "response_example": null,
+          "requires_auth": false,
+          "supports_pagination": false
+        },
+        {
+          "title": "Get",
+          "method": "GET",
+          "path": "/documents/{id}",
+          "description": "200 OK",
+          "parameters": [],
+          "request_example": null,
+          "response_example": null,
+          "requires_auth": false,
+          "supports_pagination": false
+        },
+        {
+          "title": "Delete",
+          "method": "DELETE",
+          "path": "/documents/{id}",
+          "description": "200 OK",
+          "parameters": [
+            {
+              "name": "Authorization",
+              "type": "string",
+              "required": true,
+              "description": null,
+              "param_type": "header",
+              "example": "Bearer hAvmvk6Urzus3byLD2qOWrg"
+            }
+          ],
+          "request_example": null,
+          "response_example": null,
+          "requires_auth": true,
+          "supports_pagination": false
+        },
+        {
+          "title": "Delete",
+          "method": "DELETE",
+          "path": "/documents/{id}",
+          "description": "200 OK",
+          "parameters": [
+            {
+              "name": "Authorization",
+              "type": "string",
+              "required": true,
+              "description": null,
+              "param_type": "header",
+              "example": "Bearer hAvmvk6Urzus3byLD2qOWrg"
+            }
+          ],
+          "request_example": null,
+          "response_example": null,
+          "requires_auth": true,
+          "supports_pagination": false
+        },
+        {
+          "title": "Download",
+          "method": "GET",
+          "path": "/documents/{id}/download/original",
+          "description": "200 OK",
+          "parameters": [],
+          "request_example": null,
+          "response_example": null,
+          "requires_auth": false,
+          "supports_pagination": false
+        },
+        {
+          "title": "Download",
+          "method": "GET",
+          "path": "/documents/{id}/download/original",
+          "description": "200 OK",
+          "parameters": [],
+          "request_example": null,
+          "response_example": null,
+          "requires_auth": false,
+          "supports_pagination": false
+        },
+        {
+          "title": "Download Thumbnail",
+          "method": "GET",
+          "path": "/documents/{id}/thumbnail",
+          "description": "200 OK",
+          "parameters": [],
+          "request_example": null,
+          "response_example": null,
+          "requires_auth": false,
+          "supports_pagination": false
+        },
+        {
+          "title": "Download Thumbnail",
+          "method": "GET",
+          "path": "/documents/{id}/thumbnail",
+          "description": "200 OK",
+          "parameters": [],
+          "request_example": null,
+          "response_example": null,
+          "requires_auth": false,
+          "supports_pagination": false
+        },
+        {
+          "title": "Download Page",
+          "method": "GET",
+          "path": "/documents/{id}/pages/{id}/download",
+          "description": "200 OK",
+          "parameters": [],
+          "request_example": null,
+          "response_example": null,
+          "requires_auth": false,
+          "supports_pagination": false
+        },
+        {
+          "title": "Download Page",
+          "method": "GET",
+          "path": "/documents/{id}/pages/{id}/download",
+          "description": "200 OK",
+          "parameters": [],
+          "request_example": null,
+          "response_example": null,
+          "requires_auth": false,
+          "supports_pagination": false
+        },
+        {
+          "title": "Verify",
+          "method": "GET",
+          "path": "/documents/FE32EDDADE7CBDDCBB934E7402047450B0E59C02/verify",
+          "description": "200 OK | Verified",
+          "parameters": [],
+          "request_example": null,
+          "response_example": null,
+          "requires_auth": false,
+          "supports_pagination": false
+        },
+        {
+          "title": "Verify",
+          "method": "GET",
+          "path": "/documents/FE32EDDADE7CBDDCBB934E7402047450B0E59C02/verify",
+          "description": "200 OK | Verified",
+          "parameters": [],
+          "request_example": null,
+          "response_example": null,
+          "requires_auth": false,
+          "supports_pagination": false
+        },
+        {
+          "title": "List Activities",
+          "method": "GET",
+          "path": "/documents/{id}/activities",
+          "description": "200 OK",
+          "parameters": [],
+          "request_example": null,
+          "response_example": null,
+          "requires_auth": false,
+          "supports_pagination": false
+        },
+        {
+          "title": "List Activities",
+          "method": "GET",
+          "path": "/documents/{id}/activities",
+          "description": "200 OK",
+          "parameters": [],
+          "request_example": null,
+          "response_example": null,
+          "requires_auth": false,
+          "supports_pagination": false
+        },
+        {
+          "title": "Public: Get Basic Info",
+          "method": "GET",
+          "path": "/public/documents/39adfe3r5a3a",
+          "description": "200 OK",
+          "parameters": [],
+          "request_example": null,
+          "response_example": null,
+          "requires_auth": false,
+          "supports_pagination": false
+        },
+        {
+          "title": "Public: Get Basic Info",
+          "method": "GET",
+          "path": "/public/documents/39adfe3r5a3a",
+          "description": "200 OK",
+          "parameters": [],
+          "request_example": null,
+          "response_example": null,
+          "requires_auth": false,
+          "supports_pagination": false
+        },
+        {
+          "title": "Signer: Send Token",
+          "method": "PUT",
+          "path": "/public/documents/39adfe3r5a3a/send-token",
+          "description": "200 OK",
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "type": "string",
+              "required": false,
+              "description": null,
+              "param_type": "header",
+              "example": "application/json"
+            }
+          ],
+          "request_example": null,
+          "response_example": null,
+          "requires_auth": false,
+          "supports_pagination": false
+        },
+        {
+          "title": "Signer: Send Token",
+          "method": "PUT",
+          "path": "/public/documents/39adfe3r5a3a/send-token",
+          "description": "200 OK",
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "type": "string",
+              "required": false,
+              "description": null,
+              "param_type": "header",
+              "example": "application/json"
+            }
+          ],
+          "request_example": null,
+          "response_example": null,
+          "requires_auth": false,
+          "supports_pagination": false
+        },
+        {
+          "title": "Reset Expiration",
+          "method": "PUT",
+          "path": "/documents/c57d51eaad68a7/assignments/d51edaee68a7/reset-expiration",
+          "description": "200 OK",
+          "parameters": [],
+          "request_example": null,
+          "response_example": null,
+          "requires_auth": false,
+          "supports_pagination": false
+        },
+        {
+          "title": "Reset Expiration",
+          "method": "PUT",
+          "path": "/documents/c57d51eaad68a7/assignments/d51edaee68a7/reset-expiration",
+          "description": "200 OK",
+          "parameters": [],
+          "request_example": null,
+          "response_example": null,
+          "requires_auth": false,
+          "supports_pagination": false
+        }
+      ]
+    },
+    {
+      "title": "Template",
+      "level": 1,
+      "content": "<p>This is the templates management service. The endpoints of this area allow us\nto create, list, download and delete templates.</p><h3>Template Status</h3><p>A template will be in one of the following status:</p><table>\n<thead>\n<tr>\n<th>Status</th>\n<th>Description</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>uploading</td>\n<td>The template upload is being uploaded.</td>\n</tr>\n<tr>\n<td>uploaded</td>\n<td>The template has been uploaded.</td>\n</tr>\n<tr>\n<td>processing</td>\n<td>The template is being processed.</td>\n</tr>\n<tr>\n<td>ready</td>\n<td>The template is ready to use.</td>\n</tr>\n<tr>\n<td>failed</td>\n<td>The template processing has failed.</td>\n</tr>\n</tbody>\n</table><h2 id=\"list\">List</h2><blockquote>\n<p>Request</p>\n</blockquote><pre><code class=\"language-shell\">curl \"https://api.assinafy.com.br/v1/accounts/{account_id}/templates\" \\\n  -H 'Authorization: Bearer hAvmvk6Urzus3byLD2qOWrghAvmvk6Urzus3byLD2qOWrg'</code></pre><blockquote>\n<p>200 OK</p>\n</blockquote><pre><code class=\"language-json\">{\n    \"status\": 200,\n    \"message\": \"\",\n    \"data\": [\n        {\n            \"id\": \"fa7f3e524f3a2cc00a5ea4325e2\",\n            \"name\": \"sample-contract-one-page.pdf\",\n            \"document_name\": \"sample-contract-one-page.pdf\",\n            \"message\": null,\n            \"status\": \"Ready\",\n            \"pages\": [\n                {\n                    \"id\": \"fa7f3e528d77f2b3ed786df2ce0\",\n                    \"number\": 1,\n                    \"height\": 2100,\n                    \"width\": 1275,\n                    \"download_url\": \"https://api.assinafy.com.br/v1/accounts/1a/templates/fa7f3e524f3a2cc00a5ea4325e2/pages/fa7f3e528d77f2b3ed786df2ce0/download\",\n                    \"fields\": []\n                }\n            ],\n            \"roles\": [\n                {\n                    \"id\": \"fa7f3e525bfefc71df3701eac6f\",\n                    \"name\": \"Editor\",\n                    \"assignment_type\": \"Editor\",\n                    \"created_at\": \"2024-07-19T15:23:03Z\",\n                    \"updated_at\": \"2024-07-19T15:23:03Z\"\n                }\n            ],\n            \"created_at\": \"2024-07-19T15:23:03Z\",\n            \"updated_at\": \"2024-07-19T15:23:03Z\"\n        }\n    ]\n}</code></pre><p><code>GET /accounts/{account_id}/templates</code></p><p>This endpoint will list templates of the workspace.</p><h3>Header Parameters</h3><ul>\n<li><code>Authorization: Bearer {access_token}</code></li>\n</ul><h3>URL Parameters</h3><table>\n<thead>\n<tr>\n<th>Parameter</th>\n<th>Required</th>\n<th>Description</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>account_id</td>\n<td>true</td>\n<td>ID of the workspace account.</td>\n</tr>\n<tr>\n<td>status</td>\n<td>false</td>\n<td>Status filter. Ex.: <code>?status=ready</code>.</td>\n</tr>\n<tr>\n<td>search</td>\n<td>false</td>\n<td>Search term that will be used for partial matching on the template name.</td>\n</tr>\n<tr>\n<td>sort</td>\n<td>false</td>\n<td>Allows sorting by: <code>name</code> and <code>updated_at</code>.</td>\n</tr>\n</tbody>\n</table><h3>Template Status</h3><p>These are the possible template status:</p><table>\n<thead>\n<tr>\n<th>Status</th>\n<th>Description</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>uploading</td>\n<td>The template upload is being uploaded.</td>\n</tr>\n<tr>\n<td>uploaded</td>\n<td>The template has been uploaded.</td>\n</tr>\n<tr>\n<td>processing</td>\n<td>The template is being processed.</td>\n</tr>\n<tr>\n<td>ready</td>\n<td>The template is ready to use.</td>\n</tr>\n<tr>\n<td>failed</td>\n<td>The template processing has failed.</td>\n</tr>\n</tbody>\n</table>",
+      "subsections": [],
+      "endpoints": [
+        {
+          "title": "List",
+          "method": "GET",
+          "path": "/accounts/{account_id}/templates",
+          "description": "200 OK",
+          "parameters": [],
+          "request_example": null,
+          "response_example": null,
+          "requires_auth": false,
+          "supports_pagination": false
+        },
+        {
+          "title": "List",
+          "method": "GET",
+          "path": "/accounts/{account_id}/templates",
+          "description": "200 OK",
+          "parameters": [],
+          "request_example": null,
+          "response_example": null,
+          "requires_auth": false,
+          "supports_pagination": false
+        }
+      ]
+    },
+    {
+      "title": "Assignment",
+      "level": 1,
+      "content": "<p>An assignment represent a request for signees to sign a document.</p><h2 id=\"create-without-input\">Create without Input</h2><blockquote>\n<p>Request</p>\n</blockquote><pre><code class=\"language-shell\">curl -X POST https://api.assinafy.com.br/v1/documents/60f720572d7fecf7c16c8463/assignments \\\n-H 'Content-Type: application/json' \\\n-d '\n{\n  \"signers\": [\n    {\n      \"id\": \"615605f50e968054a5b7c9b8\"\n    },\n    {\n      \"id\": \"615605f50e968054a5b7c9b9\"\n    }\n  ],\n  \"method\": \"virtual\",\n  \"expiration\": \"2021-09-30\"\n}\n'</code></pre><blockquote>\n<p>200 OK</p>\n</blockquote><pre><code class=\"language-json\">{\n  \"id\": \"615605f8f0cc742d680c62c5\",\n  \"expiration\": \"2021-09-30\",\n  \"signers\": [\n    {\n      \"id\": \"615605f50e968054a5b7c9b8\",\n      \"full_name\": \"John Dove\",\n      \"email\": \"<a class=\"__cf_email__\" data-cfemail=\"6f05000a2f0a170e021f030a410c0002\" href=\"/cdn-cgi/l/email-protection\">[email protected]</a>\"\n    },\n    {\n      \"id\": \"615605f50e968054a5b7c9b9\",\n      \"full_name\": \"Jane Doe\",\n      \"email\": \"<a class=\"__cf_email__\" data-cfemail=\"c7ada6a9a287a2bfa6aab7aba2e9a4a8aa\" href=\"/cdn-cgi/l/email-protection\">[email protected]</a>\"\n    }\n  ],\n  \"method\": \"virtual\",\n  \"items\": [\n    {\n      \"id\": \"615605f8e4a097c44247bd8e\",\n      \"page\": null,\n      \"signer\": {\n        \"id\": \"615605f50e968054a5b7c9b8\",\n        \"full_name\": \"John Dove\",\n        \"email\": \"<a class=\"__cf_email__\" data-cfemail=\"7f15101a3f1a071e120f131a511c1012\" href=\"/cdn-cgi/l/email-protection\">[email protected]</a>\"\n      },\n      \"field\": {\n        \"id\": \"61521202f2f86152752c6a1b\",\n        \"name\": \"Virtual\",\n        \"type\": \"virtual\"\n      },\n      \"display_settings\": [],\n      \"value\": null,\n      \"completed\": false\n    }\n  ],\n  \"signing_urls\": [\n    {\n      \"signer_id\": \"615605f50e968054a5b7c9b8\",\n      \"url\": \"https://api.assinafy.com.br/v1/sign/<a class=\"__cf_email__\" data-cfemail=\"d5e3e4e0e7e4e6b0b1b3edb4e0edb3e4e6e7b0e4b7e7e6ede1eab0b8b4bcb9e8bfbab095b0adb4b8a5b9b0fbb6bab8\" href=\"/cdn-cgi/l/email-protection\">[email protected]</a>\"\n    },\n    {\n      \"signer_id\": \"615605f50e968054a5b7c9b9\",\n      \"url\": \"https://api.assinafy.com.br/v1/sign/<a class=\"__cf_email__\" data-cfemail=\"5f696e6a6d6e6c3a3b39673e6a67396e6c6d3a6e3d6d6c676b603a323e363362353e313a1f3a273e322f333a713c3032\" href=\"/cdn-cgi/l/email-protection\">[email protected]</a>\"\n    }\n  ]\n}</code></pre><p><code>POST /documents/:documentId/assignments</code></p><p>Create assignments without fields (method: 'virtual').</p><h3>Header Parameters</h3><ul>\n<li><code>Content-Type: application/json</code></li>\n<li><code>Authorization: Bearer {access_token}</code></li>\n</ul><h3>Body Parameters</h3><table>\n<thead>\n<tr>\n<th>Parameter</th>\n<th>Required</th>\n<th>Description</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>method</td>\n<td>true</td>\n<td>Should be <code>virtual</code>.</td>\n</tr>\n<tr>\n<td>signers[]</td>\n<td>true</td>\n<td>List of signers configuration.</td>\n</tr>\n<tr>\n<td>signers[].id</td>\n<td>true</td>\n<td>Signer ID.</td>\n</tr>\n<tr>\n<td>message</td>\n<td>false</td>\n<td>Text to be included in the invitation email.</td>\n</tr>\n<tr>\n<td>expires_at</td>\n<td>false</td>\n<td>Expiration date for the assignment in the ISO 8601 format. Default the default is no expiration.</td>\n</tr>\n<tr>\n<td>copy_receivers</td>\n<td>false</td>\n<td>A list of signer IDs that should only receive a copy of the document.</td>\n</tr>\n<tr>\n<td>signer_ids</td>\n<td>false</td>\n<td><strong>(Legacy)</strong> A list of signer IDs. Defaults to <code>Email</code> verification and notification. Use <code>signers</code> instead.</td>\n</tr>\n</tbody>\n</table><h2 id=\"create-with-input\">Create with Input</h2><blockquote>\n<p>Request</p>\n</blockquote><pre><code class=\"language-shell\">curl -X POST https://api.assinafy.com.br/v1/documents/60f720572d7fecf7c16c8463/assignments \\\n-H 'Content-Type: application/json' \\\n-d '\n{\n  \"method\": \"collect\",\n  \"signers\": [\n    {\n      \"id\": \"61521202f665dffcef5f6b24\"\n    },\n    {\n      \"id\": \"615212039529a822e24b6913\"\n    }\n  ],\n  \"entries\": [\n    {\n      \"page_id\": \"615213ed81b071f4293b2fc2\",\n      \"fields\": [\n        {\n          \"signer_id\": \"61521202f665dffcef5f6b24\",\n          \"field_id\": \"6152120297080d55bdd13197\",\n          \"display_settings\": {\n            \"left\": 69,\n            \"top\": 282,\n            \"fontFamily\": \"Arial\",\n            \"fontSize\": 18,\n            \"backgroundColor\": \"rgb(185, 218, 255)\"\n          }\n        },\n        {\n          \"signer_id\": \"615212039529a822e24b6913\",\n          \"field_id\": \"6152120297080d55bdd13197\",\n          \"display_settings\": {\n            \"left\": 639,\n            \"top\": 285,\n            \"fontFamily\": \"Arial\",\n            \"fontSize\": 18,\n            \"backgroundColor\": \"rgb(195, 230, 203)\"\n          }\n        }\n      ]\n    }\n  ],\n  \"expires_at\": \"2021-09-30T21:00:00Z\"\n}\n'</code></pre><blockquote>\n<p>200 OK</p>\n</blockquote><pre><code class=\"language-json\">{\n  \"id\": \"615606ef81d199996981dbce\",\n  \"expiration\": \"2021-09-30\",\n  \"signers\": [\n    {\n      \"id\": \"61521202f665dffcef5f6b24\",\n      \"full_name\": \"Kennith Kuphal\",\n      \"email\": \"<a class=\"__cf_email__\" data-cfemail=\"3e4a4c51534e105a5b51507e555b53535b4c105d5153\" href=\"/cdn-cgi/l/email-protection\">[email protected]</a>\"\n    },\n    {\n      \"id\": \"615212039529a822e24b6913\",\n      \"full_name\": \"Sonny Bayer\",\n      \"email\": \"<a class=\"__cf_email__\" data-cfemail=\"bfcbd6d3d3d2ded18c8effc6ded7d0d091dcd0d2\" href=\"/cdn-cgi/l/email-protection\">[email protected]</a>\"\n    }\n  ],\n  \"method\": null,\n  \"items\": [\n    {\n      \"id\": \"615606efbb67641186c12330\",\n      \"page\": {\n        \"id\": \"615213ed81b071f4293b2fc2\",\n        \"number\": 1,\n        \"height\": 2100,\n        \"width\": 1275,\n        \"download_url\": \"https://api.assinafy.com.br/v1/documents/615213edf8a58f132e1b2384/pages/615213ed81b071f4293b2fc2/download\"\n      },\n      \"signer\": {\n        \"id\": \"61521202f665dffcef5f6b24\",\n        \"full_name\": \"Kennith Kuphal\",\n        \"email\": \"<a class=\"__cf_email__\" data-cfemail=\"fd898f92908dd399989293bd96989090988fd39e9290\" href=\"/cdn-cgi/l/email-protection\">[email protected]</a>\"\n      },\n      \"field\": {\n        \"id\": \"6152120297080d55bdd13197\",\n        \"name\": \"Signature\",\n        \"type\": \"signature\"\n      },\n      \"display_settings\": {\n        \"top\": 282,\n        \"left\": 69,\n        \"fontSize\": 18,\n        \"fontFamily\": \"Arial\",\n        \"backgroundColor\": \"rgb(185, 218, 255)\"\n      },\n      \"value\": null,\n      \"completed\": false\n    },\n    {\n      \"id\": \"615606efcde1a39c9d21e30e\",\n      \"page\": {\n        \"id\": \"615213ed81b071f4293b2fc2\",\n        \"number\": 1,\n        \"height\": 2100,\n        \"width\": 1275,\n        \"download_url\": \"https://api.assinafy.com.br/v1/documents/615213edf8a58f132e1b2384/pages/615213ed81b071f4293b2fc2/download\"\n      },\n      \"signer\": {\n        \"id\": \"615212039529a822e24b6913\",\n        \"full_name\": \"Sonny Bayer\",\n        \"email\": \"<a class=\"__cf_email__\" data-cfemail=\"5d29343131303c336e6c1d243c353232733e3230\" href=\"/cdn-cgi/l/email-protection\">[email protected]</a>\"\n      },\n      \"field\": {\n        \"id\": \"6152120297080d55bdd13197\",\n        \"name\": \"Signature\",\n        \"type\": \"signature\"\n      },\n      \"display_settings\": {\n        \"top\": 285,\n        \"left\": 639,\n        \"fontSize\": 18,\n        \"fontFamily\": \"Arial\",\n        \"backgroundColor\": \"rgb(195, 230, 203)\"\n      },\n      \"value\": null,\n      \"completed\": false\n    }\n  ],\n  \"signing_urls\": [\n    {\n      \"signer_id\": \"61521202f665dffcef5f6b24\",\n      \"url\": \"https://api.assinafy.com.br/v1/sign/<a class=\"__cf_email__\" data-cfemail=\"1f292e2a2d2e2c7a7b79277e2a27792e2c2d7a2e7d2d2c272b207a727e7673226b6d70726f317b7a70715f747a72727a6d317c7072\" href=\"/cdn-cgi/l/email-protection\">[email protected]</a>\"\n    },\n    {\n      \"signer_id\": \"615212039529a822e24b6913\",\n      \"url\": \"https://api.assinafy.com.br/v1/sign/<a class=\"__cf_email__\" data-cfemail=\"bb8d8a8e898a88dedfdd83da8e83dd8a8889de8ad98988838f84ded6dad2d786cfd2d7d7d6dad5888afbc2dad3d4d495d8d4d6\" href=\"/cdn-cgi/l/email-protection\">[email protected]</a>\"\n    }\n  ]\n}</code></pre><p><code>POST /documents/:documentId/assignments</code></p><p>Create assignments with input fields.</p><h3>Header Parameters</h3><ul>\n<li><code>Content-Type: application/json</code></li>\n<li><code>Authorization: Bearer {access_token}</code></li>\n</ul><h3>Body Parameters</h3><table>\n<thead>\n<tr>\n<th>Parameter</th>\n<th>Required</th>\n<th>Description</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>method</td>\n<td>true</td>\n<td>Should be <code>collect</code>.</td>\n</tr>\n<tr>\n<td>signers[]</td>\n<td>false</td>\n<td>List of signers configuration.</td>\n</tr>\n<tr>\n<td>signers[].id</td>\n<td>true</td>\n<td>Signer ID. References a signer defined in the <code>signers</code> array.</td>\n</tr>\n<tr>\n<td>entries[]</td>\n<td>true</td>\n<td>List of assignment items.</td>\n</tr>\n<tr>\n<td>entries[].page_id</td>\n<td>true</td>\n<td>Page ID.</td>\n</tr>\n<tr>\n<td>entries[].fields</td>\n<td>true</td>\n<td>List of fields in the page.</td>\n</tr>\n<tr>\n<td>entries[].fields[].signer_id</td>\n<td>true</td>\n<td>Signer ID. References a signer defined in the <code>signers</code> array.</td>\n</tr>\n<tr>\n<td>entries[].fields[].field_id</td>\n<td>true</td>\n<td>Field ID.</td>\n</tr>\n<tr>\n<td>entries[].fields[].display_settings</td>\n<td>true</td>\n<td>Field positioning and font information.</td>\n</tr>\n<tr>\n<td>message</td>\n<td>false</td>\n<td>Text to be included in the invitation email.</td>\n</tr>\n<tr>\n<td>expires_at</td>\n<td>false</td>\n<td>Expiration date for the assignment in the ISO 8601 format. Default the default is no expiration.</td>\n</tr>\n<tr>\n<td>copy_receivers[]</td>\n<td>false</td>\n<td>A list of signer IDs that should only receive a copy of the document.</td>\n</tr>\n</tbody>\n</table><h2 id=\"resend\">Resend</h2><blockquote>\n<p>Request</p>\n</blockquote><pre><code class=\"language-shell\">curl -X PUT \"https://api.assinafy.com.br/v1/documents/c57d51eaad68a7/assignments/d51edaee68a7/signers/a51edaee68a7/resend\"</code></pre><blockquote>\n<p>200 OK</p>\n</blockquote><pre><code class=\"language-json\">{\n  \"status\": 200,\n  \"message\": \"\",\n  \"data\": {\n    \"is_sent\": true,\n    \"document_id\": \"c57d51eaad68a7\",\n    \"signer_id\": \"a51edaee68a7\"\n  }\n}</code></pre><p><code>PUT /documents/:documentId/assignments/:assignmentId/signers/:signerId/resend</code></p><p>Resend assignment input request message to a signer. This is used in case it is necessary to resend the email message with the link to sign a document.</p><h3>Header Parameters</h3><ul>\n<li><code>Content-Type: application/json</code></li>\n<li><code>Authorization: Bearer {access_token}</code></li>\n</ul><h3>URL Parameters</h3><table>\n<thead>\n<tr>\n<th>Parameter</th>\n<th>Required</th>\n<th>Description</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>documentId</td>\n<td>true</td>\n<td>The document ID.</td>\n</tr>\n<tr>\n<td>assignmentId</td>\n<td>true</td>\n<td>The assignment ID.</td>\n</tr>\n<tr>\n<td>signerId</td>\n<td>true</td>\n<td>The signer ID.</td>\n</tr>\n</tbody>\n</table><h2 id=\"reset-expiration\">Reset Expiration</h2><blockquote>\n<p>Request example</p>\n</blockquote><pre><code class=\"language-shell\">curl -X PUT \"https://api.assinafy.com.br/v1/documents/c57d51eaad68a7/assignments/d51edaee68a7/reset-expiration\" -d\n'{\n  \"expires_at\": \"2030-08-03T21:00:00Z\"\n}'</code></pre><blockquote>\n<p>200 OK</p>\n</blockquote><pre><code class=\"language-json\">{\n  \"status\": 200,\n  \"message\": \"\",\n  \"data\": {\n    \"resource\": \"assignment\",\n    \"id\": \"1\",\n    \"expires_at\": \"2030-08-03T21:00:00Z\",\n    \"signers\": [\n      {\n        \"id\": \"customid1\",\n        \"full_name\": \"Signer 1\",\n        \"email\": \"<a class=\"__cf_email__\" data-cfemail=\"720a320a5c111d1f\" href=\"/cdn-cgi/l/email-protection\">[email protected]</a>\",\n        \"has_accepted_terms\": false\n      },\n      {\n        \"id\": \"customid2\",\n        \"full_name\": \"Signer 2\",\n        \"email\": \"<a class=\"__cf_email__\" data-cfemail=\"8ffce6e8e1eafdbdcffce6e8e1eafda1ece0e2\" href=\"/cdn-cgi/l/email-protection\">[email protected]</a>\",\n        \"has_accepted_terms\": false\n      }\n    ],\n    \"method\": \"virtual\",\n    \"items\": [\n      {\n        \"id\": \"1\",\n        \"page\": {\n          \"id\": \"1\",\n          \"number\": 1,\n          \"height\": 1,\n          \"width\": 1,\n          \"download_url\": \"https://api.assinafy.com.br/v1/documents/1/pages/1/download\"\n        },\n        \"signer\": {\n          \"id\": \"customid1\",\n          \"full_name\": \"Signer 1\",\n          \"email\": \"<a class=\"__cf_email__\" data-cfemail=\"7c043c04521f1311\" href=\"/cdn-cgi/l/email-protection\">[email protected]</a>\",\n          \"has_accepted_terms\": false\n        },\n        \"field\": null,\n        \"display_settings\": \"\",\n        \"value\": \"\",\n        \"completed\": true\n      },\n      {\n        \"id\": \"2\",\n        \"page\": {\n          \"id\": \"1\",\n          \"number\": 1,\n          \"height\": 1,\n          \"width\": 1,\n          \"download_url\": \"https://api.assinafy.com.br/v1/documents/1/pages/1/download\"\n        },\n        \"signer\": {\n          \"id\": \"customid2\",\n          \"full_name\": \"Signer 2\",\n          \"email\": \"<a class=\"__cf_email__\" data-cfemail=\"a3d0cac4cdc6d191e3d0cac4cdc6d18dc0ccce\" href=\"/cdn-cgi/l/email-protection\">[email protected]</a>\",\n          \"has_accepted_terms\": false\n        },\n        \"field\": null,\n        \"display_settings\": \"\",\n        \"value\": \"\",\n        \"completed\": false\n      },\n      {\n        \"id\": \"3\",\n        \"page\": {\n          \"id\": \"1\",\n          \"number\": 1,\n          \"height\": 1,\n          \"width\": 1,\n          \"download_url\": \"https://api.assinafy.com.br/v1/documents/1/pages/1/download\"\n        },\n        \"signer\": {\n          \"id\": \"customid1\",\n          \"full_name\": \"Signer 1\",\n          \"email\": \"<a class=\"__cf_email__\" data-cfemail=\"b5cdf5cd9bd6dad8\" href=\"/cdn-cgi/l/email-protection\">[email protected]</a>\",\n          \"has_accepted_terms\": false\n        },\n        \"field\": null,\n        \"display_settings\": \"\",\n        \"value\": \"\",\n        \"completed\": true\n      }\n    ],\n    \"summary\": {\n      \"signer_count\": 2,\n      \"completed_count\": 1,\n      \"signers\": [\n        {\n          \"id\": \"customid1\",\n          \"full_name\": \"Signer 1\",\n          \"email\": \"<a class=\"__cf_email__\" data-cfemail=\"4b330b3365282426\" href=\"/cdn-cgi/l/email-protection\">[email protected]</a>\",\n          \"has_accepted_terms\": false,\n          \"completed\": true\n        },\n        {\n          \"id\": \"customid2\",\n          \"full_name\": \"Signer 2\",\n          \"email\": \"<a class=\"__cf_email__\" data-cfemail=\"b1c2d8d6dfd4c383f1c2d8d6dfd4c39fd2dedc\" href=\"/cdn-cgi/l/email-protection\">[email protected]</a>\",\n          \"has_accepted_terms\": false,\n          \"completed\": false\n        }\n      ]\n    }\n  }\n}</code></pre><p><code>PUT /documents/:documentId/assignments/:assignmentId/reset-expiration</code></p><p>Reset assignment expiration. This endpoint can be used to set a new expiration\ndate for an assignment. A null value is accepted and means no expiration date.</p><p><strong>Headers</strong>:</p><ul>\n<li><code>Content-Type</code> - <code>application/json</code></li>\n</ul><h3>URL Parameters</h3><table>\n<thead>\n<tr>\n<th>Parameter</th>\n<th>Required</th>\n<th>Description</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>documentId</td>\n<td>true</td>\n<td>The document ID.</td>\n</tr>\n<tr>\n<td>assignmentId</td>\n<td>true</td>\n<td>The assignment ID.</td>\n</tr>\n</tbody>\n</table><h3>Request Parameters</h3><table>\n<thead>\n<tr>\n<th>Parameter</th>\n<th>Required</th>\n<th>Description</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>expires_at</td>\n<td>true</td>\n<td>The new date and time to be set in the ISO 8601 format. A null value means no expiration.</td>\n</tr>\n</tbody>\n</table><h2 id=\"get\">Get</h2><blockquote>\n<p>Request</p>\n</blockquote><pre><code class=\"language-shell\">curl 'https://api.assinafy.com.br/v1/sign?signer-access-code=9uAWyOXx9hgzCKdCuahkinwvg8tWJ2RC-n6hhxyLS1QfMhqWSw-PnwQlSs2oPNea'</code></pre><blockquote>\n<p>200 OK</p>\n</blockquote><pre><code class=\"language-json\">{\n  \"id\": \"615213edf8a58f132e1b2384\",\n  \"account_id\": \"d199996981dbd199996981db\",\n  \"name\": \"sample-contract-one-page.pdf\",\n  \"status\": \"pending\",\n  \"assignment\": {\n    \"id\": \"615606ef81d199996981dbce\",\n    \"expiration\": \"2021-09-30\",\n    \"method\": \"collect\",\n    \"items\": [\n      {\n        \"id\": \"615606efcde1a39c9d21e30e\",\n        \"page\": {\n          \"id\": \"615213ed81b071f4293b2fc2\",\n          \"number\": 1,\n          \"height\": 2100,\n          \"width\": 1275,\n          \"download_url\": \"https://api.assinafy.com.br/v1/documents/615213edf8a58f132e1b2384/pages/615213ed81b071f4293b2fc2/download\"\n        },\n        \"signer\": {\n          \"id\": \"615212039529a822e24b6913\",\n          \"full_name\": \"Sonny Bayer\",\n          \"email\": \"<a class=\"__cf_email__\" data-cfemail=\"285c4144444549461b19685149404747064b4745\" href=\"/cdn-cgi/l/email-protection\">[email protected]</a>\",\n          \"has_accepted_terms\": true\n        },\n        \"field\": {\n          \"id\": \"6152120297080d55bdd13197\",\n          \"name\": \"Signature\",\n          \"type\": \"signature\"\n        },\n        \"display_settings\": {\n          \"top\": 285,\n          \"left\": 639,\n          \"width\": 501,\n          \"height\": 27.340000000000032,\n          \"fontSize\": 18,\n          \"fontFamily\": \"Arial\",\n          \"backgroundColor\": \"rgb(195, 230, 203)\"\n        },\n        \"value\": null,\n        \"completed\": false\n      }\n    ],\n    \"summary\": {\n      \"signer_count\": 2,\n      \"completed_count\": 1,\n      \"signers\": [\n        {\n          \"id\": \"customid1\",\n          \"full_name\": \"Signer 1\",\n          \"email\": \"<a class=\"__cf_email__\" data-cfemail=\"6f172f17410c0002\" href=\"/cdn-cgi/l/email-protection\">[email protected]</a>\",\n          \"has_accepted_terms\": true,\n          \"completed\": true\n        },\n        {\n          \"id\": \"customid2\",\n          \"full_name\": \"Signer 2\",\n          \"email\": \"<a class=\"__cf_email__\" data-cfemail=\"42312b252c27307002312b252c27306c212d2f\" href=\"/cdn-cgi/l/email-protection\">[email protected]</a>\",\n          \"has_accepted_terms\": false,\n          \"completed\": false\n        }\n      ]\n    },\n    \"signing_urls\": [\n      {\n        \"signer_id\": \"customid1\",\n        \"url\": \"https://api.assinafy.com.br/v1/sign/<a class=\"__cf_email__\" data-cfemail=\"b7818682858684d2d3d18fd6828fd1868485d286d585848f8388d2dad6dedb8acff7cf99d4d8da\" href=\"/cdn-cgi/l/email-protection\">[email protected]</a>\",\n      },\n      {\n        \"signer_id\": \"customid2\",\n        \"url\": \"https://api.assinafy.com.br/v1/sign/<a class=\"__cf_email__\" data-cfemail=\"4e787f7b7c7f7d2b2a28762f7b76287f7d7c2b7f2c7c7d767a712b232f2722733d2729202b3c7c0e3d2729202b3c602d2123\" href=\"/cdn-cgi/l/email-protection\">[email protected]</a>\",\n      }\n    ]\n  },\n   \"artifacts\": {\n    \"original\": \"https://api.assinafy.com.br/v1/documents/3/download/original\",\n    \"certificated\": \"https://api.assinafy.com.br/v1/documents/3/download/certificated\",\n    \"certificate-page\": \"https://api.assinafy.com.br/v1/documents/3/download/certificate-page\",\n    \"bundle\": \"https://api.assinafy.com.br/v1/documents/3/download/bundle\"\n  },\n  \"pages\": [\n    {\n      \"id\": \"615213ed81b071f4293b2fc2\",\n      \"number\": 1,\n      \"height\": 2100,\n      \"width\": 1275,\n      \"download_url\": \"https://api.assinafy.com.br/v1/documents/615213edf8a58f132e1b2384/pages/615213ed81b071f4293b2fc2/download\"\n    }\n  ],\n  \"created_at\": 1632769005,\n  \"updated_at\": 1632769005,\n  \"current_signer\": {\n    \"id\": \"615212039529a822e24b6913\",\n    \"full_name\": \"Till Man\",\n    \"email\": \"<a class=\"__cf_email__\" data-cfemail=\"13677a7f7f7e727d2022536a727b7c7c3d707c7e\" href=\"/cdn-cgi/l/email-protection\">[email protected]</a>\",\n    \"has_accepted_terms\": true,\n    \"verification_method\": \"Email\",\n    \"notification_methods\": [\"Email\"]\n  }\n}</code></pre><p><code>GET /sign</code></p><p>Retrieve document assignment details as a signer. It requires the signer access code\nwith verification code.</p><p>The response is the document data that the signer have access to.</p><h3>Header Parameters</h3><ul>\n<li><code>Content-Type</code> - <code>application/json</code></li>\n</ul><h3>Request Parameters</h3><table>\n<thead>\n<tr>\n<th>Parameter</th>\n<th>Default</th>\n<th>Required</th>\n<th>Description</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td><code>signer-access-code</code></td>\n<td></td>\n<td>true</td>\n<td>Signer access code.</td>\n</tr>\n<tr>\n<td><code>has_accepted_terms</code></td>\n<td>false</td>\n<td>false</td>\n<td>Indicates whether signer has accepted the terms.</td>\n</tr>\n</tbody>\n</table><h2 id=\"sign\">Sign</h2><blockquote>\n<p>Request</p>\n</blockquote><pre><code class=\"language-shell\">curl -X POST 'https://api.assinafy.com.br/v1/documents/c57d51eaad68a7/assignments/d51edaee68a7?signer-access-code=9uAWyOXx9hgzCKdCuahkinwvg8tWJ2RC-n6hhxyLS1QfMhqWSw-PnwQlSs2oPNea' -d '\n[\n  {\n    \"itemId\": \"615606efcde1a39c9d21e30e\",\n    \"fieldId\": \"6152120297080d55bdd13197\",\n    \"pageId\": \"615213ed81b071f4293b2fc2\",\n    \"value\": \"Signed by Sonny Bayer\"\n  }\n]\n'</code></pre><p><code>POST /documents/:documentId/assignments/:assignmentId</code></p><p>Allow a signer to sign a document with input fields (collect method).</p><p><strong>Important:</strong> For virtual assignments using email verification method, signers must confirm their data via <code>PUT /documents/:documentId/signers/confirm-data</code> before signing. Attempting to sign without confirming data will result in a 400 error: \"Signer data must be confirmed before signing.\"</p><p><strong>Headers</strong>:</p><ul>\n<li><code>Content-Type</code> - <code>application/json</code></li>\n</ul><h3>URL Parameters</h3><table>\n<thead>\n<tr>\n<th>Parameter</th>\n<th>Required</th>\n<th>Description</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td><code>signer-access-code</code></td>\n<td>true</td>\n<td>Signer access code as query string parameter.</td>\n</tr>\n</tbody>\n</table><h3>Body Parameters</h3><table>\n<thead>\n<tr>\n<th>Parameter</th>\n<th>Required</th>\n<th>Description</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td><code>[].itemId</code></td>\n<td>true</td>\n<td>The item id.</td>\n</tr>\n<tr>\n<td><code>[].fieldId</code></td>\n<td>true</td>\n<td>Field it associated to the item.</td>\n</tr>\n<tr>\n<td><code>[].pageId</code></td>\n<td>true</td>\n<td>The page id.</td>\n</tr>\n<tr>\n<td><code>[].value</code></td>\n<td>true</td>\n<td>String representation of the value.</td>\n</tr>\n</tbody>\n</table><h3>Error Responses</h3><p><strong>400 Bad Request</strong> - If attempting to sign without confirming data (for virtual assignments):</p><pre><code class=\"language-json\">{\n  \"name\": \"Bad Request\",\n  \"message\": \"Signer data must be confirmed before signing.\",\n  \"code\": 0,\n  \"status\": 400\n}</code></pre><h2 id=\"decline\">Decline</h2><blockquote>\n<p>Request</p>\n</blockquote><pre><code class=\"language-shell\">curl -X PUT \"https://api.assinafy.com.br/v1/documents/c57d51eaad68a7/assignments/d51edaee68a7/reject?signer-access-code=1e7d51e68a7\" \\\n-H 'Content-Type: application/json' \\\n-d '{\n  \"decline_reason\": \"I do not agree with clause 2.\"\n}'</code></pre><blockquote>\n<p>200 OK</p>\n</blockquote><pre><code class=\"language-json\">{\n  \"status\": 200,\n  \"message\": \"\",\n  \"data\": []\n}</code></pre><p><code>PUT /documents/:documentId/assignments/:assignmentId/reject?signer-access-code=:accessCode</code></p><p>Allows a signer to decline an assignment.</p><h3>Header Parameters</h3><ul>\n<li><code>Content-Type: application/json</code></li>\n</ul><h3>URL Parameters</h3><table>\n<thead>\n<tr>\n<th>Parameter</th>\n<th>Required</th>\n<th>Description</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>documentId</td>\n<td>true</td>\n<td>The document ID.</td>\n</tr>\n<tr>\n<td>assignmentId</td>\n<td>true</td>\n<td>The assignment ID.</td>\n</tr>\n<tr>\n<td>accessCode</td>\n<td>true</td>\n<td>Signer access code.</td>\n</tr>\n</tbody>\n</table><h3>Body Parameters</h3><table>\n<thead>\n<tr>\n<th>Parameter</th>\n<th>Required</th>\n<th>Description</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>decline_reason</td>\n<td>true</td>\n<td>Descriptive reason for declining the invitation.</td>\n</tr>\n</tbody>\n</table>",
+      "subsections": [],
+      "endpoints": []
+    },
+    {
+      "title": "Signer Documents",
+      "level": 1,
+      "content": "<h2 id=\"list\">List</h2><blockquote>\n<p>Request</p>\n</blockquote><pre><code class=\"language-shell\">curl -X GET https://api.assinafy.com.br/v1/signers/62d6ee35c7741ca4006b9e11/documents?signer-access-code=1ca4006b9e111ca4006b9e11</code></pre><blockquote>\n<p>200 OK</p>\n</blockquote><pre><code class=\"language-json\">{\n  \"status\": 200,\n  \"message\": \"\",\n  \"data\": [\n    {\n      \"id\": \"6981dbd199996981d\",\n      \"account_id\": \"1a\",\n      \"name\": \"my_document.pdf\",\n      \"status\": \"metadata_ready\",\n      \"assignment\": {\n        \"id\": \"1\",\n        \"sender_email\": \"<a class=\"__cf_email__\" data-cfemail=\"2655434842435408435e474b564a4366434b474f4a0845494b\" href=\"/cdn-cgi/l/email-protection\">[email protected]</a>\",\n        \"method\": \"virtual\",\n        \"expires_at\": null,\n        \"message\": null,\n        \"signers\": [\n          {\n            \"id\": \"customid1\",\n            \"full_name\": \"Signer 1\",\n            \"email\": \"<a class=\"__cf_email__\" data-cfemail=\"8ffce6e8e1eafdcfeae2eee6e3a1ece0e2\" href=\"/cdn-cgi/l/email-protection\">[email protected]</a>\",\n            \"has_accepted_terms\": false\n          },\n          {\n            \"id\": \"customid2\",\n            \"full_name\": \"Signer 2\",\n            \"email\": \"<a class=\"__cf_email__\" data-cfemail=\"d7a4beb0b9b2a5e597a4beb0b9b2a5f9b4b8ba\" href=\"/cdn-cgi/l/email-protection\">[email protected]</a>\",\n            \"has_accepted_terms\": false\n          }\n        ],\n        \"items\": [\n          {\n            \"id\": \"dbd199996981d\",\n            \"page\": {\n              \"id\": \"dbd199996981d\",\n              \"number\": 1,\n              \"height\": 1,\n              \"width\": 1,\n              \"download_url\": \"https://api.assinafy.com.br/v1/documents/doc1/pages/1a/download\"\n            },\n            \"signer\": {\n              \"id\": \"dbd199996981d\",\n              \"full_name\": \"Signer Name\",\n              \"email\": \"<a class=\"__cf_email__\" data-cfemail=\"28506850064b4745\" href=\"/cdn-cgi/l/email-protection\">[email protected]</a>\",\n              \"has_accepted_terms\": false\n            },\n            \"field\": {\n              \"id\": \"dbd199996981d\",\n              \"name\": \"Assinatura\",\n              \"type\": \"virtual\",\n              \"regex\": null,\n              \"is_pre_defined\": false,\n              \"is_active\": true,\n              \"is_required\": true,\n              \"is_standard\": false,\n              \"is_read_only\": false,\n              \"is_visible\": true\n            },\n            \"display_settings\": \"\",\n            \"value\": \"\",\n            \"completed\": true\n          }\n        ],\n        \"summary\": {\n          \"signer_count\": 2,\n          \"completed_count\": 1,\n          \"signers\": [\n            {\n              \"id\": \"dbd199996981d\",\n              \"full_name\": \"Signer 1\",\n              \"email\": \"<a class=\"__cf_email__\" data-cfemail=\"d0a890a8feb3bfbd\" href=\"/cdn-cgi/l/email-protection\">[email protected]</a>\",\n              \"has_accepted_terms\": false,\n              \"completed\": true\n            },\n            {\n              \"id\": \"dbd199996981d\",\n              \"full_name\": \"Signer 2\",\n              \"email\": \"<a class=\"__cf_email__\" data-cfemail=\"e4978d838a8196d6a48189858d88ca878b89\" href=\"/cdn-cgi/l/email-protection\">[email protected]</a>\",\n              \"has_accepted_terms\": false,\n              \"completed\": false\n            }\n          ]\n        }\n      },\n      \"artifacts\": {\n        \"original\": \"https://api.assinafy.com.br/v1/documents/doc1/download/original\",\n        \"thumbnail\": \"https://api.assinafy.com.br/v1/documents/doc1/thumbnail\"\n      },\n      \"pages\": [\n        {\n          \"id\": \"dbd199996981d\",\n          \"number\": 1,\n          \"height\": 1,\n          \"width\": 1,\n          \"download_url\": \"https://api.assinafy.com.br/v1/documents/doc1/pages/1a/download\"\n        }\n      ],\n      \"created_at\": \"2023-07-21T13:43:17Z\",\n      \"updated_at\": \"2023-07-21T13:43:17Z\",\n      \"is_closed\": false,\n      \"decline_reason\": null,\n      \"declined_by\": null\n    },\n  ]\n}</code></pre><p><code>GET /signers/:signer_id/documents?signer-access-code=1ca4006b9e111ca4006b9e11</code></p><p>List signer's documents.</p><h3>Authorization</h3><p>Either the <code>authorization</code> header or the <code>signer_access_code</code> URL parameter\ncan be used for authorization.</p><h3>URL Parameters</h3><table>\n<thead>\n<tr>\n<th>Parameter</th>\n<th>Required</th>\n<th>Description</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>signer_id</td>\n<td>true</td>\n<td>The signer ID.</td>\n</tr>\n<tr>\n<td>signer_access_code</td>\n<td>true</td>\n<td>The signer access code.</td>\n</tr>\n<tr>\n<td>status</td>\n<td>false</td>\n<td>Status code to filter results. Ex.: <code>pending_signature</code>.</td>\n</tr>\n<tr>\n<td>method</td>\n<td>false</td>\n<td>Signature method filter. Ex.: <code>?method=virtual</code>. Possible values: <code>virtual</code> or <code>collect</code>.</td>\n</tr>\n<tr>\n<td>search</td>\n<td>false</td>\n<td>Search term that will be used for partial matching on the following attributes: <code>document.name</code>, <code>signer.full_name</code> and <code>signer.email</code>.</td>\n</tr>\n<tr>\n<td>sort</td>\n<td>false</td>\n<td>Allows sorting by: <code>name</code> and <code>updated_at</code>.</td>\n</tr>\n</tbody>\n</table><p>When present, the <code>search</code> URL parameter will be used for a partial search\non the following attributes: <code>document.name</code>, <code>signer.full_name</code> and <code>signer.email</code>.</p><p>Possible sort attributes are <code>name</code> and <code>updated_at</code>.</p><h3>Document Status</h3><p>These are the possible document status:</p><table>\n<thead>\n<tr>\n<th>Status</th>\n<th>Deletable</th>\n<th>Description</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>uploading</td>\n<td>no</td>\n<td>The document upload is in process.</td>\n</tr>\n<tr>\n<td>uploaded</td>\n<td>no</td>\n<td>The document has been uploaded.</td>\n</tr>\n<tr>\n<td>metadata_processing</td>\n<td>no</td>\n<td>The initial processing is under way.</td>\n</tr>\n<tr>\n<td>metadata_ready</td>\n<td>yes</td>\n<td>The initial processing has been completed.</td>\n</tr>\n<tr>\n<td>expired</td>\n<td>yes</td>\n<td>The signature deadline has been reached.</td>\n</tr>\n<tr>\n<td>certificating</td>\n<td>no</td>\n<td>The document has been signed and is being certificated.</td>\n</tr>\n<tr>\n<td>certificated</td>\n<td>no</td>\n<td>The document is certificated.</td>\n</tr>\n<tr>\n<td>rejected_by_signer</td>\n<td>yes</td>\n<td>A signer declined signing the document.</td>\n</tr>\n<tr>\n<td>pending_signature</td>\n<td>yes</td>\n<td>The document is waiting for signatures.</td>\n</tr>\n<tr>\n<td>rejected_by_user</td>\n<td>yes</td>\n<td>The signature process was cancelled by a user.</td>\n</tr>\n<tr>\n<td>failed</td>\n<td>yes</td>\n<td>The document processing has failed.</td>\n</tr>\n</tbody>\n</table><h2 id=\"sign-multiple\">Sign Multiple</h2><blockquote>\n<p>Request</p>\n</blockquote><pre><code class=\"language-shell\">curl -X PUT 'https://api.assinafy.com.br/v1/signers/documents/sign-multiple?signer-access-code=9uAWyOXx9hgzCKhkinwvg8tWJ2RC' \\\n-d '{\n  \"document_ids\": [\"documentid1\", \"documentid2\"]\n}'</code></pre><p><code>PUT /signers/documents/sign-multiple</code></p><blockquote>\n<p>200 OK</p>\n</blockquote><pre><code class=\"language-json\">{\n  \"status\": 200,\n  \"message\": \"\",\n  \"data\": []\n}</code></pre><p>Allow a signer to sign multiple documents at once.</p><aside class=\"notice\">\nEach document should be prepared for the \"virtual\" signature method.\n</aside><p><strong>Headers</strong>:</p><ul>\n<li><code>Content-Type</code> - <code>application/json</code></li>\n</ul><h3>URL Parameters</h3><table>\n<thead>\n<tr>\n<th>Parameter</th>\n<th>Required</th>\n<th>Description</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td><code>signer-access-code</code></td>\n<td>true</td>\n<td>Signer access code as query string parameter.</td>\n</tr>\n</tbody>\n</table><h3>Body Parameters</h3><table>\n<thead>\n<tr>\n<th>Parameter</th>\n<th>Required</th>\n<th>Description</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td><code>document_ids</code></td>\n<td>true</td>\n<td>Array of document IDs to be signed.</td>\n</tr>\n</tbody>\n</table><h2 id=\"decline-multiple\">Decline Multiple</h2><blockquote>\n<p>Request</p>\n</blockquote><pre><code class=\"language-shell\">curl -X PUT 'https://api.assinafy.com.br/v1/signers/documents/decline-multiple?signer-access-code=9uAWyOXx9hgzCKhkinwvg8tWJ2RC' \\\n-d '{\n  \"document_ids\": [\"documentid1\", \"documentid2\"],\n  \"decline_reason\": \"Unfavorable terms.\"\n}'</code></pre><p><code>PUT /signers/documents/decline-multiple</code></p><blockquote>\n<p>200 OK</p>\n</blockquote><pre><code class=\"language-json\">{\n  \"status\": 200,\n  \"message\": \"\",\n  \"data\": []\n}</code></pre><p>Allow a signer to decline multiple documents at once.</p><p><strong>Headers</strong>:</p><ul>\n<li><code>Content-Type</code> - <code>application/json</code></li>\n</ul><h3>URL Parameters</h3><table>\n<thead>\n<tr>\n<th>Parameter</th>\n<th>Required</th>\n<th>Description</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td><code>signer-access-code</code></td>\n<td>true</td>\n<td>Signer access code as query string parameter.</td>\n</tr>\n</tbody>\n</table><h3>Body Parameters</h3><table>\n<thead>\n<tr>\n<th>Parameter</th>\n<th>Required</th>\n<th>Description</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td><code>document_ids</code></td>\n<td>true</td>\n<td>Array of document IDs to be declined.</td>\n</tr>\n<tr>\n<td><code>decline_reason</code></td>\n<td>true</td>\n<td>Text explaining the reason for the decline.</td>\n</tr>\n</tbody>\n</table><h2 id=\"download\">Download</h2><blockquote>\n<p>Request</p>\n</blockquote><pre><code class=\"language-shell\">curl -X GET \"https://api.assinafy.com.br/v1/signers/62d6ee35c7741ca4006b9e11/documents/62d6ee35c7741ca4006b9e11/download/original?signer-access-code=1ca4006b9e111ca4006b9e11\"</code></pre><blockquote>\n<p>200 OK</p>\n</blockquote><pre><code>Content-Type: application/pdf\n\n[PDF binary]</code></pre><p><code>GET /signers/:signer_id/documents/:document_id/download/:artifact_name?signer-access-code=1ca4006b9e111ca4006b9e11</code></p><p>Download a signer's document.</p><h3>URL Parameters</h3><table>\n<thead>\n<tr>\n<th>Parameter</th>\n<th>Required</th>\n<th>Description</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>signer_id</td>\n<td>true</td>\n<td>The signer ID.</td>\n</tr>\n<tr>\n<td>document_id</td>\n<td>true</td>\n<td>The document ID.</td>\n</tr>\n<tr>\n<td>artifact_name</td>\n<td>True</td>\n<td>The type of artifact to download.</td>\n</tr>\n<tr>\n<td>signer-access-code</td>\n<td>True</td>\n<td>The signer's access code.</td>\n</tr>\n</tbody>\n</table><p><strong>Artifact types</strong>: original, certificated, certificate-page, bundle.</p>",
+      "subsections": [],
+      "endpoints": []
+    },
+    {
+      "title": "Field Definition",
+      "level": 1,
+      "content": "<h2 id=\"create\">Create</h2><blockquote>\n<p>Request</p>\n</blockquote><pre><code class=\"language-shell\">curl -X POST \"https://api.assinafy.com.br/v1/accounts/2120297080d55bdd13197/fields\" \\\n  -H 'Authorization: Bearer hAvmvk6Urzus3byLD2qOWrg' \\\n  -H 'Content-Type: application/json' \\\n  -d '{ \"type: \"text\", \"name\": \"Field Name\" }'</code></pre><blockquote>\n<p>200 OK</p>\n</blockquote><pre><code class=\"language-json\">{\n  \"status\": 200,\n  \"message\": \"\",\n  \"data\": {\n    \"resource\": \"field_definition\",\n    \"id\": \"63cfe15556a99a147bdd304b\",\n    \"name\": \"CPF\",\n    \"type\": \"cpf\",\n    \"regex\": null,\n    \"is_active\": true,\n    \"is_required\": true,\n    \"is_standard\": false,\n    \"is_read_only\": false,\n    \"is_visible\": true\n  }\n}</code></pre><p><code>POST /accounts/:accountId/fields</code></p><p>Create a field definition.</p><p><strong>Headers</strong>:</p><ul>\n<li><code>Content-Type</code> - <code>application/json</code></li>\n<li><code>Authorization</code> - <code>Bearer {access_token}</code></li>\n</ul><h3>Body Parameters</h3><table>\n<thead>\n<tr>\n<th>Parameter</th>\n<th>Required</th>\n<th>Default</th>\n<th>Description</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td><code>type</code></td>\n<td>true</td>\n<td></td>\n<td>The input type.</td>\n</tr>\n<tr>\n<td><code>name</code></td>\n<td>true</td>\n<td></td>\n<td>The label for the input field.</td>\n</tr>\n<tr>\n<td><code>regex</code></td>\n<td>false</td>\n<td></td>\n<td>REGEX pattern to be used for validation. Ex.: \"/[0-9]{2}-[0-9]{4}/\". It is effective only for <em>text</em> input types.</td>\n</tr>\n<tr>\n<td><code>is_required</code></td>\n<td>false</td>\n<td>true</td>\n<td>Indicate if an input value is required.</td>\n</tr>\n<tr>\n<td><code>is_active</code></td>\n<td>false</td>\n<td>true</td>\n<td>Indicate if the field definition is active.</td>\n</tr>\n</tbody>\n</table><p><strong>Note:</strong> the <em>/input-types</em> endpoint can be used to list allowed types.</p><h2 id=\"list\">List</h2><blockquote>\n<p>Request</p>\n</blockquote><pre><code class=\"language-shell\">curl \"https://api.assinafy.com.br/v1/accounts/2120297080d55bdd13197/fields\" \\\n  -H 'Authorization: Bearer hAvmvk6Urzus3byLD2qOWrg'</code></pre><blockquote>\n<p>200 OK</p>\n</blockquote><pre><code class=\"language-json\">{\n  \"status\": 200,\n  \"message\": \"\",\n  \"data\": [\n    {\n      \"id\": \"64a7584106d7e3ded274da11\",\n      \"name\": \"Name\",\n      \"type\": \"personName\",\n      \"regex\": null,\n      \"is_pre_defined\": true,\n      \"is_active\": true,\n      \"is_required\": false,\n      \"is_standard\": false,\n      \"is_read_only\": false,\n      \"is_visible\": true\n    },\n    {\n      \"id\": \"64a758410c5a5df8d07256b5\",\n      \"name\": \"CPF\",\n      \"type\": \"cpf\",\n      \"regex\": null,\n      \"is_pre_defined\": true,\n      \"is_active\": true,\n      \"is_required\": false,\n      \"is_standard\": false,\n      \"is_read_only\": false,\n      \"is_visible\": true\n    },\n    {\n      \"id\": \"64a75841255d055eba653c6b\",\n      \"name\": \"Phone Number\",\n      \"type\": \"phoneNumber\",\n      \"regex\": null,\n      \"is_pre_defined\": true,\n      \"is_active\": true,\n      \"is_required\": false,\n      \"is_standard\": false,\n      \"is_read_only\": false,\n      \"is_visible\": true\n    },\n    {\n      \"id\": \"64a758412201552421d7f60d\",\n      \"name\": \"Postal Code\",\n      \"type\": \"postalCode\",\n      \"regex\": null,\n      \"is_pre_defined\": true,\n      \"is_active\": true,\n      \"is_required\": false,\n      \"is_standard\": false,\n      \"is_read_only\": false,\n      \"is_visible\": true\n    },\n    {\n      \"id\": \"64a75841ce1def29916e3d23\",\n      \"name\": \"E-mail\",\n      \"type\": \"email\",\n      \"regex\": null,\n      \"is_pre_defined\": true,\n      \"is_active\": true,\n      \"is_required\": false,\n      \"is_standard\": false,\n      \"is_read_only\": false,\n      \"is_visible\": true\n    },\n    {\n      \"id\": \"64a758411a3fbc679ef91a55\",\n      \"name\": \"CNPJ\",\n      \"type\": \"cnpj\",\n      \"regex\": null,\n      \"is_pre_defined\": true,\n      \"is_active\": true,\n      \"is_required\": false,\n      \"is_standard\": false,\n      \"is_read_only\": false,\n      \"is_visible\": true\n    },\n    {\n      \"id\": \"64a75841851209fc930db912\",\n      \"name\": \"Company Name\",\n      \"type\": \"companyName\",\n      \"regex\": null,\n      \"is_pre_defined\": true,\n      \"is_active\": true,\n      \"is_required\": false,\n      \"is_standard\": false,\n      \"is_read_only\": false,\n      \"is_visible\": true\n    },\n    {\n      \"id\": \"64a75841090c4807361996b4\",\n      \"name\": \"Text Field\",\n      \"type\": \"text\",\n      \"regex\": null,\n      \"is_pre_defined\": true,\n      \"is_active\": true,\n      \"is_required\": false,\n      \"is_standard\": false,\n      \"is_read_only\": false,\n      \"is_visible\": true\n    },\n    {\n      \"id\": \"64a758413ac706942c065035\",\n      \"name\": \"Number\",\n      \"type\": \"number\",\n      \"regex\": null,\n      \"is_pre_defined\": true,\n      \"is_active\": true,\n      \"is_required\": false,\n      \"is_standard\": false,\n      \"is_read_only\": false,\n      \"is_visible\": true\n    },\n    {\n      \"id\": \"64a7584139987d891d5820df\",\n      \"name\": \"Date\",\n      \"type\": \"date\",\n      \"regex\": null,\n      \"is_pre_defined\": true,\n      \"is_active\": true,\n      \"is_required\": false,\n      \"is_standard\": false,\n      \"is_read_only\": false,\n      \"is_visible\": true\n    }\n  ]\n}</code></pre><p><code>GET /accounts/:accountId/fields</code></p><p>List field definitions.</p><p><strong>Headers</strong>:</p><ul>\n<li><code>Content-Type</code> - <code>application/json</code></li>\n<li><code>Authorization</code> - <code>Bearer {access_token}</code></li>\n</ul><h6>URL Parameters</h6><table>\n<thead>\n<tr>\n<th>Parameter</th>\n<th>Default</th>\n<th>Description</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td><code>include_inactive</code></td>\n<td>false</td>\n<td>Indicate if inactive records should be returned. Possible values: <em>true</em>, <em>false</em>.</td>\n</tr>\n<tr>\n<td><code>include_standard</code></td>\n<td>false</td>\n<td>Indicate if standard fields types should be returned. Possible values: <em>true</em>, <em>false</em>.</td>\n</tr>\n</tbody>\n</table><p>When indicating standard fields to be returned, records of type <em>signature</em>, <em>initial</em>\nand <em>signatureDate</em> will also be in the result.</p><h2 id=\"get\">Get</h2><blockquote>\n<p>Request</p>\n</blockquote><pre><code class=\"language-shell\">curl \"https://api.assinafy.com.br/v1/accounts/2120297080d55bdd13197/fields/7080d55bdd13197\" \\\n  -H 'Authorization: Bearer hAvmvk6Urzus3byLD2qOWrg'</code></pre><blockquote>\n<p>200 OK</p>\n</blockquote><pre><code class=\"language-json\">{\n  \"status\": 200,\n  \"message\": \"\",\n  \"data\": {\n    \"resource\": \"field_definition\",\n    \"id\": \"63cfe123880b1ba571a97916\",\n    \"name\": \"Field Name\",\n    \"type\": \"text\",\n    \"regex\": null,\n    \"is_active\": true,\n    \"is_required\": true,\n    \"is_standard\": false,\n    \"is_read_only\": false,\n    \"is_visible\": true\n  }\n}</code></pre><p><code>GET /accounts/:accountId/fields/{field_id}</code></p><p>Get single field definition.</p><p><strong>Headers</strong>:</p><ul>\n<li><code>Content-Type</code> - <code>application/json</code></li>\n<li><code>Authorization</code> - <code>Bearer {access_token}</code></li>\n</ul><h2 id=\"update\">Update</h2><blockquote>\n<p>Request</p>\n</blockquote><pre><code class=\"language-shell\">curl -X PUT \"https://api.assinafy.com.br/v1/accounts/2120297080d55bdd13197/fields/63345ba3255f24a5bc7c75f0\" \\\n  -H 'Authorization: Bearer hAvmvk6Urzus3byLD2qOWrg' \\\n  -H 'Content-Type: application/json' \\\n  -d '{ \"name\": \"New Field Name\" }'</code></pre><blockquote>\n<p>200 OK</p>\n</blockquote><pre><code class=\"language-json\">{\n  \"status\": 200,\n  \"message\": \"\",\n  \"data\": {\n    \"resource\": \"field_definition\",\n    \"id\": \"63cfe0e0fdc4e3aeb74783d7\",\n    \"name\": \"New Field Name\",\n    \"type\": \"text\",\n    \"regex\": null,\n    \"is_active\": true,\n    \"is_required\": true,\n    \"is_standard\": false,\n    \"is_read_only\": false,\n    \"is_visible\": true\n  }\n}</code></pre><p><code>PUT /accounts/:account_id/fields/:field_id</code></p><p>Update a field definition.</p><h3>Header Parameters</h3><ul>\n<li><code>Content-Type: application/json</code></li>\n<li><code>Authorization: Bearer {access_token}</code></li>\n</ul><h3>Body Parameters</h3><table>\n<thead>\n<tr>\n<th>Parameter</th>\n<th>Description</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td><code>type</code></td>\n<td>The input type.</td>\n</tr>\n<tr>\n<td><code>name</code></td>\n<td>The label for the input field.</td>\n</tr>\n<tr>\n<td><code>regex</code></td>\n<td>REGEX pattern to be used for validation. Ex.: \"/[0-9]{2}-[0-9]{4}/\". It is effective only for <em>text</em> input types.</td>\n</tr>\n<tr>\n<td><code>is_required</code></td>\n<td>Indicate if an input value is required.</td>\n</tr>\n<tr>\n<td><code>is_active</code></td>\n<td>Indicate if it is active.</td>\n</tr>\n</tbody>\n</table><p>Note: the <em>/input-types</em> endpoint can be used to list allowed types.</p><h2 id=\"delete\">Delete</h2><blockquote>\n<p>Request</p>\n</blockquote><pre><code class=\"language-shell\">curl -X DELETE \"https://api.assinafy.com.br/v1/accounts/2120297080d55bdd13197/fields/63345ba3255f24a5bc7c75f0\" \\\n-H 'Authorization: Bearer hAvmvk6Urzus3byLD2qOWrg'</code></pre><blockquote>\n<p>200 OK</p>\n</blockquote><pre><code class=\"language-json\">{\n  \"status\": 200,\n  \"message\": \"\",\n  \"data\": []\n}</code></pre><p><code>DELETE /accounts/:account_id/fields/:field_id</code></p><p>Delete a field definition.</p><h3>Header Parameters</h3><ul>\n<li><code>Content-Type: application/json</code></li>\n<li><code>Authorization: Bearer {access_token}</code></li>\n</ul><aside class=\"notice\">A field definition that has been used in a document cannot be\ndeleted.</aside><h2 id=\"validate\">Validate</h2><blockquote>\n<p>Request</p>\n</blockquote><pre><code class=\"language-shell\">curl -X POST \"https://api.assinafy.com.br/v1/accounts/2120297080d55bdd13197/fields/63345ba3255f24a5bc7c75f0/validate?signer-access-code=hAvmvk6Urzus3byLD2qOWrghAvmvk6Urzus3byLD2qOWrg\" \\\n  -H 'Content-Type: application/json' \\\n  -d '{\"value\":\"400.676.228-36\"}'</code></pre><blockquote>\n<p>200 OK</p>\n</blockquote><pre><code class=\"language-json\">{\n  \"status\": 200,\n  \"message\": \"\",\n  \"data\": {\n    \"type\": \"cpf\",\n    \"success\": true,\n    \"error_message\": \"\"\n  }\n}</code></pre><p><code>POST /accounts/:accountId/fields/:field_id/validate</code></p><p>Validate an input value against a field definition.</p><p><strong>Important:</strong> The <em>Authorization</em> header is used only when accessing as an\nauthenticated user. When accessing as a signer, use the <em>signer-access-code</em> URL parameter.</p><h3>Header Parameters</h3><ul>\n<li><code>Content-Type: application/json</code></li>\n<li><code>Authorization: Bearer {access_token}</code></li>\n</ul><h3>URL Parameters</h3><table>\n<thead>\n<tr>\n<th>Parameter</th>\n<th>Required</th>\n<th>Description</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td><code>signer-access-code</code></td>\n<td>true</td>\n<td>Signer access code.</td>\n</tr>\n</tbody>\n</table><h3>Body Parameters</h3><table>\n<thead>\n<tr>\n<th>Parameter</th>\n<th>Required</th>\n<th>Description</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td><code>value</code></td>\n<td>true</td>\n<td>The input value to be validated.</td>\n</tr>\n</tbody>\n</table><h2 id=\"validate-multiple\">Validate Multiple</h2><blockquote>\n<p>Request</p>\n</blockquote><pre><code class=\"language-shell\">curl -X POST \"https://api.assinafy.com.br/v1/accounts/2120297080d55bdd13197/fields/validate-multiple?signer-access-code=hAvmvk6Urzus3byLD2qOWrghAvmvk6Urzus3byLD2qOWrg\" \\\n  -H 'Content-Type: application/json' \\\n  -d '\n[\n  {\n    \"field_id\": \"63488ffb7adf435aba319787\",\n    \"value\": \"1111111111111\"\n  },\n  {\n    \"field_id\": \"63488ffb0461cebb70775497\",\n    \"value\": \"<a class=\"__cf_email__\" data-cfemail=\"ccadb9abb9bfb8a3e2afada1bca3bf8ca5abe2afa3a1e2aebe\" href=\"/cdn-cgi/l/email-protection\">[email protected]</a>\"\n  }\n]\n'</code></pre><blockquote>\n<p>200 OK</p>\n</blockquote><pre><code class=\"language-json\">{\n  \"status\": 200,\n  \"message\": \"\",\n  \"data\": [\n    {\n      \"field_id\": \"63488ffb7adf435aba319787\",\n      \"type\": \"cpf\",\n      \"success\": false,\n      \"error_message\": \"Invalid CPF.\"\n    },\n    {\n      \"field_id\": \"63488ffb0461cebb70775497\",\n      \"type\": \"email\",\n      \"success\": true,\n      \"error_message\": \"\"\n    }\n  ]\n}</code></pre><p><code>POST /accounts/:accountId/fields/validate-multiple</code></p><p>Validate multiple input values at once.</p><p><strong>Important:</strong> The <em>Authorization</em> header is used only when accessing as an\nauthenticated user. When accessing as a signer, use the <em>signer-access-code</em> URL parameter.</p><h3>Header Parameters</h3><ul>\n<li><code>Content-Type: application/json</code></li>\n<li><code>Authorization: Bearer {access_token}</code></li>\n</ul><h3>URL Parameters</h3><table>\n<thead>\n<tr>\n<th>Parameter</th>\n<th>Required</th>\n<th>Description</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td><code>signer-access-code</code></td>\n<td>true</td>\n<td>Signer access code.</td>\n</tr>\n</tbody>\n</table><h3>Body Parameters</h3><table>\n<thead>\n<tr>\n<th>Parameter</th>\n<th>Required</th>\n<th>Description</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td><code>[].field_id</code></td>\n<td>true</td>\n<td>The field definition ID.</td>\n</tr>\n<tr>\n<td><code>[].value</code></td>\n<td>true</td>\n<td>The input value to be validated.</td>\n</tr>\n</tbody>\n</table><h2 id=\"list-types\">List Types</h2><blockquote>\n<p>Request</p>\n</blockquote><pre><code class=\"language-shell\">curl \"https://api.assinafy.com.br/v1/field-types\"\n  -H 'Authorization: Bearer hAvmvk6Urzus3byLD2qOWrg'</code></pre><blockquote>\n<p>200 OK</p>\n</blockquote><pre><code class=\"language-json\">{\n  \"status\": 200,\n  \"message\": \"\",\n  \"data\": [\n    {\n      \"type\": \"personName\",\n      \"name\": \"Name\"\n    },\n    {\n      \"type\": \"cpf\",\n      \"name\": \"CPF\"\n    },\n    {\n      \"type\": \"phoneNumber\",\n      \"name\": \"Phone Number\"\n    },\n    {\n      \"type\": \"postalCode\",\n      \"name\": \"Postal Code\"\n    },\n    {\n      \"type\": \"email\",\n      \"name\": \"E-mail\"\n    },\n    {\n      \"type\": \"cnpj\",\n      \"name\": \"CNPJ\"\n    },\n    {\n      \"type\": \"companyName\",\n      \"name\": \"Company Name\"\n    },\n    {\n      \"type\": \"email\",\n      \"name\": \"E-mail\"\n    },\n    {\n      \"type\": \"text\",\n      \"name\": \"Text\"\n    },\n    {\n      \"type\": \"number\",\n      \"name\": \"Number\"\n    },\n    {\n      \"type\": \"date\",\n      \"name\": \"Date\"\n    }\n  ]\n}</code></pre><p><code>GET /field-types</code></p><p>List possible field types.</p><h3>Header Parameters</h3><ul>\n<li><code>Authorization: Bearer {access_token}</code></li>\n</ul>",
+      "subsections": [],
+      "endpoints": []
+    },
+    {
+      "title": "Webhooks",
+      "level": 1,
+      "content": "<blockquote>\n<p>Example of payload:</p>\n</blockquote><pre><code class=\"language-json\">{\n  \"id\":987,\n  \"event\":\"document_ready\",\n  \"object\":{\n    \"id\": \"efo39340da030af0g\",\n    \"name\":\"document.pdf\",\n    \"type\":\"document\"\n  },\n  \"subject\":{\n    \"id\": \"efo39340da030af0g\",\n    \"name\":\"John Doe\",\n    \"type\":\"user\"\n  },\n  \"account_id\":\"o39340do39340d\"\n}</code></pre><p>Webhooks allow your application to <strong>receive real-time notifications</strong> whenever specific events occur in our system.\nInstead of periodically polling our API, you can subscribe to events and automatically receive an HTTP request containing event data.</p><p>Using the Webhooks API, you can:</p><ul>\n<li><strong>Subscribe</strong> to one or more event types;</li>\n<li><strong>Inactivate</strong> when you no longer need updates;</li>\n<li><strong>Receive notifications</strong> at your configured endpoint whenever those events happen.</li>\n</ul><h3>How it works</h3><ol>\n<li>You register your webhook URL via the <strong>subscription endpoint</strong>.</li>\n<li>Whenever an event occurs (e.g., <code>document_ready</code>), our system sends a <code>POST</code> request with a JSON payload to your endpoint.</li>\n<li>Your server acknowledges the event with an HTTP <code>200 OK</code> response.</li>\n<li>You can later <strong>unsubscribe</strong> by inactivating webhook settings at any time.</li>\n</ol><h2 id=\"get-subscription\">Get Subscription</h2><blockquote>\n<p>Request</p>\n</blockquote><pre><code class=\"language-shell\">curl -X GET \"https://api.assinafy.com.br/v1/accounts/Avmvk6Urzus3byLD2/webhooks/subscriptions\" \\\n-H \"Authorization: Bearer hAvmvk6Urzus3byLD2qOWrg\"</code></pre><blockquote>\n<p>200 OK</p>\n</blockquote><pre><code class=\"language-json\">{\n  \"status\": 200,\n  \"message\": \"\",\n  \"data\": {\n    \"events\": [\n      \"document_ready\",\n      \"document_prepared\"\n    ],\n    \"is_active\": true,\n    \"url\": \"http://example.com?test=1\",\n    \"email\": \"<a class=\"__cf_email__\" data-cfemail=\"90f5fdf1f9fcd0e4f5e3e4bef3fffd\" href=\"/cdn-cgi/l/email-protection\">[email protected]</a>\",\n    \"updated_at\": \"2023-05-10T14:58:24Z\"\n  }\n}</code></pre><p><code>GET /accounts/{account_id}/webhooks/subscriptions</code></p><p>Retrieves the current webhook subscription status for a specific account.\nUse this endpoint to check which events the account is currently subscribed to and verify the delivery configuration.</p><h3>Header Parameters</h3><ul>\n<li><code>Authorization: Bearer {access_token}</code></li>\n</ul><h3>URL Parameters</h3><table>\n<thead>\n<tr>\n<th>Parameter</th>\n<th>Required</th>\n<th>Description</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>account_id</td>\n<td>true</td>\n<td>The ID of the account which is related to the events.</td>\n</tr>\n</tbody>\n</table><h2 id=\"update-subscription\">Update Subscription</h2><blockquote>\n<p>Request</p>\n</blockquote><pre><code class=\"language-shell\">curl -X PUT \"https://api.assinafy.com.br/v1/accounts/Avmvk6Urzus3byLD2/webhooks/subscriptions\" \\\n-H \"Authorization: Bearer hAvmvk6Urzus3byLD2qOWrg\" \\\n-H \"Content-Type: application/json\" \\\n-d '\n{\n  \"events\": [\n    \"document_ready\",\n    \"document_prepared\"\n  ],\n  \"is_active\": true,\n  \"url\": \"http://example.com?test=1\",\n  \"email\": \"<a class=\"__cf_email__\" data-cfemail=\"056068646c6945716076712b666a68\" href=\"/cdn-cgi/l/email-protection\">[email protected]</a>\"\n}'</code></pre><blockquote>\n<p>200 OK</p>\n</blockquote><pre><code class=\"language-json\">{\n  \"status\": 200,\n  \"message\": \"\",\n  \"data\": {\n    \"events\": [\n      \"document_ready\",\n      \"document_prepared\"\n    ],\n    \"is_active\": true,\n    \"url\": \"http://example.com?test=1\",\n    \"email\": \"<a class=\"__cf_email__\" data-cfemail=\"22474f434b4e62564751560c414d4f\" href=\"/cdn-cgi/l/email-protection\">[email protected]</a>\",\n    \"updated_at\": \"2023-05-10T14:58:24Z\"\n  }\n}</code></pre><p><code>PUT /accounts/{account_id}/webhooks/subscriptions</code></p><p>Updates the webhook subscription settings for a specific account.\nUse this endpoint to modify which events are being monitored, enable or disable notifications, and update the delivery or contact details.</p><h3>Header Parameters</h3><ul>\n<li><code>Content-Type: application/json</code></li>\n<li><code>Authorization: Bearer {access_token}</code></li>\n</ul><h3>URL Parameters</h3><table>\n<thead>\n<tr>\n<th>Parameter</th>\n<th>Required</th>\n<th>Description</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>account_id</td>\n<td>true</td>\n<td>Unique identifier of the account whose webhook subscription you want to update.</td>\n</tr>\n</tbody>\n</table><h3>Body Parameters</h3><table>\n<thead>\n<tr>\n<th>Parameter</th>\n<th>Required</th>\n<th>Description</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>events</td>\n<td>true</td>\n<td>Array with list of events to subscribe to.</td>\n</tr>\n<tr>\n<td>is_active</td>\n<td>true</td>\n<td>Boolean indicating whether events should be notified to webhook.</td>\n</tr>\n<tr>\n<td>url</td>\n<td>true</td>\n<td>The URL which will receive events.</td>\n</tr>\n<tr>\n<td>email</td>\n<td>true</td>\n<td>The email address that will receive important information related to webhook communication.</td>\n</tr>\n</tbody>\n</table><h2 id=\"inactivate\">Inactivate</h2><blockquote>\n<p>Request</p>\n</blockquote><pre><code class=\"language-shell\">curl -X PUT \"https://api.assinafy.com.br/v1/accounts/Avmvk6Urzus3byLD2/webhooks/inactivate\" \\\n-H \"Authorization: Bearer hAvmvk6Urzus3byLD2qOWrg\"</code></pre><blockquote>\n<p>200 OK</p>\n</blockquote><pre><code class=\"language-json\">{\n  \"status\": 200,\n  \"message\": \"\",\n  \"data\": {\n    \"events\": [\n      \"document_ready\",\n      \"document_prepared\"\n    ],\n    \"is_active\": false,\n    \"url\": \"http://example.com?myparam=value\",\n    \"email\": \"<a class=\"__cf_email__\" data-cfemail=\"8de8e0ece4e1cdf9e8fef9a3eee2e0\" href=\"/cdn-cgi/l/email-protection\">[email protected]</a>\",\n    \"updated_at\": \"2023-05-10T14:58:24Z\"\n  }\n}</code></pre><p><code>PUT /accounts/{account_id}/webhooks/inactivate</code></p><p>Deactivates the webhook integration for a specific account.\nWhile the integration is inactive, no events will be sent to the configured webhook endpoint.</p><h3>Header Parameters</h3><ul>\n<li><code>Content-Type: application/json</code></li>\n<li><code>Authorization: Bearer {access_token}</code></li>\n</ul><h3>URL Parameters</h3><table>\n<thead>\n<tr>\n<th>Parameter</th>\n<th>Required</th>\n<th>Description</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>account_id</td>\n<td>true</td>\n<td>Unique identifier of the account whose webhook integration should be deactivated.</td>\n</tr>\n</tbody>\n</table><h2 id=\"list-types\">List Types</h2><blockquote>\n<p>Request</p>\n</blockquote><pre><code class=\"language-shell\">curl -X GET \"https://api.assinafy.com.br/v1/webhooks/event-types\" \\\n-H \"Authorization: Bearer hAvmvk6Urzus3byLD2qOWrg\"</code></pre><blockquote>\n<p>200 OK</p>\n</blockquote><pre><code class=\"language-json\">{\n  \"status\": 200,\n  \"message\": \"\",\n  \"data\": [\n    {\n      \"id\": \"document_prepared\",\n      \"description\": \"Triggered when the User as subject prepares a Document.\"\n    },\n    {\n      \"id\": \"document_metadata_ready\",\n      \"description\": \"Triggered when the document is ready to be prepared. The the document has been normalized to PDF and its pages are available\"\n    },\n    {\n      \"id\": \"document_ready\",\n      \"description\": \"Triggered when the last Signer of the assignment signs the Document, as a result, the document status becomes ready.\"\n    },\n    {\n      \"id\": \"document_uploaded\",\n      \"description\": \"Triggered when the User has uploaded a Document\"\n    },\n    {\n      \"id\": \"signature_requested\",\n      \"description\": \"Triggered when the User requested signature of a Document\"\n    },\n    {\n      \"id\": \"signer_created\",\n      \"description\": \"Triggered when the User created a Signer\"\n    },\n    {\n      \"id\": \"signer_email_verified\",\n      \"description\": \"Triggered when Signer's email has been verified by a verification code linked to a Document\"\n    },\n    {\n      \"id\": \"signer_signed_document\",\n      \"description\": \"Triggered when the Signer signed a Document\"\n    },\n    {\n      \"id\": \"signer_rejected_document\",\n      \"description\": \"Triggered when the Signer rejected signing a Document\"\n    },\n    {\n      \"id\": \"signer_viewed_document\",\n      \"description\": \"Triggered when the Signer viewed a Document for the first time\"\n    },\n    {\n      \"id\": \"document_processing_failed\",\n      \"description\": \"Unprocessable document, either invalid or the system couldn't process it\"\n    }\n  ]\n}</code></pre><p><code>GET /webhooks/event-types</code></p><p>Retrieves the list of all available event types that can be subscribed to via webhooks.\nUse this endpoint to discover which events your application can receive notifications for.</p><h3>Header Parameters</h3><ul>\n<li><code>Authorization: Bearer {access_token}</code></li>\n</ul><h2 id=\"list-webhook-dispaches\">List Webhook Dispaches</h2><blockquote>\n<p>Request</p>\n</blockquote><pre><code class=\"language-shell\">curl -X GET \"https://api.assinafy.com.br/v1/accounts/Avmvk6Urzus3byLD2/webhooks\" \\\n-H \"Authorization: Bearer hAvmvk6Urzus3byLD2qOWrg\"</code></pre><blockquote>\n<p>200 OK</p>\n</blockquote><pre><code class=\"language-json\">{\n  \"status\": 200,\n  \"message\": \"\",\n  \"data\": [\n    {\n      \"id\": \"a1b2c3d4e5f6g7h8i9j0k1l2m3n4o5p6\",\n      \"event\": \"document_ready\",\n      \"activity_id\": 456,\n      \"endpoint\": \"https://example.com/webhook\",\n      \"payload\": {\n        \"event\": \"document_ready\",\n        \"id\": 456,\n        \"object\": {\n          \"id\": \"abc123\",\n          \"name\": \"contract.pdf\",\n          \"type\": \"document\"\n        },\n        \"subject\": {\n          \"id\": \"def456\",\n          \"name\": \"John Doe\",\n          \"type\": \"user\"\n        },\n        \"account_id\": \"Avmvk6Urzus3byLD2\"\n      },\n      \"delivered\": true,\n      \"http_status\": 200,\n      \"response_body\": \"OK\",\n      \"error\": null,\n      \"created_at\": 1705312200,\n      \"updated_at\": 1705312200\n    }\n  ]\n}</code></pre><p><code>GET /accounts/{account_id}/webhooks</code></p><p>Retrieves the delivery history for webhooks sent to this account's configured endpoint.\nUse this endpoint to monitor webhook delivery status, debug failed deliveries, and verify payload contents.</p><h3>Header Parameters</h3><ul>\n<li><code>Authorization: Bearer {access_token}</code></li>\n</ul><h3>URL Parameters</h3><table>\n<thead>\n<tr>\n<th>Parameter</th>\n<th>Required</th>\n<th>Description</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>account_id</td>\n<td>true</td>\n<td>The ID of the account.</td>\n</tr>\n</tbody>\n</table><h3>Query Parameters</h3><table>\n<thead>\n<tr>\n<th>Parameter</th>\n<th>Type</th>\n<th>Description</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>event</td>\n<td>string</td>\n<td>Filter by event type (e.g., <code>document_ready</code>)</td>\n</tr>\n<tr>\n<td>delivered</td>\n<td>string</td>\n<td>Filter by delivery status: <code>true</code> or <code>false</code></td>\n</tr>\n<tr>\n<td>from</td>\n<td>integer</td>\n<td>Unix timestamp - filter data after this time</td>\n</tr>\n<tr>\n<td>to</td>\n<td>integer</td>\n<td>Unix timestamp - filter data before this time</td>\n</tr>\n<tr>\n<td>page</td>\n<td>integer</td>\n<td>Page number for pagination</td>\n</tr>\n<tr>\n<td>per-page</td>\n<td>integer</td>\n<td>Items per page (default: 20)</td>\n</tr>\n</tbody>\n</table><h3>Response Headers</h3><table>\n<thead>\n<tr>\n<th>Header</th>\n<th>Description</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>X-Pagination-Current-Page</td>\n<td>Current returned page</td>\n</tr>\n<tr>\n<td>X-Pagination-Total-Count</td>\n<td>Total count of records</td>\n</tr>\n<tr>\n<td>X-Pagination-Page-Count</td>\n<td>Count of pages</td>\n</tr>\n<tr>\n<td>X-Pagination-Per-Page</td>\n<td>Count of records per page</td>\n</tr>\n</tbody>\n</table><h3>Response Fields</h3><table>\n<thead>\n<tr>\n<th>Field</th>\n<th>Type</th>\n<th>Description</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>id</td>\n<td>string</td>\n<td>Unique entry custom ID (hex string)</td>\n</tr>\n<tr>\n<td>event</td>\n<td>string</td>\n<td>The event type that triggered this webhook</td>\n</tr>\n<tr>\n<td>activity_id</td>\n<td>integer</td>\n<td>The associated activity ID</td>\n</tr>\n<tr>\n<td>endpoint</td>\n<td>string</td>\n<td>The URL the webhook was sent to</td>\n</tr>\n<tr>\n<td>payload</td>\n<td>object</td>\n<td>The JSON payload that was sent</td>\n</tr>\n<tr>\n<td>delivered</td>\n<td>boolean</td>\n<td>Whether the delivery was successful</td>\n</tr>\n<tr>\n<td>http_status</td>\n<td>integer</td>\n<td>HTTP status code returned (null if connection failed)</td>\n</tr>\n<tr>\n<td>response_body</td>\n<td>string</td>\n<td>Response body from the endpoint (truncated to 2000 chars)</td>\n</tr>\n<tr>\n<td>error</td>\n<td>string</td>\n<td>Error message if delivery failed</td>\n</tr>\n<tr>\n<td>created_at</td>\n<td>integer</td>\n<td>Unix timestamp when the delivery was attempted</td>\n</tr>\n<tr>\n<td>updated_at</td>\n<td>integer</td>\n<td>Unix timestamp of last update</td>\n</tr>\n</tbody>\n</table><h2 id=\"retry-webhook-dispatch\">Retry Webhook Dispatch</h2><blockquote>\n<p>Request</p>\n</blockquote><pre><code class=\"language-shell\">curl -X POST \"https://api.assinafy.com.br/v1/accounts/Avmvk6Urzus3byLD2/webhooks/{id}/retry\" \\\n-H \"Authorization: Bearer hAvmvk6Urzus3byLD2qOWrg\"</code></pre><blockquote>\n<p>200 OK</p>\n</blockquote><pre><code class=\"language-json\">{\n  \"status\": 200,\n  \"message\": \"\",\n  \"data\": {\n    \"resource\": \"activity_dispatching_history\",\n    \"id\": \"a1b2c3d4e5f6g7h8i9j0k1l2m3n4o5p6\",\n    \"event\": \"document_ready\",\n    \"activity_id\": 456,\n    \"endpoint\": \"https://example.com/webhook\",\n    \"payload\": {\n      \"event\": \"document_ready\",\n      \"id\": 456,\n      \"object\": {\n        \"id\": \"abc123\",\n        \"name\": \"contract.pdf\",\n        \"type\": \"document\"\n      },\n      \"subject\": {\n        \"id\": \"def456\",\n        \"name\": \"John Doe\",\n        \"type\": \"user\"\n      },\n      \"account_id\": \"Avmvk6Urzus3byLD2\"\n    },\n    \"delivered\": true,\n    \"http_status\": 200,\n    \"response_body\": \"OK\",\n    \"error\": null,\n    \"created_at\": 1705312200,\n    \"updated_at\": 1705312200\n  }\n}</code></pre><p><code>POST /accounts/{account_id}/webhooks/{dispatch_id}/retry</code></p><p>Retries dispatching a webhook for a specific entry. This endpoint allows you to manually retry a failed webhook delivery without waiting for automatic retries. Returns the newly created webhook entry.</p><p>%default_post_headers%</p><h3>URL Parameters</h3><table>\n<thead>\n<tr>\n<th>Parameter</th>\n<th>Required</th>\n<th>Description</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>account_id</td>\n<td>true</td>\n<td>The ID of the account.</td>\n</tr>\n<tr>\n<td>dispatch_id</td>\n<td>true</td>\n<td>The ID of the webhook entry to retry.</td>\n</tr>\n</tbody>\n</table><h3>Response Fields</h3><p>The response returns a webhook entry with the same fields as the list endpoint:</p><table>\n<thead>\n<tr>\n<th>Field</th>\n<th>Type</th>\n<th>Description</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>id</td>\n<td>string</td>\n<td>Unique entry custom ID (hex string)</td>\n</tr>\n<tr>\n<td>event</td>\n<td>string</td>\n<td>The event type that triggered this webhook</td>\n</tr>\n<tr>\n<td>activity_id</td>\n<td>integer</td>\n<td>The associated activity ID</td>\n</tr>\n<tr>\n<td>endpoint</td>\n<td>string</td>\n<td>The URL the webhook was sent to</td>\n</tr>\n<tr>\n<td>payload</td>\n<td>object</td>\n<td>The JSON payload that was sent</td>\n</tr>\n<tr>\n<td>delivered</td>\n<td>boolean</td>\n<td>Whether the delivery was successful</td>\n</tr>\n<tr>\n<td>http_status</td>\n<td>integer</td>\n<td>HTTP status code returned (null if connection failed)</td>\n</tr>\n<tr>\n<td>response_body</td>\n<td>string</td>\n<td>Response body from the endpoint (truncated to 2000 chars)</td>\n</tr>\n<tr>\n<td>error</td>\n<td>string</td>\n<td>Error message if delivery failed</td>\n</tr>\n<tr>\n<td>created_at</td>\n<td>integer</td>\n<td>Unix timestamp when the delivery was attempted</td>\n</tr>\n<tr>\n<td>updated_at</td>\n<td>integer</td>\n<td>Unix timestamp of last update</td>\n</tr>\n</tbody>\n</table><h3>Error Responses</h3><ul>\n<li><code>404 Not Found</code>: The webhook entry was not found or does not belong to this account.</li>\n<li><code>400 Bad Request</code>: The webhook subscription is inactive or the event type is not subscribed.</li>\n</ul>",
+      "subsections": [],
+      "endpoints": [
+        {
+          "title": "Get Subscription",
+          "method": "GET",
+          "path": "/accounts/Avmvk6Urzus3byLD2/webhooks/subscriptions",
+          "description": "200 OK",
+          "parameters": [
+            {
+              "name": "Authorization",
+              "type": "string",
+              "required": true,
+              "description": null,
+              "param_type": "header",
+              "example": "Bearer hAvmvk6Urzus3byLD2qOWrg"
+            }
+          ],
+          "request_example": null,
+          "response_example": null,
+          "requires_auth": true,
+          "supports_pagination": false
+        },
+        {
+          "title": "Get Subscription",
+          "method": "GET",
+          "path": "/accounts/Avmvk6Urzus3byLD2/webhooks/subscriptions",
+          "description": "200 OK",
+          "parameters": [
+            {
+              "name": "Authorization",
+              "type": "string",
+              "required": true,
+              "description": null,
+              "param_type": "header",
+              "example": "Bearer hAvmvk6Urzus3byLD2qOWrg"
+            }
+          ],
+          "request_example": null,
+          "response_example": null,
+          "requires_auth": true,
+          "supports_pagination": false
+        },
+        {
+          "title": "Update Subscription",
+          "method": "PUT",
+          "path": "/accounts/Avmvk6Urzus3byLD2/webhooks/subscriptions",
+          "description": "200 OK",
+          "parameters": [
+            {
+              "name": "Authorization",
+              "type": "string",
+              "required": true,
+              "description": null,
+              "param_type": "header",
+              "example": "Bearer hAvmvk6Urzus3byLD2qOWrg"
+            },
+            {
+              "name": "Content-Type",
+              "type": "string",
+              "required": false,
+              "description": null,
+              "param_type": "header",
+              "example": "application/json"
+            }
+          ],
+          "request_example": null,
+          "response_example": null,
+          "requires_auth": true,
+          "supports_pagination": false
+        },
+        {
+          "title": "Update Subscription",
+          "method": "PUT",
+          "path": "/accounts/Avmvk6Urzus3byLD2/webhooks/subscriptions",
+          "description": "200 OK",
+          "parameters": [
+            {
+              "name": "Authorization",
+              "type": "string",
+              "required": true,
+              "description": null,
+              "param_type": "header",
+              "example": "Bearer hAvmvk6Urzus3byLD2qOWrg"
+            },
+            {
+              "name": "Content-Type",
+              "type": "string",
+              "required": false,
+              "description": null,
+              "param_type": "header",
+              "example": "application/json"
+            }
+          ],
+          "request_example": null,
+          "response_example": null,
+          "requires_auth": true,
+          "supports_pagination": false
+        },
+        {
+          "title": "Inactivate",
+          "method": "PUT",
+          "path": "/accounts/Avmvk6Urzus3byLD2/webhooks/inactivate",
+          "description": "200 OK",
+          "parameters": [
+            {
+              "name": "Authorization",
+              "type": "string",
+              "required": true,
+              "description": null,
+              "param_type": "header",
+              "example": "Bearer hAvmvk6Urzus3byLD2qOWrg"
+            }
+          ],
+          "request_example": null,
+          "response_example": null,
+          "requires_auth": true,
+          "supports_pagination": false
+        },
+        {
+          "title": "Inactivate",
+          "method": "PUT",
+          "path": "/accounts/Avmvk6Urzus3byLD2/webhooks/inactivate",
+          "description": "200 OK",
+          "parameters": [
+            {
+              "name": "Authorization",
+              "type": "string",
+              "required": true,
+              "description": null,
+              "param_type": "header",
+              "example": "Bearer hAvmvk6Urzus3byLD2qOWrg"
+            }
+          ],
+          "request_example": null,
+          "response_example": null,
+          "requires_auth": true,
+          "supports_pagination": false
+        },
+        {
+          "title": "List Types",
+          "method": "GET",
+          "path": "/webhooks/event-types",
+          "description": "200 OK",
+          "parameters": [
+            {
+              "name": "Authorization",
+              "type": "string",
+              "required": true,
+              "description": null,
+              "param_type": "header",
+              "example": "Bearer hAvmvk6Urzus3byLD2qOWrg"
+            }
+          ],
+          "request_example": null,
+          "response_example": null,
+          "requires_auth": true,
+          "supports_pagination": false
+        },
+        {
+          "title": "List Types",
+          "method": "GET",
+          "path": "/webhooks/event-types",
+          "description": "200 OK",
+          "parameters": [
+            {
+              "name": "Authorization",
+              "type": "string",
+              "required": true,
+              "description": null,
+              "param_type": "header",
+              "example": "Bearer hAvmvk6Urzus3byLD2qOWrg"
+            }
+          ],
+          "request_example": null,
+          "response_example": null,
+          "requires_auth": true,
+          "supports_pagination": false
+        },
+        {
+          "title": "List Webhook Dispaches",
+          "method": "GET",
+          "path": "/accounts/Avmvk6Urzus3byLD2/webhooks",
+          "description": "200 OK",
+          "parameters": [
+            {
+              "name": "Authorization",
+              "type": "string",
+              "required": true,
+              "description": null,
+              "param_type": "header",
+              "example": "Bearer hAvmvk6Urzus3byLD2qOWrg"
+            }
+          ],
+          "request_example": null,
+          "response_example": null,
+          "requires_auth": true,
+          "supports_pagination": false
+        },
+        {
+          "title": "List Webhook Dispaches",
+          "method": "GET",
+          "path": "/accounts/Avmvk6Urzus3byLD2/webhooks",
+          "description": "200 OK",
+          "parameters": [
+            {
+              "name": "Authorization",
+              "type": "string",
+              "required": true,
+              "description": null,
+              "param_type": "header",
+              "example": "Bearer hAvmvk6Urzus3byLD2qOWrg"
+            }
+          ],
+          "request_example": null,
+          "response_example": null,
+          "requires_auth": true,
+          "supports_pagination": false
+        },
+        {
+          "title": "Retry Webhook Dispatch",
+          "method": "POST",
+          "path": "/accounts/Avmvk6Urzus3byLD2/webhooks/{id}/retry",
+          "description": "200 OK",
+          "parameters": [
+            {
+              "name": "Authorization",
+              "type": "string",
+              "required": true,
+              "description": null,
+              "param_type": "header",
+              "example": "Bearer hAvmvk6Urzus3byLD2qOWrg"
+            }
+          ],
+          "request_example": null,
+          "response_example": null,
+          "requires_auth": true,
+          "supports_pagination": false
+        },
+        {
+          "title": "Retry Webhook Dispatch",
+          "method": "POST",
+          "path": "/accounts/Avmvk6Urzus3byLD2/webhooks/{id}/retry",
+          "description": "200 OK",
+          "parameters": [
+            {
+              "name": "Authorization",
+              "type": "string",
+              "required": true,
+              "description": null,
+              "param_type": "header",
+              "example": "Bearer hAvmvk6Urzus3byLD2qOWrg"
+            }
+          ],
+          "request_example": null,
+          "response_example": null,
+          "requires_auth": true,
+          "supports_pagination": false
+        }
+      ]
+    }
+  ]
+}

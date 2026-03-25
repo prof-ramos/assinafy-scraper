@@ -179,7 +179,8 @@ def send_link(ctx, document_id, email, name):
         signing_url=doc.get("signing_url"),
         document_name=document_name,
         signer_email=email,
-        signer_name=name
+        signer_name=name,
+        config=config
     )
 
     click.echo("✅ Rascunho de email aberto no cliente de email")

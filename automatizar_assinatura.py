@@ -6,6 +6,9 @@ Fluxo:
 1. Upload do PDF
 2. Obter signing_url
 3. Enviar email com link de assinatura
+
+⚠️ Este script é mantido para compatibilidade reversa.
+   Para uso novo, prefira: assinafy_cli.py automate
 """
 import os
 import sys
@@ -16,7 +19,21 @@ import urllib.parse
 import requests
 from dotenv import load_dotenv
 
+from assinafy.logging_config import setup_logging, get_logger
+
 load_dotenv()
+
+# Configurar logging
+setup_logging(level="INFO")
+logger = get_logger(__name__)
+
+
+def mask_email(email: str) -> str:
+    """Mascara email para segurança de logs: user@domain.com → u***@domain.com"""
+    if '@' not in email:
+        return email
+    username, domain = email.split('@', 1)
+    return f"{username[0]}***@{domain}"
 
 API_KEY = os.getenv("ASSINAFY_API_KEY")
 WORKSPACE_ID = os.getenv("ASSINAFY_WORKSPACE_ID")
@@ -34,7 +51,7 @@ def wait_for_document_ready(document_id: str, timeout: int = 60) -> bool:
     start_time = time.time()
     last_status = None
 
-    print("\n⏳ Aguardando processamento do documento...")
+    logger.info("Aguardando processamento do documento...")
 
     while time.time() - start_time < timeout:
         try:
@@ -49,11 +66,11 @@ def wait_for_document_ready(document_id: str, timeout: int = 60) -> bool:
             status = document_data.get('status')
 
             if status != last_status:
-                print(f"   📊 Status atual: {status}")
+                logger.info(f"Status atual: {status}")
                 last_status = status
 
             if status in ready_statuses:
-                print(f"   ✅ Documento pronto para assinatura!")
+                logger.info("Documento pronto para assinatura!")
                 return True
 
             if status in processing_statuses:
@@ -61,30 +78,29 @@ def wait_for_document_ready(document_id: str, timeout: int = 60) -> bool:
                 continue
 
             # Status não esperado
-            print(f"   ⚠️  Status inesperado: {status}")
+            logger.warning(f"Status inesperado: {status}")
             return False
 
         except Exception as e:
-            print(f"   ❌ Erro ao verificar status: {e}")
+            logger.error(f"Erro ao verificar status: {e}")
             time.sleep(2)
             continue
 
-    print(f"   ⏱️  Timeout: documento não ficou pronto em {timeout}s")
+    logger.warning(f"Timeout: documento não ficou pronto em {timeout}s")
     return False
 
 
 def upload_pdf(pdf_path: str) -> tuple[str, str] | tuple[None, None]:
     """Fazer upload do PDF e retornar (document_id, signing_url)"""
     if not os.path.exists(pdf_path):
-        print(f"❌ Arquivo não encontrado: {pdf_path}")
+        logger.error(f"Arquivo não encontrado: {pdf_path}")
         return None, None
 
-    print("="*60)
-    print("📤 Upload de PDF via API Assinafy")
-    print("="*60)
-    print(f"\n📄 Arquivo: {pdf_path}")
-    print(f"📏 Tamanho: {os.path.getsize(pdf_path) / 1024:.1f} KB")
-    print()
+    logger.info("="*60)
+    logger.info("Upload de PDF via API Assinafy")
+    logger.info("="*60)
+    logger.info(f"Arquivo: {pdf_path}")
+    logger.debug(f"Tamanho: {os.path.getsize(pdf_path) / 1024:.1f} KB")
 
     url = f"{BASE_URL}/accounts/{WORKSPACE_ID}/documents"
 
@@ -96,16 +112,16 @@ def upload_pdf(pdf_path: str) -> tuple[str, str] | tuple[None, None]:
             "X-Api-Key": API_KEY
         }
 
-        print("📡 Enviando requisição...")
+        logger.info("Enviando requisição...")
         response = requests.post(url, files=files, headers=headers, timeout=30)
 
-    print(f"\n📊 Status HTTP: {response.status_code}")
+    logger.info(f"Status HTTP: {response.status_code}")
 
     if response.ok:
         try:
             data = response.json()
         except (json.JSONDecodeError, ValueError) as e:
-            print(f"⚠️  Erro ao decodificar JSON: {e}")
+            logger.warning(f"Erro ao decodificar JSON: {e}")
             data = {}
 
         document_data = data.get('data', {})
@@ -114,17 +130,19 @@ def upload_pdf(pdf_path: str) -> tuple[str, str] | tuple[None, None]:
         title = document_data.get('title', os.path.basename(pdf_path))
         status = document_data.get('status')
 
-        print(f"✅ Upload realizado com sucesso!")
-        print(f"\n📄 Document ID: {document_id}")
-        print(f"📋 Título: {title}")
-        print(f"📌 Status: {status}")
+        logger.info("Upload realizado com sucesso!")
+        logger.info(f"Document ID: {document_id}")
+        logger.debug(f"Título: {title}")
+        logger.debug(f"Status: {status}")
+
+        # Manter print para output final de dados
+        print(f"📄 Document ID: {document_id}")
         print(f"🔗 Signing URL: {signing_url}")
 
         return document_id, signing_url
     else:
-        print(f"❌ Falha no upload")
-        print(f"\n📝 Response:")
-        print(f"   {response.text}")
+        logger.error("Falha no upload")
+        logger.error(f"Response: {response.text}")
         return None, None
 
 
@@ -135,12 +153,10 @@ def send_signing_email(
     signer_name: str
 ) -> None:
     """Enviar email com link de assinatura"""
-    print("\n" + "="*60)
-    print("📧 Abrindo cliente de email com rascunho")
-    print("="*60)
-    print(f"\n👤 Signatário: {signer_name}")
-    print(f"📧 Email: {signer_email}")
-    print()
+    logger.info("="*60)
+    logger.info("Abrindo cliente de email com rascunho")
+    logger.info("="*60)
+    logger.info(f"Signatário: {signer_name} ({mask_email(signer_email)})")
 
     subject = f"📋 Documento para Assinatura Digital - {document_name}"
 
@@ -178,16 +194,11 @@ Equipe ASOF
 
     mailto_link = f"mailto:{signer_email}?subject={subject_encoded}&body={body_encoded}"
 
-    print(f"✅ Rascunho preparado para: {signer_email}")
-    print(f"\n🔗 Link de Assinatura incluído no rascunho:")
-    print(f"   {signing_url}")
-    print()
-
-    # Abrir cliente de email
-    print("Abrindo cliente de email...")
+    logger.debug("Abrindo cliente de email...")
     webbrowser.open(mailto_link)
 
-    print("\n⚠️  Rascunho aberto no cliente de email.")
+    logger.info("Rascunho aberto no cliente de email")
+    # Manter print para feedback visual do usuário
     print(f"💡 Revise o conteúdo e clique em ENVIAR para {signer_email}")
 
 
@@ -200,27 +211,36 @@ def main(
     """Fluxo completo de automação de assinatura"""
     # Validar credenciais
     if not API_KEY or not WORKSPACE_ID:
-        print("❌ Erro: Credenciais não encontradas no arquivo .env")
+        logger.error("Credenciais não encontradas no arquivo .env")
         sys.exit(1)
 
     # Usar nome do arquivo como document_name se não fornecido
     if not document_name:
         document_name = os.path.basename(pdf_path)
 
+    logger.info("="*60)
+    logger.info("FLUXO COMPLETO DE AUTOMAÇÃO DE ASSINATURA")
+    logger.info("="*60)
+    logger.info(f"Arquivo: {pdf_path}")
+    logger.info(f"Signatário: {signer_name} ({mask_email(signer_email)})")
+
     # Passo 1: Upload do PDF
+    logger.info("Passo 1: Upload do PDF")
     document_id, signing_url = upload_pdf(pdf_path)
 
     if not document_id or not signing_url:
-        print("\n❌ Falha no upload. Verifique os erros acima.")
+        logger.error("Falha no upload. Verifique os erros acima.")
         sys.exit(1)
 
     # Passo 1.5: Aguardar processamento do documento
+    logger.info("Passo 2: Aguardando processamento")
     if not wait_for_document_ready(document_id, timeout=60):
-        print("\n⚠️  Documento não ficou pronto a tempo.")
-        print("💡 O email será enviado mesmo assim, mas o signatário pode ter dificuldades.")
-        print("💡 Recomendação: Verifique o status do documento na plataforma Assinafy.")
+        logger.warning("Documento não ficou pronto a tempo.")
+        logger.warning("O email será enviado mesmo assim, mas o signatário pode ter dificuldades.")
+        logger.warning("Recomendação: Verifique o status do documento na plataforma Assinafy.")
 
     # Passo 2: Enviar email com link de assinatura
+    logger.info("Passo 3: Enviar email com link de assinatura")
     send_signing_email(
         signing_url=signing_url,
         document_name=document_name,
@@ -228,6 +248,14 @@ def main(
         signer_name=signer_name
     )
 
+    logger.info("="*60)
+    logger.info("FLUXO COMPLETO CONCLUÍDO!")
+    logger.info("="*60)
+    logger.info("Documento enviado com sucesso!")
+    logger.info(f"Document ID: {document_id}")
+    logger.info(f"Signatário: {signer_name} ({mask_email(signer_email)})")
+
+    # Manter print para output final visível
     print("\n" + "="*60)
     print("🎉 FLUXO COMPLETO CONCLUÍDO!")
     print("="*60)

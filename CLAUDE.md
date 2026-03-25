@@ -4,275 +4,283 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Repository Purpose
 
-Este repositório contém a **documentação extraída da API Assinafy** em formato JSON estruturado e **testes E2E** para validar o funcionamento da API.
+Este repositório contém a **documentação extraída da API Assinafy** em formato JSON estruturado, **testes E2E** para validar o funcionamento da API, e uma **CLI completa** para automação de assinaturas digitais.
 
-## Documentação da API
+## Comandos Comuns
+
+### Instalação e Configuração
+
+```bash
+# Sincronizar dependências
+uv sync
+
+# Instalar CLI como comando do sistema
+uv pip install -e .
+```
+
+### Testes
+
+```bash
+# Testes unitários
+.venv/bin/python -m pytest tests/ -v
+
+# Testes com cobertura
+.venv/bin/python -m pytest tests/ --cov=assinafy --cov-report=term-missing
+
+# Testes E2E (validam API real)
+.venv/bin/python test_e2e.py
+```
+
+### CLI (Nova)
+
+```bash
+# Usar CLI
+assinafy automate documento.pdf --email user@example.com --name "User Name"
+assinafy upload documento.pdf
+assinafy send-link DOCUMENT_ID --email user@example.com
+
+# Verbosidade (-v=INFO, -vv=DEBUG)
+assinafy -vv upload documento.pdf
+
+# Config customizada
+assinafy -c config/custom.yaml upload documento.pdf
+```
+
+### Linting e Formatação
+
+```bash
+# Linting
+.venv/bin/python -m ruff check assinafy/
+
+# Formatar código
+.venv/bin/python -m black assinafy/
+```
+
+## Arquitetura do Sistema
+
+### Estrutura Modular
+
+O projeto está organizado em 3 camadas:
+
+1. **CLI Layer** (`assinafy/cli.py` + `assinafy_cli.py`)
+   - Interface Click para comandos de automação
+   - Suporta verbosidade e configuração customizada
+
+2. **Business Logic** (`assinafy/api/`, `assinafy/automation/`)
+   - `api/client.py`: Cliente HTTP reutilizável com session management
+   - `api/documents.py`: Operações de documentos (upload, get, wait, list)
+   - `automation/signature.py`: Orquestrador do fluxo completo de assinatura
+   - `automation/email.py`: Envio de emails com mailto links
+
+3. **Infrastructure** (`assinafy/config.py`, `assinafy/logging_config.py`)
+   - Sistema de configuração multi-source (env vars > YAML > defaults)
+   - Logging estruturado com formatters customizados
+
+### Fluxo de Dados
+
+```
+CLI Command
+  ↓
+Config.load()  # Carrega config de YAML + .env
+  ↓
+Business Logic (automation/signature.py)
+  ↓
+API Client (api/client.py + api/documents.py)
+  ↓
+Assinafy API
+```
+
+### Configuração
+
+**Precedência** (maior prioridade primeiro):
+1. Variáveis de ambiente (`ASSINAFY_API_KEY`, `ASSINAFY_WORKSPACE_ID`)
+2. Arquivo YAML (`config/*.yaml`)
+3. Defaults hardcoded
+
+**Arquivo `.env`** (credenciais sensíveis):
+```bash
+ASSINAFY_API_KEY=sua_chave
+ASSINAFY_WORKSPACE_ID=seu_workspace_id
+```
+
+**Arquivo YAML** opcional (configurações não-sensíveis):
+```yaml
+assinafy:
+  base_url: "https://api.assinafy.com.br/v1"
+  document_ready_timeout: 60
+  polling_interval: 2
+```
+
+## CLI Assinafy
+
+### Comandos Disponíveis
+
+**`automate`** - Fluxo completo de assinatura:
+```bash
+assinafy automate documento.pdf -e user@example.com -n "User"
+```
+
+**`upload`** - Upload de PDF:
+```bash
+assinafy upload documento.pdf
+```
+
+**`send-link`** - Enviar link para documento existente:
+```bash
+assinafy send-link DOCUMENT_ID -e user@example.com
+```
+
+### Verbosidade
+
+- Sem flag: WARNING (apenas erros)
+- `-v`: INFO (progresso)
+- `-vv`: DEBUG (detalhes técnicos)
+
+## Scripts Legados (Compatibilidade)
+
+Todos os scripts legados continuam funcionando e usam logging estruturado:
+
+- `automatizar_assinatura.py` - Automação completa (hardcoded params)
+- `test_upload_pdf.py` - Upload isolado de PDF
+- `enviar_link_assinatura.py` - Enviar link existente
+
+**Nota**: Preferir a nova CLI `assinafy` para desenvolvimento futuro.
+
+## Testes
+
+### Estrutura de Testes
+
+```
+tests/
+├── conftest.py          # Fixtures compartilhadas
+├── test_cli.py          # Testes CLI (8 testes)
+├── test_config.py       # Testes config (6 testes)
+└── test_logging.py      # Testes logging (7 testes)
+```
+
+### Executar Teste Específico
+
+```bash
+# Teste específico
+.venv/bin/python -m pytest tests/test_config.py::TestAssinafyConfig::test_direct_instantiation -v
+
+# Testes de um módulo
+.venv/bin/python -m pytest tests/test_cli.py -v
+
+# Testes com falhas
+.venv/bin/python -m pytest tests/ -v --tb=short
+```
+
+### Testes E2E
+
+**Arquivo**: `test_e2e.py`
+
+Valida funcionamento real da API Assinafy:
+- Autenticação, listagem de recursos
+- Validação de formato de resposta
+- Paginação e busca full-text
+
+**Resultado esperado**: 9/9 testes passando (100%)
+
+## Documentação da API Assinafy
 
 **Arquivo**: `data/assinafy_api.json` (186KB)
 
-**Conteúdo**:
 - 84 endpoints documentados
 - 10 seções organizadas (Signer, Document, Template, Webhooks, etc.)
-- Métodos HTTP, paths, parâmetros e exemplos
-- Base URL: https://api.assinafy.com.br/v1
+- Base URL: `https://api.assinafy.com.br/v1`
 
 **Consultar via jq**:
 ```bash
 cat data/assinafy_api.json | jq '.sections[] | {title: .title, endpoints: (.endpoints | length)}'
-cat data/assinafy_api.json | jq '.sections[].endpoints[] | select(.path | contains("signers"))'
 ```
 
-## Testes E2E
-
-### Executar Testes
-
-```bash
-# Instalar dependências (primeira vez)
-uv sync
-
-# Executar todos os testes E2E
-uv run python test_e2e.py
-# ou
-.venv/bin/python test_e2e.py
-```
-
-### Resultado Esperado
-
-**8/9 testes devem passar (88%)**:
-- ✅ Autenticação com API Key
-- ✅ Listagem de contas, documentos, signatários, templates, webhooks
-- ✅ Validação de formato de resposta
-- ✅ Busca full-text
-- ❌ Paginação (falha esperada - workspace tem apenas 2 documentos, precisa de ≥6)
-
-## Automação de Assinatura Digital
-
-**Script**: `automatizar_assinatura.py`
-**Documentação**: `docs/fluxo_documentos_assinafy.md`
-
-Automatiza o fluxo completo de envio de documento para assinatura digital via API Assinafy:
-
-### Fluxo Automatizado
+## Headers de Autenticação
 
 ```
-Upload do PDF
-  ↓
-Obter signing_url
-  ↓
-Enviar email com link de assinatura
+X-Api-Key: <ASSINAFY_API_KEY>
+Content-Type: application/json  # OMITIR para uploads multipart
+Accept: application/json
 ```
 
-### Executar Automação
+**Importante**: Para uploads de arquivo, **não incluir** `Content-Type` header - requests define automaticamente para `multipart/form-data`.
 
-```bash
-# Editar configurações no arquivo
-# - PDF_FILE: caminho do PDF
-# - SIGNER_EMAIL: email do signatário
-# - SIGNER_NAME: nome do signatário
-# - DOCUMENT_NAME: nome do documento
+## Detalhes de Implementação
 
-.venv/bin/python automatizar_assinatura.py
-```
+### Multipart Upload Bug (FIXED)
 
-### Retorno Automático
+**Problema**: Session com `Content-Type: application/json` interfere com uploads multipart.
 
-A API Assinafy retorna automaticamente:
-- `document_id`: ID único do documento
-- `signing_url`: Link direto para assinatura (https://app.assinafy.com.br/sign/{id})
-
-**Não é necessário adicionar signatários manualmente** - todo documento criado via API já possui um `signing_url` válido.
-
-### Scripts Auxiliares
-
-- `test_upload_pdf.py`: Teste isolado de upload de PDF
-- `enviar_link_assinatura.py`: Enviar email com link já existente
-- `adicionar_signatarios.py`: Adicionar signatários (experimental - endpoint 404)
-- `explore_signers.py`: Explorar estrutura de signatários na API
-
-## Arquitetura do Teste E2E
-
-### Classe: `AssinafyE2ETest`
-
-**Arquivo**: `test_e2e.py`
-
-**Estrutura**:
+**Solução**: `AssinafyClient` inicializado sem Content-Type por padrão:
 ```python
-class AssinafyE2ETest:
-    def __init__(self):
-        # Configura session com headers de autenticação
-        self.session = requests.Session()
-        self.results = []
-
-    # Métodos de teste (9 testes no total)
-    def test_authenticate(self)           # Test 1
-    def test_list_accounts(self)           # Test 2
-    def test_list_documents(self, id)      # Test 3
-    def test_list_signers(self, id)        # Test 4
-    def test_list_templates(self, id)      # Test 5
-    def test_list_webhooks(self, id)       # Test 6
-    def test_response_format(self, id)     # Test 7
-    def test_pagination(self, id)          # Test 8
-    def test_search(self, id)              # Test 9
-
-    # Helpers
-    def _test_list_resource(self, id, name, endpoint)  # Helper genérico
-    def _get_response_details(self, response)           # Extrair detalhes de erro
-    def log(self, name, passed, details="")              # Registrar resultado
-
-    def run_all_tests(self)              # Orchestrator
+# assinafy/api/client.py
+self.session.headers.update(config.get_auth_headers(include_content_type=False))
 ```
 
-### Fluxo de Execução
+Para uploads, usar método `upload_file()` que define apenas `X-Api-Key`.
 
-```
-run_all_tests()
-  ↓
-test_authenticate()  → Valida API Key
-  ↓
-test_list_accounts()  → Obtém account_id ou usa WORKSPACE_ID
-  ↓
-test_list_*()         → Testa listagem de recursos (documents, signers, etc.)
-  ↓
-test_response_format() → Valida estrutura JSON
-  ↓
-test_pagination()     → Testa paginação (precisa ≥6 docs)
-  ↓
-test_search()         → Testa busca full-text
-  ↓
-Resumo com estatísticas
-```
+### Logging Estruturado
 
-### Padrão de Testes
-
-**Helper genérico** para evitar repetição:
-```python
-def _test_list_resource(self, account_id, resource_name, endpoint):
-    response = self.session.get(f"{BASE_URL}/accounts/{account_id}/{endpoint}")
-    data = response.json()
-    items = data.get("data", [])
-    self.log(f"Listar {resource_name}", len(items) >= 0, f"Encontrados: {len(items)}")
-    return items
-```
+**Formato**: `[TIMESTAMP] LEVEL [module:line] message`
 
 **Uso**:
 ```python
-def test_list_documents(self, account_id):
-    return self._test_list_resource(account_id, "documentos", "documents")
+from assinafy.logging_config import setup_logging, get_logger
+
+logger = get_logger(__name__)
+logger.info("Progress update")
+logger.debug("Technical details")
 ```
 
-## Autenticação
+**Scripts legados**: Prints mantidos apenas para output final de dados (document_id, signing_url).
 
-**Arquivo**: `.env`
+## Documentação Adicional
 
-```bash
-USUARIO=gabriel@asof.org.br
-ASSINAFY_API_KEY=U0NN2B_penT0_oYfoU4Tsdfp1izRyLpX3P0VbhSFJXwlDIs1mm0ijsF08IC7xpjO
-ASSINAFY_WORKSPACE_ID=ff385f40ae28a08ae962609d5e7
-```
-
-**Headers utilizados**:
-```
-X-Api-Key: <ASSINAFY_API_KEY>
-Content-Type: application/json
-Accept: application/json
-```
+- **`docs/migracao_cli.md`** - Guia de migração scripts → CLI
+- **`docs/resumo_fases_4_6.md`** - Resumo implementação CLI/config/logging
+- **`docs/arquitetura.md`** - Arquitetura completa com diagramas
+- **`docs/fluxo_documentos_assinafy.md`** - Análise fluxo de documentos
 
 ## Dependências
 
 **Runtime**:
 - `requests>=2.31.0` - Cliente HTTP
-- `python-dotenv>=1.0.0` - Carregar variáveis de ambiente
+- `python-dotenv>=1.0.0` - Variáveis de ambiente
+- `click>=8.1.0` - Framework CLI
+- `pyyaml>=6.0.0` - Config YAML
 
-**Desenvolvimento** (dev-dependencies):
-- `pytest>=7.4.0` - Framework de testes
-- `pytest-cov>=4.1.0` - Cobertura de testes
-- `black>=23.0.0` - Formatação de código
+**Dev**:
+- `pytest>=7.4.0` - Testes
+- `pytest-cov>=4.1.0` - Cobertura
+- `black>=23.0.0` - Formatação
 - `ruff>=0.1.0` - Linting
 
-## Adicionar Novos Testes
+## Adicionar Novos Comandos CLI
 
-**Padrão**:
+1. Adicionar função em `assinafy/cli.py`:
 ```python
-def test_new_feature(self, account_id):
-    """Test N: Descrição curta"""
-    try:
-        response = self.session.get(f"{BASE_URL}/accounts/{account_id}/new-endpoint", timeout=10)
-
-        if response.status_code != 200:
-            details = self._get_response_details(response)
-            self.log("Nome do teste", False, details)
-            return False
-
-        data = response.json()
-        # Validar resposta
-        self.log("Nome do teste", True, "Detalhes do sucesso")
-        return True
-    except Exception as e:
-        self.log("Nome do teste", False, f"Erro: {str(e)}")
-        return False
+@cli.command()
+@click.argument("param")
+@click.pass_context
+def new_command(ctx, param):
+    """Descrição do comando"""
+    config = ctx.obj["config"]
+    # Lógica aqui
 ```
 
-**Depois**: Adicionar chamada em `run_all_tests()`:
+2. Testar com Click:
 ```python
-def run_all_tests(self):
-    # ... testes existentes ...
-    self.test_new_feature(account_id)
-    # ...
+# tests/test_cli.py
+def test_new_command_help(self, runner):
+    result = runner.invoke(cli, ["new-command", "--help"])
+    assert result.exit_code == 0
 ```
 
-## Seções da API
+## Status de Documentos API
 
-- **Signer** (38 endpoints): Gestão de signatários
-- **Document** (32 endpoints): Gestão de documentos
-- **Template** (2 endpoints): Templates de documento
-- **Webhooks** (12 endpoints): Webhooks e eventos
-- **Authentication**, **Assignment**, **Field Definition**: Outros recursos
-
-## Estrutura do JSON da API
-
-```json
-{
-  "base_url": "https://api.assinafy.com.br/v1",
-  "extracted_at": "2026-03-24T21:48:09",
-  "metadata": {"source": "html_scraping", "pages_scraped": 1, "total_endpoints": 100},
-  "sections": [
-    {
-      "title": "Signer",
-      "level": 1,
-      "endpoints": [
-        {
-          "title": "Creating Signers",
-          "method": "GET",
-          "path": "/accounts/{id}/signers",
-          "parameters": [],
-          "requires_auth": true
-        }
-      ]
-    }
-  ]
-}
+Documentos passam por estes status:
+```
+uploading → uploaded → metadata_processing → metadata_ready → pending_signature → certificated
 ```
 
-## Documentação Adicional
-
-- **Fluxo de Documentos**: `docs/fluxo_documentos_assinafy.md` - Análise completa do processamento de documentos na API Assinafy
-- **Arquitetura do Sistema**: `docs/arquitetura.md` - Documentação completa de arquitetura incluindo diagramas Mermaid, decisões de design e limitações
-- **CLAUDE.md** (este arquivo): Guia para desenvolvimento
-
-## Arquitetura do Sistema
-
-### Visão Geral
-
-O sistema consiste em 3 camadas principais:
-
-1. **Camada de UI**: Scripts CLI (`automatizar_assinatura.py`, scripts de teste)
-2. **Camada de Lógica**: Scraper (extractor, parser, models) e Automação (upload, email)
-3. **Camada de Dados**: JSON estruturado, environment variables, PDFs
-
-### Fluxo Principal
-
-```
-Upload PDF → Obter signing_url → Aguardar processamento → Enviar email
-```
-
-**Diagrama completo**: Ver `docs/arquitetura.md` para diagramas Mermaid detalhados.
+**`signing_url` disponível imediatamente** após upload - não aguardar processamento.

@@ -132,10 +132,23 @@ class AssinafyConfig:
 
         return cls(**config)
 
-    def get_auth_headers(self) -> dict:
-        """Retornar headers de autenticação para requisições HTTP."""
-        return {
+    def get_auth_headers(self, include_content_type: bool = True) -> dict:
+        """
+        Retornar headers de autenticação para requisições HTTP.
+
+        Args:
+            include_content_type: Incluir Content-Type (padrão: True)
+                             Usar False para upload de arquivos (multipart)
+
+        Returns:
+            Dict de headers
+        """
+        headers = {
             "X-Api-Key": self.api_key,
-            "Content-Type": "application/json",
             "Accept": "application/json"
         }
+
+        if include_content_type:
+            headers["Content-Type"] = "application/json"
+
+        return headers
