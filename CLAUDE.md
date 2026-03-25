@@ -253,9 +253,26 @@ def run_all_tests(self):
 }
 ```
 
-## Paths Normalizados
+## Documentação Adicional
 
-IDs de exemplo foram substituídos por placeholders:
-- MongoDB IDs: `/abc123...` → `/{id}`
-- UUIDs: `/123e4567-...` → `/{uuid}`
-- Numéricos: `/1234` → `/{id}`
+- **Fluxo de Documentos**: `docs/fluxo_documentos_assinafy.md` - Análise completa do processamento de documentos na API Assinafy
+- **Arquitetura do Sistema**: `docs/arquitetura.md` - Documentação completa de arquitetura incluindo diagramas Mermaid, decisões de design e limitações
+- **CLAUDE.md** (este arquivo): Guia para desenvolvimento
+
+## Arquitetura do Sistema
+
+### Visão Geral
+
+O sistema consiste em 3 camadas principais:
+
+1. **Camada de UI**: Scripts CLI (`automatizar_assinatura.py`, scripts de teste)
+2. **Camada de Lógica**: Scraper (extractor, parser, models) e Automação (upload, email)
+3. **Camada de Dados**: JSON estruturado, environment variables, PDFs
+
+### Fluxo Principal
+
+```
+Upload PDF → Obter signing_url → Aguardar processamento → Enviar email
+```
+
+**Diagrama completo**: Ver `docs/arquitetura.md` para diagramas Mermaid detalhados.

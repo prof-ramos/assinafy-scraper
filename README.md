@@ -168,8 +168,35 @@ O `signing_url` está disponível imediatamente e a plataforma Assinafy lida com
 
 Este projeto é para uso interno da ASOF.
 
-## 🔗 Links Úteis
+## 🏛️ Arquitetura
 
-- **API Assinafy**: https://api.assinafy.com.br/v1/docs
-- **Plataforma**: https://app.assinafy.com.br
-- **Base URL**: https://api.assinafy.com.br/v1
+### Visão Geral
+
+```mermaid
+flowchart LR
+    A[Scripts CLI] --> B[Automação]
+    A --> C[Scraper]
+
+    B --> D[Assinafy API]
+    C --> D
+
+    D --> E[Documents]
+    B --> F[Email Client]
+
+    style A fill:#e1f5ff
+    style D fill:#ffccbc
+    style E fill:#c8e6c9
+```
+
+**Componentes principais**:
+- **Scraper**: Extrai documentação da API (HTML → JSON)
+- **Automação**: Upload PDF + envio de email
+- **E2E Tests**: Suíte de testes para validar API
+
+### Documentação Completa
+
+Ver `docs/arquitetura.md` para:
+- Diagramas detalhados de fluxo de dados
+- Decisões de design e justificativas
+- Limitações e restrições do sistema
+- Interações entre componentes
